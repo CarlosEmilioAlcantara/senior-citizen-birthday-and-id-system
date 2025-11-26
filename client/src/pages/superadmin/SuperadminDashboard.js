@@ -9,7 +9,7 @@ export default function SuperadminDashboard() {
   useEffect(() => {
     async function getSuperadminInfo() {
       try {
-        const res = await fetch("/admin/info", {
+        const res = await fetch("/admins/info", {
           method: "GET"
         })
         const data = await res.json();

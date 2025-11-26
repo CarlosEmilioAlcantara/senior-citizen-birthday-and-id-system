@@ -167,20 +167,20 @@ def total_verified_seniors():
     total = query_db("""
         SELECT COUNT(*) FROM senior_citizens 
         WHERE verify_status = 1
-    """)[0]["COUNT(*)"]
+    """, (None), True)["COUNT(*)"]
     return total
 
 def total_unverified_seniors():
     total = query_db("""
         SELECT COUNT(*) FROM senior_citizens 
         WHERE verify_status = 0
-    """)[0]["COUNT(*)"]
+    """, (None), True)["COUNT(*)"]
     return total
 
 def total_seniors():
     total = query_db(
         "SELECT COUNT(*) FROM senior_citizens"
-    )[0]["COUNT(*)"]
+    , (None), True)["COUNT(*)"]
     return total
 
 def select_seniors():
@@ -234,3 +234,15 @@ def select_signature_picture(identifier):
         (identifier),
     ), True)["image_name"]
     return path
+
+def select_senior_where(keyword):
+    rows = query_db("""
+        SELECT * FROM senior_citizens
+        WHERE email LIKE %s
+            OR first_name LIKE %s
+            OR middle_name LIKE %s
+            OR last_name LIKE %s
+    ;""", (
+        keyword, keyword, keyword, keyword,
+    ))
+    return rows
