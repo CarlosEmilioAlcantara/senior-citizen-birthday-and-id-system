@@ -1,0 +1,12 @@
+# React
+client/node_modules/
+
+# Python
+__pycache__/
+server/uploads/id-pictures/*
+server/uploads/signatures/*
+!server/uploads/id-pictures/.gitkeep
+!server/uploads/signatures/.gitkeep
+server/venv/
+server/.env
+server/.flaskenv
