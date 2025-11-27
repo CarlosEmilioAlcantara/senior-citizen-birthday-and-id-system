@@ -29,7 +29,7 @@ function App() {
         <Route path="/logout" element={<Logout/>}/>
         <Route path="/too-many-requests" element={<RateLimitExceeded/>}/>
         <Route path="/forbidden" element={<Forbidden/>}/>
-        <Route path="/unauthorized" element={<Forbidden/>}/>
+        <Route path="/unauthorized" element={<Unauthorized/>}/>
 
         <Route element={<ProtectedRoute allowedRoles={["user"]}/>}>
           <Route path="/" element={<UserDashboard/>}/>

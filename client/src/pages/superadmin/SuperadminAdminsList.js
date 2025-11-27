@@ -14,7 +14,7 @@ export default function SuperadminAdminsList() {
   const [username, setUsername] = useState("");
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [filter, setFilter] = useState("All");
-  const [sort, setSort] = useState("None");
+  const [sort, setSort] = useState("Newest");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pages, setPages] = useState([]);
@@ -24,42 +24,11 @@ export default function SuperadminAdminsList() {
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   async function getAdminsInfo() {
-  //     try {
-  //       const res = await fetch(
-  //         `/admins/info?get_all=${getAll}&page=${page}`, 
-  //         { method: "GET", }
-  //       )
-  //       const data = await res.json();
-  //       setAdmins([...data.info]);
-  //       setTotalPages(data.total_pages);
-
-  //       for (let i = 1; i <= totalPages; i++) {
-  //         pages.push(i);
-  //       }
-
-  //       if (data.status === 429) {
-  //         navigate("/too-many-requests");
-  //       }
-  //       if (data.status === 403) {
-  //         navigate("/forbidden");
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }
-
-  //   getAdminsInfo();
-  // }, [])
-
-  async function handleSearch(e) {
-    e.preventDefault();
-
+  async function fetchAdmins() {
     try {
       const res = await fetch(
-        `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`, 
-        { method: "GET", }
+        `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`,
+        { method: "GET" }
       )
       const data = await res.json();
       setAdmins([...data.info]);
@@ -77,28 +46,7 @@ export default function SuperadminAdminsList() {
   }
 
   useEffect(() => {
-    async function handleSort() {
-      try {
-        const res = await fetch(
-          `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`,
-          { method: "GET" }
-        )
-        const data = await res.json();
-        setAdmins([...data.info]);
-        setTotalPages(data.total_pages);
-
-        if (data.status === 429) {
-          navigate("/too-many-requests");
-        }
-        if (data.status === 403) {
-          navigate("/forbidden");
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    handleSort();
+    fetchAdmins();
   }, [sort, page])
 
   useEffect(() => {
@@ -168,7 +116,7 @@ export default function SuperadminAdminsList() {
         navigate("/forbidden");
       }
       if (data.success) {
-        setAdmins([...data.admins])
+        fetchAdmins();
       }
     } catch (err) {
       console.error(err);
@@ -208,7 +156,7 @@ export default function SuperadminAdminsList() {
       }
       if (data.success) {
         setOpenEdit(false);
-        window.location.reload(true);
+        fetchAdmins();
       }
     } catch (err) {
       console.error(err);
@@ -255,7 +203,7 @@ export default function SuperadminAdminsList() {
       }
       if (data.success) {
         setOpenDelete(false);
-        window.location.reload(true);
+        fetchAdmins();
       }
     } catch (err) {
       console.error(err);
@@ -274,7 +222,7 @@ export default function SuperadminAdminsList() {
         <h3>List of admin accounts</h3>
         <div>
           <div style={{"display": "flex", "alignItems": "center", "gap": "1em"}}>
-            <form onSubmit={handleSearch}>
+            <form onSubmit={fetchAdmins}>
               <input 
                 type="text" 
                 placeholder="Search by username/email"
@@ -303,6 +251,8 @@ export default function SuperadminAdminsList() {
               <select value={sort} onChange={(e) => setSort(e.target.value)}>
                 <option value={"Newest"}>Newest to Oldest</option>
                 <option value={"Oldest"}>Oldest to Newest</option>
+                <option value={"Updated"}>Last Updated</option>
+                <option value={"Unupdated"}>Last Unupdated</option>
               </select>
             </div>
           </div>
@@ -316,6 +266,8 @@ export default function SuperadminAdminsList() {
             <th>Username</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Created At</th>
+            <th>Updated At</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -346,6 +298,8 @@ export default function SuperadminAdminsList() {
                   <option>superadmin</option>
                 </select>
               </td>
+              <td>{admin.created_at}</td>
+              <td>{admin.updated_at}</td>
               <td>
                 <button onClick={() => editAdmin(
                   admin.admin_id,

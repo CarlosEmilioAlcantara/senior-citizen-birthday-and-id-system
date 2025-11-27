@@ -4,7 +4,7 @@ import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
 from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_seniors, select_signature_picture, select_signatures, update_senior
-from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_where, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
+from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
 from services.sort_data import sort_data
 from services.check_password import check_password
@@ -28,10 +28,18 @@ def admin_info():
 
     if get_all:
         page = int(request.args.get("page"))
-        admins = select_admin_where(keyword, page, per_page)
+        match sort:
+            case "Newest":
+                admins = select_admin_newest(keyword, page, per_page)
+            case "Oldest":
+                admins = select_admin_oldest(keyword, page, per_page)
+            case "Updated":
+                admins = select_admin_updated(keyword, page, per_page)
+            case "Unupdated":
+                admins = select_admin_unupdated(keyword, page, per_page)
+
         total_filtered = total_admins_filtered(keyword)
         total_pages = total_filtered // per_page
-        sort_data(sort, admins)
         return jsonify({
             "success": True, 
             "response": "Info Gathered", 

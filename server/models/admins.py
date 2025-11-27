@@ -31,7 +31,7 @@ def select_admin(identifier):
 def select_admins():
     admins = query_db("""
         SELECT * FROM admin_accounts
-        ORDER BY admin_id DESC
+        ORDER BY created_at DESC
     """, (
         None
     ), False)
@@ -138,14 +138,56 @@ def change_role_admin(role, identifier):
         role, identifier,
     ))
 
-def select_admin_where(keyword, page, per_page):
+def select_admin_newest(keyword, page, per_page):
     keyword = f"%{keyword}%"
     offset = (page - 1) * per_page
     rows = query_db("""
         SELECT * FROM admin_accounts
         WHERE email LIKE %s
         OR username LIKE %s
-        ORDER BY admin_id DESC
+        ORDER BY created_at DESC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def select_admin_oldest(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY created_at ASC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def select_admin_updated(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY updated_at DESC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def select_admin_unupdated(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY updated_at ASC
         LIMIT %s OFFSET %s
     """, (
         keyword, keyword, per_page, offset

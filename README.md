@@ -24,7 +24,9 @@
   FLASK_APP=your_flask_app
   ```
 Note that default folders and flask app name are provided but you may change this if you want.
+
 4. Change directory into the react client.
+
 5. Setup react client:
    ```powershell
    npm install
