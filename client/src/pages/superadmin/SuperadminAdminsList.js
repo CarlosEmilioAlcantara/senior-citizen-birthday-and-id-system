@@ -25,42 +25,11 @@ export default function SuperadminAdminsList() {
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   async function getAdminsInfo() {
-  //     try {
-  //       const res = await fetch(
-  //         `/admins/info?get_all=${getAll}&page=${page}`, 
-  //         { method: "GET", }
-  //       )
-  //       const data = await res.json();
-  //       setAdmins([...data.info]);
-  //       setTotalPages(data.total_pages);
-
-  //       for (let i = 1; i <= totalPages; i++) {
-  //         pages.push(i);
-  //       }
-
-  //       if (data.status === 429) {
-  //         navigate("/too-many-requests");
-  //       }
-  //       if (data.status === 403) {
-  //         navigate("/forbidden");
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }
-
-  //   getAdminsInfo();
-  // }, [])
-
-  async function handleSearch(e) {
-    e.preventDefault();
-
+  async function fetchAdmins() {
     try {
       const res = await fetch(
-        `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`, 
-        { method: "GET", }
+        `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`,
+        { method: "GET" }
       )
       const data = await res.json();
       setAdmins([...data.info]);
