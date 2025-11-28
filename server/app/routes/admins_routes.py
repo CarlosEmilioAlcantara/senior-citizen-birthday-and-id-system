@@ -4,8 +4,9 @@ import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
 from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_seniors, select_signature_picture, select_signatures, update_senior
-from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admins, update_admin
+from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
+from services.sort_data import sort_data
 from services.check_password import check_password
 from services.change_password import change_password
 from services.upsert_image import upsert_image
@@ -18,24 +19,40 @@ from services.remove_folder import remove_folder
 
 admins_bp = Blueprint("admins", __name__)
 
-@admins_bp.route("/admin/info", methods=["GET", "POST"])
+@admins_bp.route("/admins/info", methods=["GET"])
 def admin_info():
-    if request.method == "POST":
-        admin = select_admins()
-    elif request.method == "GET":
-        admin = select_admin(session["admin_id"])
+    get_all = request.args.get("get_all")
+    keyword = request.args.get("keyword", default="")
+    sort = request.args.get("sort", default="Newest")
+    per_page = 15
 
-    if admin:
+    if get_all:
+        page = int(request.args.get("page"))
+        match sort:
+            case "Newest":
+                admins = select_admin_newest(keyword, page, per_page)
+            case "Oldest":
+                admins = select_admin_oldest(keyword, page, per_page)
+            case "Updated":
+                admins = select_admin_updated(keyword, page, per_page)
+            case "Unupdated":
+                admins = select_admin_unupdated(keyword, page, per_page)
+
+        total_filtered = total_admins_filtered(keyword)
+        total_pages = total_filtered // per_page
         return jsonify({
             "success": True, 
             "response": "Info Gathered", 
-            "info": admin
+            "info": admins,
+            "total_pages": total_pages
         }), 200
-    else:
-        return jsonify({
-            "success": False, 
-            "response": "Info Not Gathered", 
-        }), 400
+
+    admin = select_admin(session["admin_id"])
+    return jsonify({
+        "success": True, 
+        "response": "Info Gathered", 
+        "info": admin
+    }), 200
 
 # @require_role("admin", "superadmin")
 @admins_bp.route("/admins/edit", methods=["POST"])

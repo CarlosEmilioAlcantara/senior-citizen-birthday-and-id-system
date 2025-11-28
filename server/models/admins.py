@@ -31,11 +31,20 @@ def select_admin(identifier):
 def select_admins():
     admins = query_db("""
         SELECT * FROM admin_accounts
-        ORDER BY admin_id DESC
+        ORDER BY created_at DESC
     """, (
         None
     ), False)
     return admins
+
+# def select_admins_asc():
+#     admins = query_db("""
+#         SELECT * FROM admin_accounts
+#         ORDER BY admin_id ASC
+#     """, (
+#         None
+#     ), False)
+#     return admins
 
 def emails_admin():
     rows = query_db("""
@@ -70,19 +79,19 @@ def check_username_admin(identifier):
 def total_superadmins():
     total = query_db(
         "SELECT COUNT(*) FROM admin_accounts WHERE role = superadmin"
-    )[0]["COUNT(*)"]
+    , (None), True)["COUNT(*)"]
     return total
 
 def total_admins():
     total = query_db(
         "SELECT COUNT(*) FROM admin_accounts WHERE role = admin"
-    )[0]["COUNT(*)"]
+    , (None), True)["COUNT(*)"]
     return total
 
 def total_admin_accounts():
     total = query_db(
         "SELECT COUNT(*) FROM admin_accounts"
-    )[0]["COUNT(*)"]
+    , (None), True)["COUNT(*)"]
     return total
 
 def insert_admin(email, username, password, role):
@@ -124,7 +133,75 @@ def change_role_admin(role, identifier):
     modify_db("""
         UPDATE admin_accounts 
         SET role = %s 
-        WHERE admin_id = %s;
+        WHERE admin_id = %s
     """, (
         role, identifier,
     ))
+
+def select_admin_newest(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY created_at DESC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def select_admin_oldest(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY created_at ASC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def select_admin_updated(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY updated_at DESC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def select_admin_unupdated(keyword, page, per_page):
+    keyword = f"%{keyword}%"
+    offset = (page - 1) * per_page
+    rows = query_db("""
+        SELECT * FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+        ORDER BY updated_at ASC
+        LIMIT %s OFFSET %s
+    """, (
+        keyword, keyword, per_page, offset
+    ))
+    return rows
+
+def total_admins_filtered(keyword):
+    keyword = f"%{keyword}%"
+    total = query_db("""
+        SELECT COUNT(*)
+        FROM admin_accounts
+        WHERE email LIKE %s
+        OR username LIKE %s
+    """, (
+        keyword, keyword,
+    ), True)["COUNT(*)"]
+    return total

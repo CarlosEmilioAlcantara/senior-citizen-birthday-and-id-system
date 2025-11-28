@@ -12,44 +12,48 @@ export default function SuperadminAdminsList() {
   const [id, setAdminID] = useState(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [filter, setFilter] = useState("all");
   const [emailOrUsername, setEmailOrUsername] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [sort, setSort] = useState("Newest");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pages, setPages] = useState([]);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
   const [response, setResponse] = useState("");
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function getAdminsInfo() {
-      try {
-        const res = await fetch("/admin/info", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken,
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            getAll,
-          }),
-        })
-        const data = await res.json();
-        setAdmins([...data.info]);
+  async function fetchAdmins() {
+    try {
+      const res = await fetch(
+        `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`,
+        { method: "GET" }
+      )
+      const data = await res.json();
+      setAdmins([...data.info]);
+      setTotalPages(data.total_pages);
 
-        if (data.status === 429) {
-          navigate("/too-many-requests");
-        }
-        if (data.status === 403) {
-          navigate("/forbidden");
-        }
-      } catch (err) {
-        console.error(err);
+      if (data.status === 429) {
+        navigate("/too-many-requests");
       }
+      if (data.status === 403) {
+        navigate("/forbidden");
+      }
+    } catch (err) {
+      console.error(err);
     }
+  }
 
-    getAdminsInfo();
-  }, [csrfToken])
+  useEffect(() => {
+    fetchAdmins();
+  }, [sort, page])
+
+  useEffect(() => {
+    for (let i = 1; i <= totalPages; i++) {
+      setPages(Array.from({ length: totalPages }, (_, i) => i + 1));;
+    }
+  }, [totalPages])
 
   useEffect(() => {
     async function getSuperadminID() {
@@ -112,7 +116,7 @@ export default function SuperadminAdminsList() {
         navigate("/forbidden");
       }
       if (data.success) {
-        setAdmins([...data.admins])
+        fetchAdmins();
       }
     } catch (err) {
       console.error(err);
@@ -152,7 +156,7 @@ export default function SuperadminAdminsList() {
       }
       if (data.success) {
         setOpenEdit(false);
-        window.location.reload(true);
+        fetchAdmins();
       }
     } catch (err) {
       console.error(err);
@@ -199,7 +203,7 @@ export default function SuperadminAdminsList() {
       }
       if (data.success) {
         setOpenDelete(false);
-        window.location.reload(true);
+        fetchAdmins();
       }
     } catch (err) {
       console.error(err);
@@ -218,26 +222,37 @@ export default function SuperadminAdminsList() {
         <h3>List of admin accounts</h3>
         <div>
           <div style={{"display": "flex", "alignItems": "center", "gap": "1em"}}>
-            <form>
+            <form onSubmit={fetchAdmins}>
               <input 
                 type="text" 
                 placeholder="Search by username/email"
                 value={emailOrUsername}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                  }}
-                }
+                // onKeyDown={(e) => {
+                //   if (e.key === "Enter") {
+                //     e.preventDefault();
+                //   }}
+                // }
                 onChange={(e) => setEmailOrUsername(e.target.value)}
               />
+              <button type="submit">Submit</button>
             </form>
 
             <div>
               <p>Filter By</p>
               <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value={"all"}>All</option>
+                <option value={"All"}>All</option>
                 <option value={"admin"} >admin</option>
                 <option value={"superadmin"} >superadmin</option>
+              </select>
+            </div>
+
+            <div>
+              <p>Sort By</p>
+              <select value={sort} onChange={(e) => setSort(e.target.value)}>
+                <option value={"Newest"}>Newest to Oldest</option>
+                <option value={"Oldest"}>Oldest to Newest</option>
+                <option value={"Updated"}>Last Updated</option>
+                <option value={"Unupdated"}>Last Unupdated</option>
               </select>
             </div>
           </div>
@@ -251,6 +266,8 @@ export default function SuperadminAdminsList() {
             <th>Username</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Created At</th>
+            <th>Updated At</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -258,13 +275,13 @@ export default function SuperadminAdminsList() {
         <tbody>
           {admins
           .filter(admin => admin.admin_id !== currentAdmin)
+          // .filter(admin => {
+          //   return emailOrUsername === "" ? admin : 
+          //   admin.username.includes(emailOrUsername.toLowerCase()) ||
+          //   admin.email.includes(emailOrUsername.toLowerCase())
+          // })
           .filter(admin => {
-            return emailOrUsername === "" ? admin : 
-            admin.username.includes(emailOrUsername.toLowerCase()) ||
-            admin.email.includes(emailOrUsername.toLowerCase())
-          })
-          .filter(admin => {
-            return filter === "all" ? 
+            return filter === "All" ? 
             admin : admin.role === filter
           })
           .map((admin) => (
@@ -281,6 +298,8 @@ export default function SuperadminAdminsList() {
                   <option>superadmin</option>
                 </select>
               </td>
+              <td>{admin.created_at}</td>
+              <td>{admin.updated_at}</td>
               <td>
                 <button onClick={() => editAdmin(
                   admin.admin_id,
@@ -295,6 +314,30 @@ export default function SuperadminAdminsList() {
           ))}
         </tbody>
       </table>
+
+      <div>
+        <button 
+          disabled={page <= 1} 
+          onClick={() => setPage(page - 1)}
+        >
+          Prev
+        </button>
+        {pages.map(num => (
+          <button 
+            key={num} 
+            style={page === num ? { color: "red" } : {}}
+            onClick={() => setPage(num)}
+          >
+            {num}
+          </button>
+        ))}
+        <button 
+          disabled={page >= totalPages} 
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
+      </div>
       
       { openEdit && (
         <div className="popup">

@@ -106,94 +106,73 @@ export default function UserRegister() {
 
   return (
     <>
-      { !status && (
-        <p style={{color: "red"}}>{response}</p>
-      )}
+      {!status && <p style={{ color: "red" }}>{response}</p>}
 
-      { status ? (
+      {status ? (
         <div>
           <h3>User Register</h3>
           <form onSubmit={handleRegister}>
             <label>1x1 / Passport Size Image</label>
-            <input 
-              type="file" 
+            <input
+              type="file"
               accept="image/png, image/jpeg"
               name="id_picture"
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.id_picture}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.id_picture}</small>
+            <br />
 
             <label>Signature on white background</label>
-            <input 
-              type="file" 
-              name="signature_picture"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.signature_picture}</small>
-            <br/>
+            <input type="file" name="signature_picture" />
+            <br />
+            <small style={{ color: "red" }}>{errors.signature_picture}</small>
+            <br />
 
             <label>First Name</label>
-            <input 
-              type="text" 
-              placeholder="First name..."
-              name="first_name"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.first_name}</small>
-            <br/>
+            <input type="text" placeholder="First name..." name="first_name" />
+            <br />
+            <small style={{ color: "red" }}>{errors.first_name}</small>
+            <br />
 
             <label>Middle Name</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Middle name..."
               name="middle_name"
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.middle_name}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.middle_name}</small>
+            <br />
 
             <label>Last Name</label>
-            <input 
-              type="text" 
-              placeholder="Last name..."
-              name="last_name"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.last_name}</small>
-            <br/>
+            <input type="text" placeholder="Last name..." name="last_name" />
+            <br />
+            <small style={{ color: "red" }}>{errors.last_name}</small>
+            <br />
 
             <label>Address</label>
-            <br/>
+            <br />
             <label>House No. / Building / Lot No. *</label>
-            <input 
-              type="text"
-              placeholder="144"
-              name="house"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.house}</small>
-            <br/>
+            <input type="text" placeholder="144" name="house" />
+            <br />
+            <small style={{ color: "red" }}>{errors.house}</small>
+            <br />
 
             <label>Street *</label>
-            <input 
-              type="text"
-              placeholder="Bayabas St."
-              name="street"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.street}</small>
-            <br/>
+            <input type="text" placeholder="Bayabas St." name="street" />
+            <br />
+            <small style={{ color: "red" }}>{errors.street}</small>
+            <br />
 
             <label>Subdivision</label>
-            <input 
+            <input
               type="text"
               placeholder="Sayote Village"
               name="subdivision"
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.subdivision}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.subdivision}</small>
+            <br />
 
             <label>Barangay *</label>
             <select name="barangay">
@@ -220,57 +199,60 @@ export default function UserRegister() {
               <option>West Crame</option>
               <option>Greenhills</option>
             </select>
-            <br/>
-            <small style={{"color": "red"}}>{errors.barangay}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.barangay}</small>
+            <br />
 
             <label>City / Municipality</label>
-            <input 
+            <input
               type="text"
               placeholder="San Juan"
               name="city"
               value="San Juan"
               disabled
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.city}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.city}</small>
+            <br />
 
             <label>Province</label>
-            <input 
+            <input
               type="text"
               placeholder="Metro Manila"
               name="province"
               value="Metro Manila"
               disabled
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.province}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.province}</small>
+            <br />
 
             <label>Date of Birth</label>
-            <input 
-              type="date" 
+            <input
+              type="date"
               name="birthday"
               value={birthday}
-              onChange={(e) => {setBirthday(e.target.value); handleSetAge()}}
+              onChange={(e) => {
+                setBirthday(e.target.value);
+                handleSetAge();
+              }}
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.birthday}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.birthday}</small>
+            <br />
 
             <label>Age</label>
-            <input 
-              type="number" 
+            <input
+              type="number"
               min="0"
               max="150"
               name="age"
               value={age}
               disabled
             />
-            <br/>
-            <small style={{"color": "red"}}>{errors.age}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.age}</small>
+            <br />
 
             <label>Gender</label>
             <select name="gender">
@@ -278,96 +260,129 @@ export default function UserRegister() {
               <option>Male</option>
               <option>Female</option>
             </select>
-            <br/>
-            <small style={{"color": "red"}}>{errors.gender}</small>
-            <br/>
+            <br />
+            <small style={{ color: "red" }}>{errors.gender}</small>
+            <br />
 
             <label>Emergency Contact's First Name</label>
-            <input 
-              type="text" 
-              name="emergency_fname"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_fname}</small>
-            <br/>
+            <input type="text" name="emergency_fname" />
+            <br />
+            <small style={{ color: "red" }}>{errors.emergency_fname}</small>
+            <br />
 
             <label>Emergency Contact's Middle Name</label>
-            <input 
-              type="text" 
-              name="emergency_mname"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_mname}</small>
-            <br/>
+            <input type="text" name="emergency_mname" />
+            <br />
+            <small style={{ color: "red" }}>{errors.emergency_mname}</small>
+            <br />
 
             <label>Emergency Contact's Last Name</label>
-            <input 
-              type="text" 
-              name="emergency_lname"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_lname}</small>
-            <br/>
+            <input type="text" name="emergency_lname" />
+            <br />
+            <small style={{ color: "red" }}>{errors.emergency_lname}</small>
+            <br />
 
             <label>Emergency Contact's Contact Number</label>
-            <input 
-              type="tel" 
-              name="emergency_number"
-              maxLength={13}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_number}</small>
-            <br/>
+            <input type="tel" name="emergency_number" maxLength={13} />
+            <br />
+            <small style={{ color: "red" }}>{errors.emergency_number}</small>
+            <br />
 
             <button type="submit">Submit</button>
           </form>
-          <button type="submit" onClick={() => setStatus(false)}>Cancel</button>
+          <button type="submit" onClick={() => setStatus(false)}>
+            Cancel
+          </button>
         </div>
       ) : (
-        <div>
-          <h3>User Register - Info</h3>
-          <form onSubmit={handleExists}>
-            <label>Email Address</label>
-            <input 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.email}</small>
-            <br/>
+        <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
+          {/* LEFT SIDE */}
+          <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 relative overflow-hidden border-4 border-white rounded-2xl">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Senior Citizen
+            </h3>
+            <p className="text-white text-sm max-w-md">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
 
-            <label>Password</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <br/>
-            <small>Must be 8 or more and no whitespace</small>
-            <br/>
-            <small style={{"color": "red"}}>{errors.password}</small>
-            <br/>
+          {/* RIGHT SIDE - REGISTER FORM */}
+          <div className="flex flex-col justify-center  p-12 lg:p-20 ">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">
+              Create an Account
+            </h2>
 
-            <label>Confirm Password</label>
-            <input 
-              type="password" 
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.confirm}</small>
-            <br/>
+            <form onSubmit={handleExists} className="space-y-4">
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  placeholder="example@email.com"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <p className="text-red-500">{errors.email}</p>
 
-            <button type="submit">Register</button>
-          </form>
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
 
-          <nav>
-            <Link to="/user-login">Already have an account?</Link>
-          </nav>
+                {/* <p className="text-xs text-gray-500 text-right">Must be 8 or more and no whitespace</p> */}
+
+                <p className="text-red-500">{errors.password}</p>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="Confirm Password"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+
+                <p className="text-red-500">{errors.confirm}</p>
+              </div>
+
+              <button
+                className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer"
+                type="submit"
+              >
+                Create an account
+              </button>
+            </form>
+
+            <div className="text-center my-6">
+              <span className="text-sm text-gray-600 cursor-pointer flex justify-center gap-1">
+                <span>Already have an account yet?</span>
+                <Link
+                  to="/user-login"
+                  className="hover:underline text-blue-600 font-semibold"
+                >
+                  Login here
+                </Link>
+              </span>
+            </div>
+          </div>
         </div>
-      )
-    }
-  </>
+      )}
+    </>
   );
 }
