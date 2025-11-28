@@ -3,7 +3,7 @@ import os
 import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
-from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_seniors, select_signature_picture, select_signatures, update_senior
+from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, update_senior
 from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
 from services.sort_data import sort_data
@@ -24,7 +24,7 @@ def admin_info():
     get_all = request.args.get("get_all")
     keyword = request.args.get("keyword", default="")
     sort = request.args.get("sort", default="Newest")
-    per_page = 15
+    per_page = request.args.get("per_page")
 
     if get_all:
         page = int(request.args.get("page"))
@@ -130,15 +130,37 @@ def admin_delete():
 # @limiter.exempt
 @admins_bp.route("/admins/users-list", methods=["GET"])
 def users_list():
-    seniors = select_seniors()
+    keyword = request.args.get("keyword", default="")
+    sort = request.args.get("sort", default="Newest")
+    per_page = request.args.get("per_page")
+    seniors = select_senior_newest(keyword)
     pictures = select_pictures()
     signatures = select_signatures()
+
+    try:
+        page = int(request.args.get("page"))
+    except ValueError as e:
+        print("Converting Unsuccessful", e)
+
+    match sort:
+        case "Newest":
+            seniors = select_senior_newest(keyword, page, per_page)
+        case "Oldest":
+            seniors = select_senior_oldest(keyword, page, per_page)
+        case "Updated":
+            seniors = select_senior_updated(keyword, page, per_page)
+        case "Unupdated":
+            seniors = select_senior_unupdated(keyword, page, per_page)
+
+    total_filtered = total_admins_filtered(keyword)
+    total_pages = total_filtered // per_page
     return jsonify({
         "success": True, 
-        "response": "Info gathered", 
+        "response": "Info Gathered", 
         "list": seniors, 
         "pictures": pictures, 
         "signatures": signatures,
+        "total_pages": total_pages
     }), 200
 
 # @require_role("admin", "superadmin")

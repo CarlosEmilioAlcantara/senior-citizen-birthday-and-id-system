@@ -16,6 +16,7 @@ export default function SuperadminAdminsList() {
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Newest");
   const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(15)
   const [totalPages, setTotalPages] = useState(1);
   const [pages, setPages] = useState([]);
   const [errors, setErrors] = useState({});
@@ -27,7 +28,7 @@ export default function SuperadminAdminsList() {
   async function fetchAdmins() {
     try {
       const res = await fetch(
-        `/admins/info?get_all=${getAll}&page=${page}&keyword=${emailOrUsername}&sort=${sort}`,
+        `/admins/info?get_all=${getAll}&page=${page}&per_page=${perPage}&keyword=${emailOrUsername}&sort=${sort}`,
         { method: "GET" }
       )
       const data = await res.json();
@@ -48,6 +49,11 @@ export default function SuperadminAdminsList() {
   useEffect(() => {
     fetchAdmins();
   }, [sort, page])
+
+  const handleFetchAdmins = (e) => {
+    e.preventDefault();
+    fetchAdmins();
+  };
 
   useEffect(() => {
     for (let i = 1; i <= totalPages; i++) {
@@ -222,7 +228,7 @@ export default function SuperadminAdminsList() {
         <h3>List of admin accounts</h3>
         <div>
           <div style={{"display": "flex", "alignItems": "center", "gap": "1em"}}>
-            <form onSubmit={fetchAdmins}>
+            <form onSubmit={handleFetchAdmins}>
               <input 
                 type="text" 
                 placeholder="Search by username/email"

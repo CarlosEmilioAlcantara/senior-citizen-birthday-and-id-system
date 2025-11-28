@@ -6,55 +6,58 @@ export default function UsersList() {
   const [users, setUsers] = useState([]);
   const [pictures, setPictures] = useState([]);
   const [signatures, setSignatures] = useState([]);
-  const [cards, setCards] = useState([]);
   const [verifications, setVerifications] = useState({});
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openCard, setOpenCard] = useState(false);
-
+  const [emailOrFullname, setEmailOrFullname] = useState("");
+  const [sort, setSort] = useState("Newest");
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(15);
+  const [filter, setFilter] = useState("all");
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(null)
   const [response, setResponse] = useState("")
-  const [printingUserID, setPrintingUserID] = useState(null);
-  const [userList, setUserList] = useState([]);
-  const [emailOrFullname, setEmailOrFullname] = useState("");
-  const [filter, setFilter] = useState("all");
-
   const csrfToken = useCsrfToken();
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function handleGetUsers() {
-      try {
-        const res = await fetch("/admins/users-list", {
-          method: "GET",
-          credentials: "include"
+  async function fetchUsers() {
+    try {
+      const res = await fetch(
+        `/admins/users-list?page=${page}&per_page=${perPage}keyword=${emailOrFullname}&sort=${sort}`, 
+        { method: "GET", }
+      )
+      const data = await res.json();
+      const processedList = data.list.map(u => ({
+        ...u,
+        birthday: new Date(u.birthday).toLocaleDateString("en-US", {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
         })
-        const data = await res.json();
-        const processedList = data.list.map(u => ({
-          ...u,
-          birthday: new Date(u.birthday).toLocaleDateString("en-US", {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-          })
-        }));
-        setUsers([...processedList]);
-        setPictures([...data.pictures]);
-        setSignatures([...data.signatures]);
+      }));
+      setUsers([...processedList]);
+      setPictures([...data.pictures]);
+      setSignatures([...data.signatures]);
 
-        if (data.status === 429) {
-          navigate("/too-many-requests");
-        }
-        if (data.status === 403) {
-          navigate("/forbidden");
-        }
-      } catch (err) {
-        console.error(err);
+      if (data.status === 429) {
+        navigate("/too-many-requests");
       }
+      if (data.status === 403) {
+        navigate("/forbidden");
+      }
+    } catch (err) {
+      console.error(err);
     }
+  }
 
-    handleGetUsers();
+  const handleFetchUsers = (e) => {
+    e.preventDefault();
+    fetchUsers();
+  }
+
+  useEffect(() => {
+    fetchUsers();
   }, [])
 
   useEffect(() => {
@@ -277,9 +280,6 @@ export default function UsersList() {
       }
       if (data.success) {
         setOpenCard(true);
-        // alert(data.response);
-        // alert(`Senior ${userData.senior_id} ID Card printed`);
-        // window.location.reload(true);
       }
     } catch (err) {
       console.error(err);
@@ -320,93 +320,24 @@ export default function UsersList() {
     }
   }
 
-  // async function handleSearchSeniors(e) {
-  //   e.preventDefault();
-
-  //   const res = await fetch("/admins/search-seniors", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json"},
-  //     body: JSON.stringify({emailOrFullname, filter}),
-  //   })
-  //   const data = await res.json();
-  //   setErrors({...data.errors});
-
-  //   if (data.list) {
-  //     const processedList = data.list.map(u => ({
-  //       ...u,
-  //       birthday: new Date(u.birthday).toLocaleDateString("en-US", {
-  //         year: 'numeric',
-  //         month: '2-digit',
-  //         day: '2-digit'
-  //       })
-  //     }));
-  //     setUserList([...processedList]);
-  //   }
-  //   if (data.status === 429) {
-  //     navigate("/too-many-requests");
-  //   }
-  //   if (data.status === 403) {
-  //     navigate("/forbidden");
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   async function handleFilter(emailOrFullname, filter) {
-  //     const res = await fetch("/admins/filter-seniors", {
-  //       method: "POST",
-  //       headers: { 
-  //         "Content-Type": "application/json",
-  //         "X-CSRF-Token": csrfToken
-  //        },
-  //       body: JSON.stringify({ emailOrFullname, filter }),
-  //     })
-  //     const data = await res.json();
-
-  //     if (data.errors) {
-  //       Object.values(data.errors).forEach((error) => {
-  //         alert(error);
-  //       })
-  //     }
-  //     if (data.list) {
-  //       const processedList = data.list.map(u => ({
-  //         ...u,
-  //         birthday: new Date(u.birthday).toLocaleDateString("en-US", {
-  //           year: 'numeric',
-  //           month: '2-digit',
-  //           day: '2-digit'
-  //         })
-  //       }));
-  //       setUserList([...processedList]);
-  //     }
-  //     if (data.status === 429) {
-  //       navigate("/too-many-requests");
-  //     }
-
-  //     if (data.status === 403) {
-  //       navigate("/forbidden");
-  //     }
-  //   }
-
-  //   handleFilter(emailOrFullname, filter);
-  // }, [filter, csrfToken])
-
   return(
     <div>
       <div>
         <h3>List of Senior Citizens</h3>
         <div style={{"display": "flex", "alignItems": "center", "gap": "1em"}}>
-          <form>
+          <form onSubmit={handleFetchUsers}>
             <input 
               type="text" 
               placeholder="Search by email/full name"
               value={emailOrFullname}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                }}
-              }
+              // onKeyDown={(e) => {
+              //   if (e.key === "Enter") {
+              //     e.preventDefault();
+              //   }}
+              // }
               onChange={(e) => setEmailOrFullname(e.target.value)}
             />
+            <button type="submit">Search</button>
           </form>
 
           <div>
@@ -415,6 +346,16 @@ export default function UsersList() {
               <option value={"all"}>All</option>
               <option value={1} >Verified</option>
               <option value={0} >Unverified</option>
+            </select>
+          </div>
+
+          <div>
+            <p>Sort By</p>
+            <select value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value={"Newest"}>Newest to Oldest</option>
+              <option value={"Oldest"}>Oldest to Newest</option>
+              <option value={"Updated"}>Last Updated</option>
+              <option value={"Unupdated"}>Last Unupdated</option>
             </select>
           </div>
         </div>
@@ -435,22 +376,24 @@ export default function UsersList() {
             <th>Emergency Contact Name</th>
             <th>Emergency Contact #</th>
             <th>Verification Status</th>
+            <th>Created At</th>
+            <th>Updated At</th>
             <th>Actions</th>
           </tr>
         </thead>
 
         <tbody>
           {users
-          .filter(user => {
-            if (emailOrFullname === "") return user
-            const q = emailOrFullname.toLowerCase();
+          // .filter(user => {
+          //   if (emailOrFullname === "") return user
+          //   const q = emailOrFullname.toLowerCase();
 
-            return (
-              user.first_name.toLowerCase().includes(q) || 
-              user.middle_name.toLowerCase().includes(q) || 
-              user.last_name.toLowerCase().includes(q)
-            )
-          })
+          //   return (
+          //     user.first_name.toLowerCase().includes(q) || 
+          //     user.middle_name.toLowerCase().includes(q) || 
+          //     user.last_name.toLowerCase().includes(q)
+          //   )
+          // })
           .filter(user => {
             return filter === "all" ? user :
             user.verify_status === Number(filter)
@@ -517,6 +460,9 @@ export default function UsersList() {
                   <option>Unverified</option>
                 </select>
               </td>
+
+              <td>{user.created_at}</td>
+              <td>{user.updated_at}</td>
 
               <td>
                 <button onClick={() => {
