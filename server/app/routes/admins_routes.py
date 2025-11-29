@@ -3,7 +3,7 @@ import os
 import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
-from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, update_senior
+from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, total_seniors_filtered, update_senior
 from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
 from services.sort_data import sort_data
@@ -24,10 +24,13 @@ def admin_info():
     get_all = request.args.get("get_all")
     keyword = request.args.get("keyword", default="")
     sort = request.args.get("sort", default="Newest")
-    per_page = request.args.get("per_page")
 
     if get_all:
-        page = int(request.args.get("page"))
+        try:
+            page = int(request.args.get("page"))
+            per_page = int(request.args.get("per_page"))
+        except ValueError as e:
+            print("Converting Unsuccessful", e)
         match sort:
             case "Newest":
                 admins = select_admin_newest(keyword, page, per_page)
@@ -132,13 +135,12 @@ def admin_delete():
 def users_list():
     keyword = request.args.get("keyword", default="")
     sort = request.args.get("sort", default="Newest")
-    per_page = request.args.get("per_page")
-    seniors = select_senior_newest(keyword)
     pictures = select_pictures()
     signatures = select_signatures()
 
     try:
         page = int(request.args.get("page"))
+        per_page = int(request.args.get("per_page"))
     except ValueError as e:
         print("Converting Unsuccessful", e)
 
@@ -152,7 +154,7 @@ def users_list():
         case "Unupdated":
             seniors = select_senior_unupdated(keyword, page, per_page)
 
-    total_filtered = total_admins_filtered(keyword)
+    total_filtered = total_seniors_filtered(keyword)
     total_pages = total_filtered // per_page
     return jsonify({
         "success": True, 
@@ -236,8 +238,8 @@ def admins_edit_senior():
         email, id)
 
     if form.id_picture.data.filename and form.signature_picture.data.filename:
-        delete_old_image("picture_name", "picture_images", session["user_id"])
-        delete_old_image("image_name", "signature_images", session["user_id"])
+        delete_old_image("picture_name", "picture_images", id)
+        delete_old_image("image_name", "signature_images", id)
         upsert_image(
             last_name, middle_name, first_name, id_picture, "id",
             current_app.config["ID_FOLDER"], "picture_images", "picture_name", 
@@ -247,13 +249,13 @@ def admins_edit_senior():
             current_app.config["SIGNATURE_FOLDER"], "signature_images",
             "image_name", id, "update")
     elif form.id_picture.data.filename:
-        delete_old_image("picture_name", "picture_images", session["user_id"])
+        delete_old_image("picture_name", "picture_images", id)
         upsert_image(
             last_name, middle_name, first_name, id_picture, "id",
             current_app.config["ID_FOLDER"], "picture_images", "picture_name", 
             id, "update")
     elif form.signature_picture.data.filename:
-        delete_old_image("image_name", "signature_images", session["user_id"])
+        delete_old_image("image_name", "signature_images", id)
         upsert_image(
             last_name, middle_name, first_name, signature_picture, "signature",
             current_app.config["SIGNATURE_FOLDER"], "signature_images",
@@ -329,6 +331,8 @@ def admins_print_id():
     emergency_mname = form.emergency_mname.data
     emergency_lname = form.emergency_lname.data
     emergency_number = form.emergency_number.data
+    id_front = f"http://localhost:5000/temp/card-front.png"
+    id_back = f"http://localhost:5000/temp/card-back.png"
 
     generate_id_card(
         first_name, middle_name, last_name, email, age, birthday,
@@ -336,7 +340,12 @@ def admins_print_id():
         emergency_fname, emergency_lname, emergency_mname,
         emergency_number, id_picture, signature_picture, id
     )
-    return jsonify({"success": True, "response": "Print ID Successful"}), 200
+    return jsonify({
+        "success": True, 
+        "response": "Print ID Successful",
+        "id_front": id_front,
+        "id_back": id_back
+    }), 200
 
 @admins_bp.route("/download-id", methods=["POST", "GET"])
 def download_id():

@@ -27,6 +27,14 @@ app.config.update(
         os.path.dirname(__file__),
         os.getenv("TEMP_FOLDER")
     ),
+    TEMPLATE_FILE_FRONT = os.path.join(
+        os.path.dirname(__file__),
+        os.getenv("TEMPLATE_FILE_FRONT")
+    ),
+    TEMPLATE_FILE_BACK = os.path.join(
+        os.path.dirname(__file__),
+        os.getenv("TEMPLATE_FILE_BACK")
+    ),
     LIMITER_DAY_LIMIT = os.getenv("LIMITER_DAY_LIMIT"),
     LIMITER_HOUR_LIMIT = os.getenv("LIMITER_HOUR_LIMIT"),
     RATELIMIT_HEADERS_ENABLED = True,

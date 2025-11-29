@@ -264,7 +264,8 @@ def select_senior_oldest(keyword, page, per_page):
         ORDER BY created_at ASC
         LIMIT %s OFFSET %s
     """, (
-        keyword, keyword, per_page, offset
+        keyword, keyword, keyword, keyword,
+        per_page, offset
     ))
     return rows
 
@@ -280,7 +281,8 @@ def select_senior_updated(keyword, page, per_page):
         ORDER BY updated_at DESC
         LIMIT %s OFFSET %s
     """, (
-        keyword, keyword, per_page, offset
+        keyword, keyword, keyword, keyword,
+        per_page, offset
     ))
     return rows
 
@@ -296,6 +298,21 @@ def select_senior_unupdated(keyword, page, per_page):
         ORDER BY updated_at ASC
         LIMIT %s OFFSET %s
     """, (
-        keyword, keyword, per_page, offset
+        keyword, keyword, keyword, keyword,
+        per_page, offset
     ))
     return rows
+
+def total_seniors_filtered(keyword):
+    keyword = f"%{keyword}%"
+    total = query_db("""
+        SELECT COUNT(*)
+        FROM senior_citizens
+        WHERE email LIKE %s
+            OR first_name LIKE %s
+            OR middle_name LIKE %s
+            OR last_name LIKE %s
+    """, (
+        keyword, keyword, keyword, keyword,
+    ), True)["COUNT(*)"]
+    return total

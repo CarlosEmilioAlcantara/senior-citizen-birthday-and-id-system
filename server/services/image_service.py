@@ -1,12 +1,8 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from flask import current_app
 from PIL import Image, ImageDraw, ImageFont
 from services.create_address import create_address
-
-TEMPLATE_FILE_FRONT = "./static/images/senior-id-card-template-front.png"
-TEMPLATE_FILE_BACK = "./static/images/senior-id-card-template-back.png"
-# CARDS_FOLDER = "./uploads/cards"
-TEMPORARY_FOLDER = "./temp"
 
 def generate_id_card(
     first_name, middle_name, last_name, email, age, birthday, gender,
@@ -16,7 +12,7 @@ def generate_id_card(
 ):
     address = create_address(
         house, street, barangay, city, province, subdivision)
-    id_back = Image.open(TEMPLATE_FILE_BACK)
+    id_back = Image.open(current_app.config["TEMPLATE_FILE_BACK"])
     draw_back = ImageDraw.Draw(id_back)
 
     now = datetime.now(ZoneInfo("Asia/Manila"))
@@ -25,7 +21,9 @@ def generate_id_card(
     # card_folder = f"{CARDS_FOLDER}/card_{last_name}_{middle_name}_{first_name}-{timestamp}"
     # os.mkdir(card_folder)
 
-    with Image.open(TEMPLATE_FILE_FRONT).convert("RGBA") as id_front:
+    with Image.open(
+        current_app.config["TEMPLATE_FILE_FRONT"]
+    ).convert("RGBA") as id_front:
         draw_front = ImageDraw.Draw(id_front)
         
         full_name = f"{first_name} {middle_name} {last_name}"
@@ -65,9 +63,11 @@ def generate_id_card(
             id_front.paste(senior_signature, (300, 690), senior_signature)
 
         # id_front_name = f"card-front_{last_name}_{middle_name}_{first_name}-{timestamp}.png" 
-        id_front.save(f"{TEMPORARY_FOLDER}/card-front.png")
+        id_front.save(f"{current_app.config["TEMP_FOLDER"]}/card-front.png")
 
-    with Image.open(TEMPLATE_FILE_BACK).convert("RGBA") as id_back:
+    with Image.open(
+        current_app.config["TEMPLATE_FILE_BACK"]
+    ).convert("RGBA") as id_back:
         draw_back = ImageDraw.Draw(id_back)
         
         emergency_name = f"{emergency_fname} {emergency_mname} {emergency_lname}"
@@ -80,7 +80,7 @@ def generate_id_card(
             font=ImageFont.truetype("arial.ttf", size=48))
         
         # id_back_name = f"card-back_{last_name}_{middle_name}_{first_name}-{timestamp}.png" 
-        id_back.save(f"{TEMPORARY_FOLDER}/card-back.png")
+        id_back.save(f"{current_app.config["TEMP_FOLDER"]}/card-back.png")
 
     # card = query_db(
     #     "SELECT * FROM card_images WHERE senior_id = %s;",

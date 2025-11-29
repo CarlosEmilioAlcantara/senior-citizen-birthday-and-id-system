@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
 
 export default function UsersList() {
@@ -10,10 +10,14 @@ export default function UsersList() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openCard, setOpenCard] = useState(false);
+  const [cardFront, setCardFront] = useState("")
+  const [cardBack, setCardBack] = useState("")
   const [emailOrFullname, setEmailOrFullname] = useState("");
   const [sort, setSort] = useState("Newest");
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(15);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pages, setPages] = useState([]);
   const [filter, setFilter] = useState("all");
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(null)
@@ -24,7 +28,7 @@ export default function UsersList() {
   async function fetchUsers() {
     try {
       const res = await fetch(
-        `/admins/users-list?page=${page}&per_page=${perPage}keyword=${emailOrFullname}&sort=${sort}`, 
+        `/admins/users-list?&page=${page}&per_page=${perPage}&keyword=${emailOrFullname}&sort=${sort}`, 
         { method: "GET", }
       )
       const data = await res.json();
@@ -39,6 +43,7 @@ export default function UsersList() {
       setUsers([...processedList]);
       setPictures([...data.pictures]);
       setSignatures([...data.signatures]);
+      setTotalPages(data.total_pages)
 
       if (data.status === 429) {
         navigate("/too-many-requests");
@@ -58,7 +63,13 @@ export default function UsersList() {
 
   useEffect(() => {
     fetchUsers();
-  }, [])
+  }, [sort, page])
+
+  useEffect(() => {
+    for (let i = 1; i <= totalPages; i++) {
+      setPages(Array.from({ length: totalPages }, (_, i) => i + 1));;
+    }
+  }, [totalPages])
 
   useEffect(() => {
     setVerifications(
@@ -92,8 +103,7 @@ export default function UsersList() {
         navigate("/forbidden");
       }
       if (data.success) {
-        alert(`Senior ${id}'s verification has changed`);
-        window.location.reload(true);
+        fetchUsers();
       }
     } catch (err) {
       console.error(err);
@@ -200,7 +210,8 @@ export default function UsersList() {
       }
       if (data.success) {
         alert(`Senior ${id} edited`);
-        window.location.reload(true);
+        setOpenEdit(false);
+        fetchUsers();
       }
     } catch (err) {
       console.error(err);
@@ -231,7 +242,8 @@ export default function UsersList() {
       }
       if (data.success) {
         alert(`Senior ${id}'s deleted`);
-        window.location.reload(true);
+        setOpenDelete(false);
+        fetchUsers();
       }
     } catch (err) {
       console.error(err);
@@ -279,12 +291,22 @@ export default function UsersList() {
         navigate("/forbidden");
       }
       if (data.success) {
-        setOpenCard(true);
+        setCardFront(`${data.id_front}?${Date.now()}`);
+        setCardBack(`${data.id_back}?${Date.now()}`);
       }
     } catch (err) {
       console.error(err);
     }
   }
+
+  const [hold, setHold] = useState(false);
+  useEffect(() => {
+    if (hold && id) { 
+      handlePrintID(); 
+      setOpenCard(true);
+      setHold(false);
+    }
+  }, [id, hold])
 
   async function handleDownloadID() {
     try {
@@ -490,7 +512,9 @@ export default function UsersList() {
                       user.emergency_fname, user.emergency_mname, 
                       user.emergency_lname, user.emergency_number, true
                   ); 
-                  setOpenDelete(false); setOpenEdit(false); handlePrintID();
+                  setOpenDelete(false); 
+                  setOpenEdit(false); 
+                  setHold(true);
                 }}>
                   Print ID
                 </button>
@@ -508,6 +532,30 @@ export default function UsersList() {
           ))}
         </tbody>
       </table>
+
+      <div>
+        <button 
+          disabled={page <= 1} 
+          onClick={() => setPage(page - 1)}
+        >
+          Prev
+        </button>
+        {pages.map(num => (
+          <button 
+            key={num} 
+            style={page === num ? { color: "red" } : {}}
+            onClick={() => setPage(num)}
+          >
+            {num}
+          </button>
+        ))}
+        <button 
+          disabled={page >= totalPages} 
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
+      </div>
 
       { openEdit && (
         <div className="popup">
@@ -784,13 +832,19 @@ export default function UsersList() {
         <div className="popup">
           <label>Front</label>
           <br/>
-          <img src="./temp/card-front.png" width={"200px"}></img>
+          <img 
+            src={cardFront}
+            width={"200px"}
+          ></img>
 
           <br/>
 
           <label>Back</label>
           <br/>
-          <img src="./temp/card-back.png" width={"200px"}></img>
+          <img 
+            src={cardBack} 
+            width={"200px"}
+          ></img>
 
           <br/>
           <button onClick={() => {handleDownloadID();}}>Download ID</button>
