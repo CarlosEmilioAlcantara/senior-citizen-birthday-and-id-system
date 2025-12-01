@@ -28,7 +28,7 @@ export default function UsersList() {
   async function fetchUsers() {
     try {
       const res = await fetch(
-        `/admins/users-list?&page=${page}&per_page=${perPage}&keyword=${emailOrFullname}&sort=${sort}`, 
+        `/admins/users-list?page=${page}&per_page=${perPage}&keyword=${emailOrFullname}&sort=${sort}`, 
         { method: "GET", }
       )
       const data = await res.json();
@@ -163,6 +163,41 @@ export default function UsersList() {
     setEmergencyMiddleName(emergency_mname);
     setEmergencyLastName(emergency_lname);
     setEmergencyNumber(emergency_number);
+  }
+
+  async function fetchUser(e) {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(
+        `/admins/users-list?id=${id}`, 
+        { method: "GET", }
+      )
+      const data = await res.json();
+      const processedBirthday = new Date(data.info.birthday)
+      .toLocaleDateString("en-US", {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        })
+      setUserInfo(
+        id, data.info.first_name, data.info.middle_name, data.info.last_name,
+        data.info.email, data.info.age, processedBirthday, data.info.gender, 
+        data.info.house, data.info.street, data.info.subdivision, 
+        data.info.barangay, data.info.city, data.info.province,
+        data.info.emergency_fname, data.info.emergency_mname, 
+        data.info.emergency_lname, data.info.emergency_number, true
+      )
+
+      if (data.status === 429) {
+        navigate("/too-many-requests");
+      }
+      if (data.status === 403) {
+        navigate("/forbidden");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   function handleSetAge() {
@@ -808,6 +843,11 @@ export default function UsersList() {
             />
             <br/>
             <small style={{"color": "red"}}>{errors.emergency_number_error}</small>
+            <br/>
+
+            <button onClick={(e) => fetchUser(e)}>
+              Reset
+            </button>
             <br/>
 
             <button type="submit">Submit</button>
