@@ -24,6 +24,7 @@ def admin_info():
     get_all = request.args.get("get_all")
     keyword = request.args.get("keyword", default="")
     sort = request.args.get("sort", default="Newest")
+    id = request.args.get("id")
 
     if get_all:
         try:
@@ -48,6 +49,14 @@ def admin_info():
             "response": "Info Gathered", 
             "info": admins,
             "total_pages": total_pages
+        }), 200
+
+    if id:
+        admin = select_admin(id)
+        return jsonify({
+            "success": True, 
+            "response": "Info Gathered", 
+            "info": admin
         }), 200
 
     admin = select_admin(session["admin_id"])
@@ -137,6 +146,15 @@ def users_list():
     sort = request.args.get("sort", default="Newest")
     pictures = select_pictures()
     signatures = select_signatures()
+    id = request.args.get("id")
+
+    if id:
+        user_info = select_senior(id, True)
+        return jsonify({
+            "success": True, 
+            "response": "Info Gathered", 
+            "info": user_info
+        }), 200
 
     try:
         page = int(request.args.get("page"))

@@ -46,6 +46,29 @@ export default function SuperadminAdminsList() {
     }
   }
 
+  async function fetchAdmin(e) {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(
+        `/admins/info?id=${id}`,
+        { method: "GET" }
+      )
+      const data = await res.json();
+      setEmail(data.info.email);
+      setUsername(data.info.username);
+
+      if (data.status === 429) {
+        navigate("/too-many-requests");
+      }
+      if (data.status === 403) {
+        navigate("/forbidden");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   useEffect(() => {
     fetchAdmins();
   }, [sort, page])
@@ -374,6 +397,11 @@ export default function SuperadminAdminsList() {
             />
             <br/>
             <small style={{"color": "red"}}>{errors.username}</small>
+            <br/>
+
+            <button onClick={(e) => fetchAdmin(e)}>
+              Reset
+            </button>
             <br/>
 
             <button type="submit">Edit Admin</button>
