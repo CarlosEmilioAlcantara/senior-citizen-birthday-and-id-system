@@ -3,19 +3,19 @@ import os
 import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
-from models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, total_seniors_filtered, update_senior
-from models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
+from app.models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, total_seniors_filtered, update_senior
+from app.models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
-from services.sort_data import sort_data
-from services.check_password import check_password
-from services.change_password import change_password
-from services.upsert_image import upsert_image
-from services.delete_account import delete_account
-from services.delete_old_image import delete_old_image
-from services.image_service import generate_id_card
-from services.create_filename import create_filename
-from services.create_folder import create_folder 
-from services.remove_folder import remove_folder
+from app.services.sort_data import sort_data
+from app.services.check_password import check_password
+from app.services.change_password import change_password
+from app.services.upsert_image import upsert_image
+from app.services.delete_account import delete_account
+from app.services.delete_old_image import delete_old_image
+from app.services.image_service import generate_id_card
+from app.services.create_filename import create_filename
+from app.services.create_folder import create_folder 
+from app.services.remove_folder import remove_folder
 
 admins_bp = Blueprint("admins", __name__)
 

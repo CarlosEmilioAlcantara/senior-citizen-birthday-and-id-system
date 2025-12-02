@@ -1,28 +1,20 @@
 import mysql.connector
+from flask import current_app
 
-db_config = {
-    "host": "localhost",
-    "user": "root",
-    "password": "1234",
-    "database": "seniors"
-}
+def get_db_config():
+    with current_app.app_context():
+        return {
+            "host": current_app.config["DB_HOST"],
+            "user": current_app.config["DB_USER"],
+            "password": current_app.config["DB_PASSWORD"],
+            "database": current_app.config["DB_DATABASE"]
+        }
+
 
 def db_connect():
+    db_config = get_db_config()
     connection = mysql.connector.connect(**db_config)
     return connection
-
-# def count_db(query):
-#     conn = db_connect()
-#     cursor = conn.cursor(dictionary=True)
-
-#     try:
-#         cursor.execute(query)
-#         result = cursor.fetchone()
-
-#         return result
-#     finally:
-#         cursor.close()
-#         conn.close()
 
 def query_db(query, args=None, fetchone=False):
     conn = db_connect()

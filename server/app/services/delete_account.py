@@ -1,5 +1,5 @@
-from models.seniors import delete_senior
-from models.admins import delete_admin
+from app.models.seniors import delete_senior
+from app.models.admins import delete_admin
 
 def delete_account(identifier, kind):
     if kind == "senior":

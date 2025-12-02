@@ -1,10 +1,10 @@
 from flask import Blueprint, request, session, jsonify, current_app
-from common.extensions import csrf
+from app.common.extensions import csrf
 from app.forms.auth_forms import AdminLoginForm, LoginForm, RegisterForm, InfoForm
-from models.seniors import exist_senior, get_id_senior, insert_senior, session_senior
-from models.admins import exist_admin, session_admin
-from services.check_password import check_password
-from services.upsert_image import upsert_image
+from app.models.seniors import exist_senior, get_id_senior, insert_senior, session_senior
+from app.models.admins import exist_admin, session_admin
+from app.services.check_password import check_password
+from app.services.upsert_image import upsert_image
 
 auth_bp = Blueprint("auth", __name__)
 

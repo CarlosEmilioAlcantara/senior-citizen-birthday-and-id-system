@@ -1,7 +1,7 @@
 import os
 from flask import current_app
-from services.create_filename import create_filename
-from services.move_images import move_images
+from app.services.create_filename import create_filename
+from app.services.move_images import move_images
 
 def create_folder(last_name, middle_name, first_name):
     folder_name = create_filename("card", last_name, middle_name, first_name)

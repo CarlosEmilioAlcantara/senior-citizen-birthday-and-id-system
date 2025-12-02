@@ -1,5 +1,5 @@
 from app.database import modify_db, query_db
-from services.encrypt_password import encrypt_password
+from app.services.encrypt_password import encrypt_password
 
 def session_admin(identifier):
     admin = query_db(

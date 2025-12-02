@@ -1,7 +1,7 @@
 import os
-from models.seniors import insert_id_image, update_id_image
-from services.create_filename import create_filename
-from services.validate_file import validate_file
+from app.models.seniors import insert_id_image, update_id_image
+from app.services.create_filename import create_filename
+from app.services.validate_file import validate_file
 
 def upsert_image(
     last_name, 
