@@ -1,6 +1,6 @@
 from app.database import modify_db, query_db
-from services.is_verified import is_verified
-from services.encrypt_password import encrypt_password
+from app.services.is_verified import is_verified
+from app.services.encrypt_password import encrypt_password
 
 def session_senior(identifier):
     user = query_db(

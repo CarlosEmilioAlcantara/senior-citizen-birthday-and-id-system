@@ -1,13 +1,13 @@
 from flask import Blueprint, jsonify, request, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
-from models.seniors import check_verify_status, select_picture, select_senior, update_senior
+from app.models.seniors import check_verify_status, select_picture, select_senior, update_senior
 from app.forms.auth_forms import ChangePasswordForm, DeleteAccountForm, UserEditForm
-from services.check_password import check_password
-from services.change_password import change_password
-from services.create_address import create_address
-from services.upsert_image import upsert_image
-from services.delete_account import delete_account
-from services.delete_old_image import delete_old_image
+from app.services.check_password import check_password
+from app.services.change_password import change_password
+from app.services.create_address import create_address
+from app.services.upsert_image import upsert_image
+from app.services.delete_account import delete_account
+from app.services.delete_old_image import delete_old_image
 
 users_bp = Blueprint("users", __name__)
 

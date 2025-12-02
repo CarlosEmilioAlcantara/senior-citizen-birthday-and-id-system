@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request, session
-from models.seniors import total_seniors, total_unverified_seniors, total_verified_seniors
-from models.admins import change_role_admin, check_email_admin, check_username_admin, exist_admin, insert_admin, select_admin, select_admins, total_admin_accounts, update_admin
+from app.models.seniors import total_seniors, total_unverified_seniors, total_verified_seniors
+from app.models.admins import change_role_admin, check_email_admin, check_username_admin, exist_admin, insert_admin, select_admin, select_admins, total_admin_accounts, update_admin
 from app.forms.auth_forms import ChangeAdminRoleForm, CheckIDForm, CreateAdminForm, EditAdminForm
-from services.delete_account import delete_account
+from app.services.delete_account import delete_account
 
 superadmins_bp = Blueprint("superadmins", __name__)
 
