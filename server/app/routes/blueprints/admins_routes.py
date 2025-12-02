@@ -16,6 +16,7 @@ from app.services.image_service import generate_id_card
 from app.services.create_filename import create_filename
 from app.services.create_folder import create_folder 
 from app.services.remove_folder import remove_folder
+from app.services.email_service import email_senior
 
 admins_bp = Blueprint("admins", __name__)
 
@@ -197,6 +198,7 @@ def admins_edit_senior_verification():
         })
 
     id = form.id.data
+    email = form.email.data
     verification = form.verification.data
 
     if not select_senior(id, True):
@@ -210,6 +212,8 @@ def admins_edit_senior_verification():
         verification, 
         id
     )
+    email_senior(email, verification)
+
     return jsonify({
         "success": True, 
         "response": "Verification Edit Unsuccessful", 

@@ -292,6 +292,7 @@ class CheckIDForm(FlaskForm):
 
 class ChangeVerification(FlaskForm):
     id = IntegerField("id", validators=[DataRequired(), NumberRange(min=1)])
+    email = EmailField("email", validators=[DataRequired(), Email()])
     verification = SelectField(
         "verification", 
         choices=[("Verified", "Verified"), ("Unverified", "Unverified")],
