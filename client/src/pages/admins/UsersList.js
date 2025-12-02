@@ -79,7 +79,7 @@ export default function UsersList() {
     )
   }, [users])
 
-  async function handleVerificationChange(id, verification) {
+  async function handleVerificationChange(id, email, verification) {
     setVerifications(prev => ({...prev, [id]: verification}));
 
     try {
@@ -90,7 +90,7 @@ export default function UsersList() {
           "X-CSRF-Token": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify({id, verification}),
+        body: JSON.stringify({id, email, verification}),
       })
       const data = await res.json();
       if (!data.exists) {
@@ -511,7 +511,7 @@ export default function UsersList() {
                 <select 
                   value={verifications[user.senior_id]}
                   onChange={(e) => handleVerificationChange(
-                    user.senior_id, e.target.value)}
+                    user.senior_id, user.email, e.target.value)}
                 >
                   <option>Verified</option>
                   <option>Unverified</option>
