@@ -32,3 +32,7 @@ class Config:
 #   SESSION_COOKIE_SECURE=True, 
 #   SESSION_COOKIE_HTTPONLY=True, 
 #   SESSION_COOKIE_SAMESITE='Lax' 
+    MAIL_SERVER = os.getenv("MAIL_SERVER")
+    MAIL_PORT = os.getenv("MAIL_PORT")
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")

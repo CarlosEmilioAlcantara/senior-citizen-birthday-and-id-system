@@ -1,7 +1,8 @@
 from flask import Flask
 from datetime import timedelta
-from server.app.security.cors import implement_cors
-from server.app.security.limiter import implement_limiter
+from app.security.cors import implement_cors
+from app.security.limiter import implement_limiter
+from app.security.csrf import implement_csrf
 from app.routes.routes import register_routes
 
 app = Flask(__name__)
@@ -14,9 +15,9 @@ def create_app():
         days=app.config["SESSION_LIFETIME_DAYS"]
     )
 
-    print(app.config["UPLOAD_FOLDER"])
     implement_cors(app)
     implement_limiter(app)
+    implement_csrf(app)
     register_routes(app)
 
     return app

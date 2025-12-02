@@ -2,7 +2,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 def implement_limiter(app):
-    limiter = Limiter(
+    Limiter(
         app=app,
         key_func=get_remote_address,
         default_limits=[
@@ -10,4 +10,3 @@ def implement_limiter(app):
             app.config["LIMITER_HOUR_LIMIT"], 
         ],
     )
-    return limiter
