@@ -1,5 +1,6 @@
 from flask import Blueprint, request, session, jsonify, current_app
-from app.common.extensions import csrf
+from flask_wtf.csrf import generate_csrf
+from app.security.csrf import csrf
 from app.forms.auth_forms import AdminLoginForm, LoginForm, RegisterForm, InfoForm
 from app.models.seniors import exist_senior, get_id_senior, insert_senior, session_senior
 from app.models.admins import exist_admin, session_admin
@@ -10,8 +11,7 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/csrf-token", methods=["GET"])
 def csrf_token():
-    from flask_wtf.csrf import generate_csrf
-    token = generate_csrf()  # does not break session; uses same secret
+    token = generate_csrf()  
     # session.permanent = True
     return jsonify({"csrf_token": token})
 

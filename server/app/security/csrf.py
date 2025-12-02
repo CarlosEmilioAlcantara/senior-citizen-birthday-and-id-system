@@ -1,8 +1,5 @@
-from flask import request, jsonify, current_app
-from itsdangerous import URLSafeTimedSerializer, BadSignature
+from flask_wtf.csrf import CSRFProtect
+csrf = CSRFProtect()
 
-def get_serializer():
-    return URLSafeTimedSerializer(current_app.secret_key)
-
-def generate_csrf_token():
-    return get_serializer().dumps("csrf")
+def implement_csrf(app):
+    csrf.init_app(app)
