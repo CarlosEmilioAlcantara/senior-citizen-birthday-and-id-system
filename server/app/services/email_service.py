@@ -15,7 +15,3 @@ def email_senior(recipient, verification):
         message.body = "Unfortunately your account has been unverified, please edit your information and ensure the data is correct."
 
     mail.send(message)
-
-def birthday_emailer(recipient):
-    # Send email when -15 days > birthday > +15 days
-    return
