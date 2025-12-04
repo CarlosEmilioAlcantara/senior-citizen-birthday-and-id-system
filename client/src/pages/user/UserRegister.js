@@ -89,21 +89,6 @@ export default function UserRegister() {
     }
   }
 
-  // useEffect(() => {
-  //   async function getBarangays() {
-  //     const res = await fetch(
-  //       "https://psgc.gitlab.io/api/cities/137405000/barangays/",
-  //       { method: "GET" }
-  //     )
-  //     const data = await res.json();
-  //     for (let i = 0; i < data.length; i++) {
-  //       console.log(data[i].name)
-  //     }
-  //   }
-
-  //   getBarangays();
-  // }, [])
-
   return (
     <>
       {!status && <p style={{ color: "red" }}>{response}</p>}

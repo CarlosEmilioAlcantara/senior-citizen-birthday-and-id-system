@@ -5,6 +5,7 @@ import Sidebar from "../../components/Sidebar";
 export default function UserDashboard() {
   const [info, setInfo] = useState({});
   const [verificationStatus, setVerificationStatus] = useState(null);
+  const [birthdayNear, setBirthdayNear] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +40,10 @@ export default function UserDashboard() {
         } else {
           setVerificationStatus(data.verification);
         }
+
+        if (data.status === 429) {
+          navigate("/too-many-requests");
+        }
       } catch (err) {
         console.error(err);
       }
@@ -47,9 +52,33 @@ export default function UserDashboard() {
     getVerificationStatus();
   }, [])
 
+  useEffect(() => {
+    async function getBirthdayNear() {
+      try {
+        const res = await fetch("/user/check-birthday", {
+          method: "GET"
+        })
+        const data = await res.json();
+        setBirthdayNear(data.birthday_near);
+        
+        if (data.status === 429) {
+          navigate("/too-many-requests");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getBirthdayNear();
+  }, [])
+
   return (
     <div>
       <Sidebar/>
+      { verificationStatus && birthdayNear && (
+        <h3 style={{"color": "blue"}}>Your birthday is near! You may get your birthday payout at the establishment.</h3>
+      )}
+
       { verificationStatus ? (
         <h3 style={{"color": "green"}}>You are verified</h3>
       ) : (

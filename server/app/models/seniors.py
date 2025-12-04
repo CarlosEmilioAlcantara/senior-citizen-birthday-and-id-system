@@ -316,3 +316,12 @@ def total_seniors_filtered(keyword):
         keyword, keyword, keyword, keyword,
     ), True)["COUNT(*)"]
     return total
+
+def get_senior_birthday(identifier):
+    birthday = query_db("""
+        SELECT birthday FROM senior_citizens
+        WHERE senior_id = %s
+    """, (
+        identifier,
+    ), True)["birthday"]
+    return birthday

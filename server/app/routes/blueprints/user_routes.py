@@ -1,6 +1,8 @@
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from flask import Blueprint, jsonify, request, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
-from app.models.seniors import check_verify_status, select_picture, select_senior, update_senior
+from app.models.seniors import check_verify_status, get_senior_birthday, select_picture, select_senior, update_senior
 from app.forms.auth_forms import ChangePasswordForm, DeleteAccountForm, UserEditForm
 from app.services.check_password import check_password
 from app.services.change_password import change_password
@@ -8,6 +10,7 @@ from app.services.create_address import create_address
 from app.services.upsert_image import upsert_image
 from app.services.delete_account import delete_account
 from app.services.delete_old_image import delete_old_image
+from app.services.is_birthday_near import is_birthday_near
 
 users_bp = Blueprint("users", __name__)
 
@@ -186,3 +189,12 @@ def get_verification_status():
             "success": False, 
             "response": "Session Nonexistent"
         }), 400
+
+@users_bp.route("/user/check-birthday", methods=["GET"])
+def check_birthday():
+    birthday_near = is_birthday_near(session["user_id"])
+    return jsonify({
+        "success": True, 
+        "response": "Birthday Gather Successful",
+        "birthday_near": birthday_near
+    })
