@@ -10,7 +10,6 @@ def get_db_config():
             "database": current_app.config["DB_DATABASE"]
         }
 
-
 def db_connect():
     db_config = get_db_config()
     connection = mysql.connector.connect(**db_config)
