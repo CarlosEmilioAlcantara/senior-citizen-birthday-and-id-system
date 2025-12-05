@@ -1,69 +1,16 @@
 from database.database import db_connect
+from models.models import get_future_recipients, get_today_celebrants, get_today_recipients, update_senior_age
 
 def who_has_birthday_near():
-    conn = db_connect()
-    cursor = conn.cursor(dictionary=True)
-    query = """
-        SELECT
-            first_name, middle_name, last_name,
-            birthday, age, email
-        FROM senior_citizens
-        WHERE ((DAYOFYEAR(birthday) - DAYOFYEAR(CURDATE()) + 366) % 366) = 15
-    """
-
-    try:
-        cursor.execute(query, None)
-        return cursor.fetchall()
-    finally:
-        cursor.close() 
-        conn.close()
+    recipients = get_future_recipients()
+    return recipients
 
 def who_has_birthday_today():
-    conn = db_connect()
-    cursor = conn.cursor(dictionary=True)
-    query = """
-        SELECT
-            first_name, middle_name, last_name,
-            birthday, age, email
-        FROM senior_citizens
-        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
-    """
-
-    try:
-        cursor.execute(query, None)
-        return cursor.fetchall()
-    finally:
-        cursor.close() 
-        conn.close()
+    recipients = get_today_recipients()
+    return recipients
 
 def update_age():
-    conn = db_connect()
-    cursor = conn.cursor(dictionary=True)
-    query = """
-        SELECT 
-            senior_id, age
-        FROM senior_citizens
-        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
-    """
+    celebrants = get_today_celebrants()
 
-    try:
-        cursor.execute(query, None)
-        with_birthdays = cursor.fetchall()
-    finally:
-        cursor.close() 
-        conn.close()
-
-    conn = db_connect()
-    cursor = conn.cursor(dictionary=True)
-    query = """
-        UPDATE senior_citizens
-        SET age = %s
-        WHERE senior_id = %s
-    """
-
-    for celebrant in with_birthdays:
-        cursor.execute(query, (celebrant["age"] + 1, celebrant["senior_id"]))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
+    for celebrant in celebrants:
+        update_senior_age(celebrant["age"] + 1, celebrant["senior_id"])
