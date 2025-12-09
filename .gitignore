@@ -10,3 +10,4 @@ server/uploads/signatures/*
 venv/
 .env
 server/.flaskenv
+.vscode

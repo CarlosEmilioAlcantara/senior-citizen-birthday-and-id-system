@@ -19,15 +19,15 @@ export default function Sidebar() {
     getRole();
   }, []);
 
-  return(
-    <div>
-      <nav>
-        <li style={{"display": "flex", "gap": "2em", "padding": "0.3em 0em"}}>
-          { role === "user" && (
+  return (
+    <div className="bg-gradient-to-b from-cyan-700 to-blue-700">
+      <nav className="mx-3 w-64 hidden md:block">
+        <li className="flex flex-col ">
+          {role === "user" && (
             <>
-              <Link to="/">Home</Link>
-              <a>Pending Awards</a>
-              <a>Received Awards</a>
+              {/* <Link to="/">Home</Link> */}
+              {/* <a>Pending Awards</a>
+              <a>Received Awards</a> */}
               <Link to="/user-edit">Edit Account</Link>
               <Link to="/user-change-password">Change Password</Link>
               <Link to="/user-delete">Delete Account</Link>
@@ -35,7 +35,7 @@ export default function Sidebar() {
             </>
           )}
 
-          { role === "admin" && (
+          {role === "admin" && (
             <>
               <Link to="/admin-dashboard">Dashboard</Link>
               <Link to="/users-list">List of Users</Link>
@@ -45,7 +45,7 @@ export default function Sidebar() {
             </>
           )}
 
-          { role === "superadmin" && (
+          {role === "superadmin" && (
             <>
               <Link to="/superadmin-dashboard">Dashboard</Link>
               <Link to="/users-list">List of Users</Link>
