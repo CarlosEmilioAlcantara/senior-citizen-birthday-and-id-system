@@ -16,7 +16,7 @@ def send_bulk_emails(recipients, when):
     ):
         body = f"""
 Happy birthday! {first_name} {middle_name} {last_name}!
-You are {'nearly' if when == 'near' else 'now'} {age}, your birthday is {'today ' if when == 'today' else 'on'} {birthday},
+You are {'nearly' if when == 'near' else 'now'} {age + 1 if when == 'near' else age}, your birthday is {'today ' if when == 'today' else 'on'} {birthday},
 you may now visit the establishment to earn your
 birthday payout.
 
