@@ -1,4 +1,3 @@
-from database.database import db_connect
 from models.models import get_future_recipients, get_today_celebrants, get_today_recipients, update_senior_age
 
 def who_has_birthday_near():
