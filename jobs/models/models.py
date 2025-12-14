@@ -8,7 +8,7 @@ def get_future_recipients():
         FROM senior_citizens
         WHERE (
             (DAYOFYEAR(birthday) - DAYOFYEAR(CURDATE()) + 366) % 366
-        ) BETWEEN 1 AND 15;
+        ) = 15;
     """, None, False)
     return recipients
 
@@ -19,6 +19,18 @@ def get_today_recipients():
             birthday, age, email
         FROM senior_citizens
         WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+    """, None, False)
+    return recipients
+
+def get_past_recipients():
+    recipients = query_db("""
+        SELECT
+            first_name, middle_name, last_name,
+            birthday, age, email
+        FROM senior_citizens
+        WHERE (
+            (DAYOFYEAR(CURDATE()) - DAYOFYEAR(birthday) + 366) % 366
+        ) = 15;
     """, None, False)
     return recipients
 

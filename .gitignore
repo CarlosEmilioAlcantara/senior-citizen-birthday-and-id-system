@@ -10,3 +10,6 @@ server/uploads/signatures/*
 venv/
 .env
 server/.flaskenv
+
+# Jobs
+run-emailer.bat
