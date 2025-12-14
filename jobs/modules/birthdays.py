@@ -1,4 +1,4 @@
-from models.models import get_future_recipients, get_today_celebrants, get_today_recipients, update_senior_age
+from models.models import get_future_recipients, get_past_recipients, get_today_celebrants, get_today_recipients, update_senior_age
 
 def who_has_birthday_near():
     recipients = get_future_recipients()
@@ -6,6 +6,10 @@ def who_has_birthday_near():
 
 def who_has_birthday_today():
     recipients = get_today_recipients()
+    return recipients
+
+def who_has_birthday_past():
+    recipients = get_past_recipients()
     return recipients
 
 def update_age():
