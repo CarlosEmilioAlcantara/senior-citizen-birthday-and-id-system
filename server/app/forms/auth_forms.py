@@ -1,13 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import DateField, FileField, IntegerField, SelectField, StringField, EmailField, PasswordField
 from wtforms.validators import DataRequired, Email, Regexp, EqualTo, NumberRange, AnyOf, Length, Optional
-from .validators import optional_allowed_file, password_strength, allowed_file, path_allowed_file
+from .validators import file_size_limit, optional_allowed_file, password_strength, allowed_file, path_allowed_file
 
 class LoginForm(FlaskForm):
     class Meta:
         csrf = False
 
-    # id = IntegerField("id", validators=[DataRequired(), NumberRange(min=1)])
     email = EmailField("email", validators=[DataRequired(), Email()])
     password = PasswordField("password", validators=[DataRequired()])
 
@@ -36,12 +35,12 @@ class InfoForm(FlaskForm):
     id_picture = FileField(
         "id_picture", 
         validators=[
-            DataRequired(), allowed_file
+            DataRequired(), allowed_file, file_size_limit
         ])
     signature_picture = FileField(
         "signature_picture", 
         validators=[
-            DataRequired(), allowed_file
+            DataRequired(), allowed_file, file_size_limit
         ])
     first_name = StringField(
         "first_name", 
@@ -117,12 +116,12 @@ class UserEditForm(FlaskForm):
     id_picture = FileField(
         "id_picture", 
         validators=[
-            Optional(), optional_allowed_file
+            Optional(), optional_allowed_file, file_size_limit
         ])
     signature_picture = FileField(
         "signature_picture", 
         validators=[
-            Optional(), optional_allowed_file
+            Optional(), optional_allowed_file, file_size_limit
         ])
     first_name = StringField(
         "first_name", 
@@ -285,12 +284,12 @@ class AdminEditUserForm(FlaskForm):
     id_picture = FileField(
         "id_picture", 
         validators=[
-            Optional(), optional_allowed_file
+            Optional(), optional_allowed_file, file_size_limit
         ])
     signature_picture = FileField(
         "signature_picture", 
         validators=[
-            Optional(), optional_allowed_file
+            Optional(), optional_allowed_file, file_size_limit
         ])
     first_name = StringField(
         "first_name", 

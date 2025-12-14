@@ -33,3 +33,13 @@ def optional_allowed_file(form, field):
     ext = os.path.splitext(file.filename)[1].lower().lstrip(".")
     if ext not in {"jpg", "jpeg", "png"}:
         raise ValidationError("File type should be .png, .jpg, or .jpeg")
+
+def file_size_limit(form, field):
+    max_bytes = 64000
+    field.data.seek(0, 2)
+    file_size = field.data.tell()
+
+    if file_size > max_bytes:
+        raise ValidationError(f"File size must be less than 64kb")
+
+    field.data.seek(0)
