@@ -268,28 +268,6 @@ class EditAdminForm(FlaskForm):
 class CheckIDForm(FlaskForm):
     id = IntegerField("id", validators=[DataRequired(), NumberRange(min=1)])
 
-# class SearchAdminForm(FlaskForm):
-#     email_or_username = StringField(
-#         "email_or_username", 
-#         validators=[DataRequired()])
-#     filter = SelectField(
-#         "filter", 
-#         validators=[
-#             DataRequired(),
-#             AnyOf(["All", "admin", "superadmin"])
-#         ])
-
-# class FilterAdminForm(FlaskForm):
-#     email_or_username = StringField(
-#         "email_or_username", 
-#         validators=[Optional()])
-#     filter = SelectField(
-#         "filter", 
-#         validators=[
-#             DataRequired(),
-#             AnyOf(["All", "admin", "superadmin"])
-#         ])
-
 class ChangeVerification(FlaskForm):
     id = IntegerField("id", validators=[DataRequired(), NumberRange(min=1)])
     email = EmailField("email", validators=[DataRequired(), Email()])
