@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function AdminsLogin() {
   const [status, setStatus] = useState(null);
@@ -63,6 +63,7 @@ export default function AdminsLogin() {
         <br/>
         <small style={{"color": "red"}}>{errors.password}</small>
         <br />
+        <Link to="/reset-password">Forgot Password?</Link>
 
         <button type="submit">Login</button>
       </form>
