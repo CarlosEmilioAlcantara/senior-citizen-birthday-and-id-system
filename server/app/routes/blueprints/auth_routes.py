@@ -6,6 +6,8 @@ from app.models.seniors import exist_senior, get_id_senior, insert_senior, sessi
 from app.models.admins import exist_admin, session_admin
 from app.services.check_password import check_password
 from app.services.upsert_image import upsert_image
+from app.services.email_otp import email_otp
+from app.services.create_otp import create_otp
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -68,6 +70,35 @@ def exists():
         return jsonify({
             "success": False, 
             "response": "Email is registered"
+        }), 401
+
+@auth_bp.route("/auth/reset-password", methods=["POST"])
+@csrf.exempt
+def reset_password():
+    session.clear()
+    form = RegisterForm()
+
+    if not form.validate_on_submit():
+        return jsonify({
+            "success": False, 
+            "response": "Reset Password Unsuccessful",
+            "errors": form.errors
+        }), 400
+
+    email = form.email.data
+    exists = exist_senior(email) or exist_admin(email)
+
+    if exists:
+        otp = create_otp()
+        email_otp(email, otp)
+        return jsonify({
+            "success": True, 
+            "response": "Email is registered"
+        }), 200
+    else:
+        return jsonify({
+            "success": False, 
+            "response": "Email is not registered"
         }), 401
 
 @auth_bp.route("/auth/register", methods=["POST"])
