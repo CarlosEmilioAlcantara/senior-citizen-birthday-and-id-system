@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState(null);
   const [response, setResponse] = useState("");
@@ -19,7 +20,6 @@ export default function ForgotPassword() {
         body: fd,
       })
       const data = await res.json();
-      setStatus(data.success);
       setResponse(data.response);
       setErrors({...data.errors});
 
@@ -37,14 +37,15 @@ export default function ForgotPassword() {
   async function handleOTP(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
+    fd.append("email", email);
+    fd.append("password", password)
 
     try {
-      const res = await fetch("/auth/reset-password", {
+      const res = await fetch("/auth/otp", {
         method: "POST",
         body: fd,
       })
       const data = await res.json();
-      setStatus(data.success);
       setResponse(data.response);
       setErrors({...data.errors});
 
@@ -52,7 +53,8 @@ export default function ForgotPassword() {
         navigate("/too-many-requests");
       }
       if (res.ok && data.success) {
-        setStatus(data.success);
+        alert(`${data.response}, redirecting you back to login page`);
+        navigate("/");
       }
     } catch (err) {
       console.error(err);
@@ -79,7 +81,7 @@ export default function ForgotPassword() {
             Confirm OTP
           </h2>
 
-          {!status && <p style={{ color: "red" }}>{response}</p>}
+          {response && <p style={{ color: "red" }}>{response}</p>}
 
           <form onSubmit={handleOTP} className="space-y-4">
             <div>
@@ -87,13 +89,13 @@ export default function ForgotPassword() {
                 OTP
               </label>
               <input
-                type="text"
+                type="number"
                 placeholder="508795"
                 name="otp"
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <p className="text-red-500">{errors.email}</p>
+            <p className="text-red-500">{errors.otp}</p>
 
             <button
               className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer"
@@ -133,6 +135,8 @@ export default function ForgotPassword() {
                 placeholder="example@email.com"
                 name="email"
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <p className="text-red-500">{errors.email}</p>

@@ -431,3 +431,11 @@ class DownloadIDValidator(FlaskForm):
     first_name = StringField("first_name", validators=[DataRequired()])
     middle_name = StringField("middle_name", validators=[DataRequired()])
     last_name = StringField("last_name", validators=[DataRequired()])
+
+class OTPForm(FlaskForm):
+    class Meta:
+        csrf = False
+
+    email = EmailField("email", validators=[DataRequired(), Email()])
+    otp = IntegerField("otp", validators=[DataRequired(), NumberRange(min=1)])
+    password = PasswordField("password", validators=[DataRequired()])

@@ -123,6 +123,15 @@ def change_password_admin(hash, identifier):
         hash.decode("utf-8"), identifier,
     ))
 
+def change_password_admin_email(hash, identifier):
+    modify_db("""
+        UPDATE admin_accounts
+        SET password_hash = %s
+        WHERE email = %s;
+    """, (
+        hash.decode("utf-8"), identifier,
+    ))
+
 def delete_admin(identifier):
     modify_db(
         "DELETE FROM admin_accounts WHERE admin_id = %s",
