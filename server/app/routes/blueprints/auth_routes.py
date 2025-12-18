@@ -121,8 +121,14 @@ def otp():
     email = form.email.data
     otp = form.otp.data
     password = form.password.data
+    check = check_otp(email, otp)
 
-    if check_otp(email, otp):
+    if check == "late":
+        return jsonify({
+            "success": False,
+            "response": "OTP Has Expired"
+        }), 400
+    elif check == "early":
         change_password(password, email, "senior", True)
         delete_otp(email)
         return jsonify({
