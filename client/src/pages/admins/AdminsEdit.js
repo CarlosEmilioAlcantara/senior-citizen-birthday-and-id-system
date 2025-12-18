@@ -15,7 +15,7 @@ export default function AdminsEdit() {
 
   async function getAdminInfo() {
     try {
-      const res = await fetch("/admin/info", {
+      const res = await fetch("/admins/info", {
         method: "GET",
         credentials: "include",
       })
