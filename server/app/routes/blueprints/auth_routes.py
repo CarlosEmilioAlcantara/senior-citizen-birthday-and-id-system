@@ -1,13 +1,16 @@
 from flask import Blueprint, request, session, jsonify, current_app
 from flask_wtf.csrf import generate_csrf
 from app.security.csrf import csrf
-from app.forms.auth_forms import AdminLoginForm, LoginForm, RegisterForm, InfoForm
+from app.forms.auth_forms import AdminLoginForm, LoginForm, OTPForm, RegisterForm, InfoForm
 from app.models.seniors import exist_senior, get_id_senior, insert_senior, session_senior
 from app.models.admins import exist_admin, session_admin
 from app.services.check_password import check_password
 from app.services.upsert_image import upsert_image
 from app.services.email_otp import email_otp
 from app.services.create_otp import create_otp
+from app.models.both import delete_otp, save_otp
+from app.services.check_otp import check_otp
+from app.services.change_password import change_password
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -91,6 +94,7 @@ def reset_password():
     if exists:
         otp = create_otp()
         email_otp(email, otp)
+        save_otp(email, otp)
         return jsonify({
             "success": True, 
             "response": "Email is registered"
@@ -100,6 +104,38 @@ def reset_password():
             "success": False, 
             "response": "Email is not registered"
         }), 401
+
+@auth_bp.route("/auth/otp", methods=["POST"])
+@csrf.exempt
+def otp():
+    session.clear()
+    form = OTPForm()
+
+    if not form.validate_on_submit():
+        return jsonify({
+            "success": False,
+            "response": "Password Changed Unsuccesfully",
+            "errors": form.errors
+        }), 400
+
+    email = form.email.data
+    otp = form.otp.data
+    password = form.password.data
+
+    if check_otp(email, otp):
+        change_password(password, email, "senior", True)
+        delete_otp(email)
+        return jsonify({
+            "success": True,
+            "response": "Password Changed Successfully"
+        }), 200
+    else:
+        return jsonify({
+            "success": False,
+            "response": "OTP Is Invalid"
+        }), 400
+
+
 
 @auth_bp.route("/auth/register", methods=["POST"])
 @csrf.exempt

@@ -146,6 +146,15 @@ def change_password_senior(hash, identifier):
         hash.decode("utf-8"), identifier,
     ))
 
+def change_password_senior_email(hash, identifier):
+    modify_db("""
+        UPDATE senior_citizens
+        SET password_hash = %s
+        WHERE email = %s;
+    """, (
+        hash.decode("utf-8"), identifier,
+    ))
+
 def delete_senior(identifier):
     modify_db("""
         DELETE FROM senior_citizens 
