@@ -8,7 +8,7 @@ from app.services.check_password import check_password
 from app.services.upsert_image import upsert_image
 from app.services.email_otp import email_otp
 from app.services.create_otp import create_otp
-from app.models.both import delete_otp, save_otp
+from app.models.both import delete_otp, save_otp, update_otp
 from app.services.check_otp import check_otp
 from app.services.change_password import change_password
 
@@ -141,6 +141,35 @@ def otp():
             "response": "OTP Is Invalid"
         }), 400
 
+@auth_bp.route("/auth/resend-otp", methods=["POST"])
+def resend_otp():
+    session.clear()
+    data = request.get_json()
+    form = RegisterForm(data=data)
+
+    if not form.validate():
+        return jsonify({
+            "success": False, 
+            "response": "Resend OTP Unsuccessful",
+            "errors": form.errors
+        }), 400
+
+    email = form.email.data
+    exists = exist_senior(email) or exist_admin(email)
+
+    if exists:
+        otp = create_otp()
+        email_otp(email, otp)
+        update_otp(email, otp)
+        return jsonify({
+            "success": True, 
+            "response": "Email is registered"
+        }), 200
+    else:
+        return jsonify({
+            "success": False, 
+            "response": "Email is not registered"
+        }), 401
 
 
 @auth_bp.route("/auth/register", methods=["POST"])

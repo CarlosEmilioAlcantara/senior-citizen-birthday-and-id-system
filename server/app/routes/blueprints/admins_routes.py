@@ -216,7 +216,7 @@ def admins_edit_senior_verification():
 
     return jsonify({
         "success": True, 
-        "response": "Verification Edit Unsuccessful", 
+        "response": "Verification Edit Successful", 
         "senior_id": id
     }), 200
 
@@ -306,12 +306,13 @@ def admins_delete_senior():
         delete_account(id, "senior")
         return jsonify({
             "success": True, 
-            "response": "Delete Account Successful"
+            "response": "Delete Senior Successful",
+            "exists": False
         }), 200
     else:
         return jsonify({
             "success": False, 
-            "response": "User Lookup Unsuccessful",
+            "response": "Senior Lookup Unsuccessful",
             "exists": False
         }), 400
 

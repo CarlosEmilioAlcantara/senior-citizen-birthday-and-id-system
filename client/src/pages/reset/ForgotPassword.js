@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [open, setOpen] = useState(null);
   const [status, setStatus] = useState(null);
   const [response, setResponse] = useState("");
@@ -58,6 +59,22 @@ export default function ForgotPassword() {
         alert(`${data.response}, redirecting you back to login page`);
         navigate("/");
       }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function resendOTP(e) {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/auth/resend-otp", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email, password, confirm})
+      })
+      const data = await res.json();
+      
     } catch (err) {
       console.error(err);
     }
@@ -170,6 +187,8 @@ export default function ForgotPassword() {
                 placeholder="Confirm Password"
                 name="confirm"
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
               />
 
               <p className="text-red-500">{errors.confirm}</p>
