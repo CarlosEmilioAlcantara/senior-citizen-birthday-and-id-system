@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(null);
   const [status, setStatus] = useState(null);
   const [response, setResponse] = useState("");
   const [errors, setErrors] = useState({});
@@ -27,7 +28,7 @@ export default function ForgotPassword() {
         navigate("/too-many-requests");
       }
       if (res.ok && data.success) {
-        setStatus(data.success);
+        setOpen(data.success);
       }
     } catch (err) {
       console.error(err);
@@ -46,6 +47,7 @@ export default function ForgotPassword() {
         body: fd,
       })
       const data = await res.json();
+      setStatus(data.success);
       setResponse(data.response);
       setErrors({...data.errors});
 
@@ -75,13 +77,13 @@ export default function ForgotPassword() {
       </div>
 
       {/* RIGHT SIDE - REGISTER FORM */}
-      { status ? (
+      { open ? (
         <div className="flex flex-col justify-center  p-12 lg:p-20 ">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">
             Confirm OTP
           </h2>
 
-          {response && <p style={{ color: "red" }}>{response}</p>}
+          {!status && <p style={{ color: "red" }}>{response}</p>}
 
           <form onSubmit={handleOTP} className="space-y-4">
             <div>
