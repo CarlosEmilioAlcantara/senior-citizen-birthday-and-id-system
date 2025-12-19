@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
@@ -6,7 +6,8 @@ export default function ForgotPassword() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [open, setOpen] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState(true);
+  const [timeCheck, setTimeCheck] = useState(true);
   const [response, setResponse] = useState("");
   const [errors, setErrors] = useState({});
 
@@ -74,11 +75,45 @@ export default function ForgotPassword() {
         body: JSON.stringify({email, password, confirm})
       })
       const data = await res.json();
+      setStatus(data.success);
+      setResponse(data.response);
       
+      if (data.status === 429) {
+        navigate("/too-many-requests");
+      }
+      if (res.ok && data.success) {
+        alert(`New OTP sent`);
+      }
     } catch (err) {
       console.error(err);
     }
   }
+
+  useEffect(() => {
+    async function timeCheckOTP() {
+      try {
+        const res = await fetch("/auth/timecheck-otp", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({email, password, confirm})
+        })
+        const data = await res.json();
+        setTimeCheck(data.time_check);
+
+        if (data.status === 429) {
+          navigate("/too-many-requests");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    const intervalMinutes = 30
+    const runInterval = setInterval(timeCheckOTP, intervalMinutes * 60 * 1000);
+
+    return () => {
+      clearInterval(runInterval);
+    }
+  }, [])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
@@ -123,6 +158,12 @@ export default function ForgotPassword() {
               Confirm Reset
             </button>
           </form>
+          <button 
+            onClick={resendOTP}
+            disabled={timeCheck}
+          >
+            Resend OTP
+          </button>
 
           <div className="text-center my-6">
             <span className="text-sm text-gray-600 cursor-pointer flex justify-center gap-1">

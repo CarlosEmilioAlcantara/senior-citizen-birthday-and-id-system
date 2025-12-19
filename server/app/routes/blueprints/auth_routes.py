@@ -123,18 +123,18 @@ def otp():
     password = form.password.data
     check = check_otp(email, otp)
 
-    if check == "late":
-        return jsonify({
-            "success": False,
-            "response": "OTP Has Expired"
-        }), 400
-    elif check == "early":
+    if check == "early":
         change_password(password, email, "senior", True)
         delete_otp(email)
         return jsonify({
             "success": True,
             "response": "Password Changed Successfully"
         }), 200
+    elif check == "late":
+        return jsonify({
+            "success": False,
+            "response": "OTP Has Expired"
+        }), 400
     else:
         return jsonify({
             "success": False,
@@ -142,6 +142,7 @@ def otp():
         }), 400
 
 @auth_bp.route("/auth/resend-otp", methods=["POST"])
+@csrf.exempt
 def resend_otp():
     session.clear()
     data = request.get_json()
@@ -158,19 +159,62 @@ def resend_otp():
     exists = exist_senior(email) or exist_admin(email)
 
     if exists:
-        otp = create_otp()
-        email_otp(email, otp)
-        update_otp(email, otp)
-        return jsonify({
-            "success": True, 
-            "response": "Email is registered"
-        }), 200
+        check = check_otp(email)
+        if check == "late":
+            otp = create_otp()
+            email_otp(email, otp)
+            update_otp(email, otp)
+            return jsonify({
+                "success": True, 
+                "response": "Resent Successfully"
+            }), 200
+        elif check == "early":
+            return jsonify({
+                "success": False, 
+                "response": "Too Early To Resend"
+            }), 400
     else:
         return jsonify({
             "success": False, 
-            "response": "Email is not registered"
+            "response": "Email Is Not Registered"
         }), 401
 
+@auth_bp.route("/auth/timecheck-otp", methods=["POST"])
+@csrf.exempt
+def timecheck_otp():
+    session.clear()
+    data = request.get_json()
+    form = RegisterForm(data=data)
+
+    if not form.validate():
+        return jsonify({
+            "success": False, 
+            "response": "Time Check OTP Unsuccessful",
+            "errors": form.errors
+        }), 400
+
+    email = form.email.data
+    exists = exist_senior(email) or exist_admin(email)
+
+    if exists:
+        check = check_otp(email)
+        if check == "late":
+            return jsonify({
+                "success": True, 
+                "response": "Can Now Resend",
+                "time_check": False
+            }), 200
+        elif check == "early":
+            return jsonify({
+                "success": False, 
+                "response": "Too Early To Resend",
+                "time_check": True
+            }), 400
+    else:
+        return jsonify({
+            "success": False, 
+            "response": "Email Is Not Registered"
+        }), 401
 
 @auth_bp.route("/auth/register", methods=["POST"])
 @csrf.exempt
