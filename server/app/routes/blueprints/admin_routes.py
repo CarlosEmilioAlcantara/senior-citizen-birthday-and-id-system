@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify
-from server.app.models.seniors import total_seniors, total_unverified_seniors, total_verified_seniors
+from app.models.seniors import total_seniors, total_unverified_seniors, total_verified_seniors
 
-admins_bp = Blueprint("superadmins", __name__)
+admin_bp = Blueprint("admin", __name__)
 
 # @require_role("admin", "superadmin")
-@admins_bp.route("/admin/dashboard", methods=["GET"])
+@admin_bp.route("/admin/dashboard", methods=["GET"])
 def superadmin_dashboard():
     info = {}
     senior_accounts = total_seniors()
