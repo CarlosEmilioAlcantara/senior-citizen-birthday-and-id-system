@@ -6,6 +6,8 @@ import Unauthorized from "./pages/Unauthorized";
 import UserLogin from "./pages/user/UserLogin";
 import UserRegister from "./pages/user/UserRegister";
 import ForgotPassword from "./pages/reset/ForgotPassword";
+import UsersForgotPassword from "./pages/reset/UsersForgotPassword";
+import AdminsForgotPassword from "./pages/reset/AdminsForgotPassword";
 import UserDashboard from "./pages/user/UserDashboard";
 import UserEdit from "./pages/user/UserEdit";
 import UserChangePassword from "./pages/user/UserChangePassword";
@@ -32,7 +34,8 @@ function App() {
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/admins-login" element={<AdminsLogin />} />
         <Route path="/user-register" element={<UserRegister />} />
-        <Route path="/reset-password" element={<ForgotPassword />} />
+        <Route path="/user-reset-password" element={<UsersForgotPassword />} />
+        <Route path="/admin-reset-password" element={<AdminsForgotPassword />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/too-many-requests" element={<RateLimitExceeded />} />
         <Route path="/forbidden" element={<Forbidden />} />

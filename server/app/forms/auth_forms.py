@@ -439,3 +439,9 @@ class OTPForm(FlaskForm):
     email = EmailField("email", validators=[DataRequired(), Email()])
     otp = IntegerField("otp", validators=[DataRequired(), NumberRange(min=1)])
     password = PasswordField("password", validators=[DataRequired()])
+    role = SelectField(
+        "role", 
+        choices=[("senior", "senior"), ("admin", "admin")],
+        validators=[
+            DataRequired(), AnyOf(["senior", "admin"])
+        ])

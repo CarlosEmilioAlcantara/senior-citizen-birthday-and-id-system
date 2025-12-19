@@ -75,7 +75,7 @@ export default function UserLogin() {
             />
             <div className="text-right">
               <span className="text-xs hover:underline text-red-600 cursor-pointer">
-                <Link to="/reset-password">Forgot Password?</Link>
+                <Link to="/user-reset-password">Forgot Password?</Link>
               </span>
             </div>
             <small className="text-sm underline text-red-600 cursor-pointer">
