@@ -2,7 +2,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from app.models.both import select_otp
 
-def check_otp(email, otp):
+def check_otp(email, otp=None):
     reset_data = select_otp(email)
     stored_otp = reset_data["otp"]
     expires_at = reset_data["expires_at"]
@@ -12,9 +12,17 @@ def check_otp(email, otp):
         now_formatted,
         "%Y-%m-%d %H:%M:%S"
     )
-    if str(otp) == stored_otp and now_clean >= expires_at:
-        return "late"
-    elif str(otp) == stored_otp and now_clean < expires_at:
-        return "early"
+    if otp:
+        if str(otp) == stored_otp and now_clean >= expires_at:
+            return "late"
+        elif str(otp) == stored_otp and now_clean < expires_at:
+            return "early"
+        else:
+            return "invalid"
     else:
-        return "invalid"
+        if now_clean >= expires_at:
+            return "late"
+        elif now_clean < expires_at:
+            return "early"
+        else:
+            return "invalid"
