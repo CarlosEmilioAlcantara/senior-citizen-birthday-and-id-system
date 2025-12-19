@@ -92,13 +92,23 @@ def reset_password():
     exists = exist_senior(email) or exist_admin(email)
 
     if exists:
+        check = check_otp(email)
         otp = create_otp()
-        email_otp(email, otp)
-        save_otp(email, otp)
-        return jsonify({
-            "success": True, 
-            "response": "Email is registered"
-        }), 200
+        if not check:
+            email_otp(email, otp)
+            save_otp(email, otp)
+            return jsonify({
+                "success": True, 
+                "response": "Email is registered"
+            }), 200
+        else:
+            email_otp(email, otp)
+            delete_otp(email)
+            save_otp(email, otp)
+            return jsonify({
+                "success": True, 
+                "response": "Resent OTP Successfully"
+            }), 200
     else:
         return jsonify({
             "success": False, 
@@ -121,10 +131,12 @@ def otp():
     email = form.email.data
     otp = form.otp.data
     password = form.password.data
+    role = form.role.data
     check = check_otp(email, otp)
+    print(otp, check)
 
     if check == "early":
-        change_password(password, email, "senior", True)
+        change_password(password, email, role, True)
         delete_otp(email)
         return jsonify({
             "success": True,
@@ -163,10 +175,11 @@ def resend_otp():
         if check == "late":
             otp = create_otp()
             email_otp(email, otp)
-            update_otp(email, otp)
+            delete_otp(email)
+            save_otp(email, otp)
             return jsonify({
                 "success": True, 
-                "response": "Resent Successfully"
+                "response": "Resent OTP Successfully"
             }), 200
         elif check == "early":
             return jsonify({

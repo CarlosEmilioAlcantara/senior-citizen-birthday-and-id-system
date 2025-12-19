@@ -63,7 +63,7 @@ export default function AdminsLogin() {
         <br/>
         <small style={{"color": "red"}}>{errors.password}</small>
         <br />
-        <Link to="/reset-password">Forgot Password?</Link>
+        <Link to="/admin-reset-password">Forgot Password?</Link>
 
         <button type="submit">Login</button>
       </form>
