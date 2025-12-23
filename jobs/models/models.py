@@ -51,3 +51,13 @@ def update_senior_age(new_age, identifier):
     """, (
         new_age, identifier
     ))
+
+def clean_password_resets():
+    modify_db("""
+        DELETE FROM password_resets
+        WHERE (
+            (DAYOFYEAR(CURDATE()) - DAYOFYEAR(created_at) + 366) % 366
+        ) >= 2;
+    """, (
+        None
+    ))
