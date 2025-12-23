@@ -214,3 +214,26 @@ def total_admins_filtered(keyword):
         keyword, keyword,
     ), True)["COUNT(*)"]
     return total
+
+def get_today_celebrants(page, per_page):
+    offset = (page - 1) * per_page
+    recipients = query_db("""
+        SELECT *
+        FROM senior_citizens
+        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+        ORDER BY last_name DESC
+        LIMIT %s OFFSET %s
+    """, (
+        per_page, offset,
+    ), False)
+    return recipients
+
+def total_celebrants():
+    total = query_db("""
+        SELECT COUNT(*)
+        FROM senior_citizens
+        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+    """, (
+        None
+    ), True)["COUNT(*)"]
+    return total

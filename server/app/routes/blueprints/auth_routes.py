@@ -133,7 +133,6 @@ def otp():
     password = form.password.data
     role = form.role.data
     check = check_otp(email, otp)
-    print(otp, check)
 
     if check == "early":
         change_password(password, email, role, True)

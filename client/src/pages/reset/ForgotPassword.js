@@ -5,7 +5,7 @@ export default function ForgotPassword({ accountType }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  // const [otp, setOTP] = useState("");
+  const [otp, setOTP] = useState("");
   const [open, setOpen] = useState(null);
   const [status, setStatus] = useState(true);
   const [timeCheck, setTimeCheck] = useState(true);
@@ -150,22 +150,22 @@ export default function ForgotPassword({ accountType }) {
                 placeholder="508795"
                 name="otp"
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                // value={otp}
+                value={otp}
                 // Nagdedelete lagi pamula likod
-                // onKeyDown={(e) => {
-                //   if (
-                //       (e.key >= "0" && e.key <= "9") || 
-                //       e.key === "Enter" || 
-                //       e.key === "Backspace" || 
-                //       e.key === "Delete"
-                //   ) {
-                //     if (e.key !== "Backspace" && e.key !== "Delete") {
-                //       setOTP((otp) => otp + e.key); 
-                //     } else {
-                //       setOTP((otp) => otp.slice(0, -1));
-                //     }
-                //   }
-                // }} 
+                onKeyDown={(e) => {
+                  if (
+                      (e.key >= "0" && e.key <= "9") || 
+                      e.key === "Enter" || 
+                      e.key === "Backspace" || 
+                      e.key === "Delete"
+                  ) {
+                    if (e.key !== "Backspace" && e.key !== "Delete") {
+                      setOTP((otp) => otp + e.key); 
+                    } else {
+                      setOTP((otp) => otp.slice(0, -1));
+                    }
+                  }
+                }} 
               />
             </div>
             <p className="text-red-500">{errors.otp}</p>
