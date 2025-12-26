@@ -15,17 +15,17 @@ export default function AdminsLogin() {
         method: "POST",
         credentials: "include",
         body: fd,
-      })
-      
+      });
+
       const data = await res.json();
-      setErrors({...data.errors});
+      setErrors({ ...data.errors });
       setStatus(data.success);
       setResponse(data.response);
 
       if (data.status === 429) {
         navigate("/too-many-requests");
-      } 
-      
+      }
+
       if (data.success && data.role === "admin") {
         navigate("/admin-dashboard");
       } else if (data.success && data.role === "superadmin") {
@@ -34,7 +34,7 @@ export default function AdminsLogin() {
     } catch (err) {
       console.log(err);
     }
-  };
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
@@ -69,19 +69,16 @@ export default function AdminsLogin() {
             <small className="text-red-500">{errors.email_or_username}</small>
           </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          placeholder="password"
-          name="password"
-        />
-        <br/>
-        <small style={{"color": "red"}}>{errors.password}</small>
-        <br />
-        <Link to="/admin-reset-password">Forgot Password?</Link>
+          <label>Password</label>
+          <input type="password" placeholder="password" name="password" />
+          <br />
+          <small style={{ color: "red" }}>{errors.password}</small>
+          <br />
+          <Link to="/admin-reset-password">Forgot Password?</Link>
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
 }
