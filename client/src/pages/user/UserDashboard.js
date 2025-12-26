@@ -74,17 +74,17 @@ export default function UserDashboard() {
 
 
   // SideBar
-    // const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex bg-white md:h-screen ">
-       <Sidebar /> 
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
         {/* HEADER */}
         <header className="bg-white flex justify-between items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
           <button
-            // onClick={() => setSidebarOpen(true)}
+            onClick={() => setSidebarOpen(true)}
             className="cursor-pointer p-2 hover:text-cyan-700 hover:scale-110 lg:hidden"
           >
             <svg
@@ -105,61 +105,209 @@ export default function UserDashboard() {
           <div>
             <h1 className="text-2xl font-bold">Dashboard</h1>
           </div>
+
+          {/* Admin Profile Container */}
           <div className="flex gap-2">
-            {/* Admin Profile Container */}
-            <div className="flex">
-              <div className="bg-blue-300 size-11 rounded-full"></div>
-              <div className=" mx-2 hidden md:block">
-                <h2 className="font-bold">Complete Name</h2>
+            {/* <div className=" mx-2 hidden md:block">
+                <div className="font-bold flex gap-1">
+                  {info.first_name}
+
+                  {info.last_name}
+                </div>
                 <p className="uppercase font-semibold text-sm text-right">
                   Senior Citizen
                 </p>
-              </div>
+              </div> */}
+            <div className="hidden md:block">
+              <p className="font-bold">
+                {info.first_name} {info.last_name}
+              </p>
+              <p className="text-sm font-semibold uppercase text-right">
+                Senior Citizen
+              </p>
             </div>
+
+            {/* <div className="bg-blue-300 size-11 rounded-full"></div> */}
+            <img
+              className="w-12 h-12 rounded-full object-cover border shadow"
+              src={`http://localhost:5000/${info.picture_name}`}
+            ></img>
           </div>
         </header>
 
         {/* SCROLLABLE  USER DASHBOARD CONTENT */}
         <main className="flex-1 overflow-y-auto p-5 bg-white">
-          {verificationStatus && birthdayNear && (
-            <h3 style={{ color: "blue" }}>
-              Your birthday is near! You may get your birthday payout at the
-              establishment.
-            </h3>
-          )}
+          {/* <h3>User Dashboard</h3> */}
+          <li className="list-none ">
+            {/* Profile Photo & Senior Signature */}
+            <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 mb-5 flex flex-col gap-5 md:flex-row md:justify-around">
+              {/* Profile Photo */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                  Profile Photo
+                </h3>
 
-          {verificationStatus ? (
-            <h3 style={{ color: "green" }}>You are verified</h3>
-          ) : (
-            <h3 style={{ color: "red" }}>You are still unverified</h3>
-          )}
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <img
+                    className="w-24 h-24 rounded-full object-cover border shadow"
+                    src={`http://localhost:5000/${info.picture_name}`}
+                    alt="Profile"
+                  />
 
-          <h3>User Dashboard</h3>
-          <li className="list-none">
-            <h3>Senior Image</h3>
-            <img
-              width="150"
-              src={`http://localhost:5000/${info.picture_name}`}
-            ></img>
-            <h3>Senior Signature</h3>
-            <img
-              width="150"
-              src={`http://localhost:5000/${info.image_name}`}
-            ></img>
-            <h3>
-              Fullname: {info.first_name} {info.middle_name} {info.last_name}
-            </h3>
-            <h3>Email: {info.email}</h3>
-            <h3>Address: {info.address}</h3>
-            <h3>Age: {info.age}</h3>
-            <h3>Birthday: {info.birthday}</h3>
-            <h3>Gender: {info.gender}</h3>
-            <h3>
-              Emergency Contact Name: {info.emergency_fname}{" "}
-              {info.emergency_mname} {info.emergency_lname}
-            </h3>
-            <h3>Emergency Contact #: {info.emergency_number}</h3>
-            <h3>Card Picture:</h3>
+                  <div className="text-center sm:text-left">
+                    <h2 className="font-bold text-lg">
+                      {info.first_name} {info.last_name}
+                    </h2>
+                    <p className="uppercase font-semibold text-sm">
+                      Senior Citizen
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/*(SIGNATURE) */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                  Senior Signature
+                </h3>
+
+                <div className="flex justify-center">
+                  <img
+                    width="150 "
+                    src={`http://localhost:5000/${info.image_name}`}
+                  ></img>
+                </div>
+              </div>
+            </div>
+
+            {/* Personal, Contact Info and Senior ID Details */}
+            <div className="flex flex-col gap-5">
+              {/* Personal Information */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                  Personal Information
+                </h3>
+
+                <div>
+                  {[
+                    ["First Name", info.first_name],
+                    ["Middle Name", info.middle_name],
+                    ["Last Name", info.last_name],
+                    ["Birthday", info.birthday],
+                    ["Age", info.age],
+                    ["Gender", info.gender],
+                    ["Address", info.address],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2"
+                    >
+                      <span className="text-gray-500 text-base">{label}</span>
+                      <span className="font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]">
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div className="bg-white rounded-xl border p-4 sm:p-5">
+                <h3 className="text-base sm:text-lg font-semibold mb-3">
+                  Contact Information
+                </h3>
+
+                <div>
+                  {[
+                    ["Contact Number", "0999-888-7777"],
+                    ["Email", info.email],
+                    ["Emergency First Name", info.emergency_fname],
+                    ["Emergency Middle Initial", info.emergency_mname],
+                    ["Emergency Last Name", info.emergency_lname],
+                    ["Emergency Contact Number", info.emergency_number],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2"
+                    >
+                      <span className="text-gray-500 text-sm">{label}</span>
+                      <span className="font-medium text-gray-700 text-sm sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]">
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Senior ID Details */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                  Senior ID Details
+                </h3>
+
+                {/* CARD PICTURE */}
+                <div className="mb-4">
+                  <p className="text-gray-500 text-sm mb-2">Card Picture</p>
+
+                  <div className="flex justify-center sm:justify-start">
+                    <div className="w-64 h-40 bg-gray-100 border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden">
+                      {/* PLACEHOLDER IMAGE */}
+                      <img
+                        src="https://via.placeholder.com/256x160?text=Senior+ID+Card"
+                        alt="Senior ID Card"
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ID NUMBER */}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                  <span className="text-gray-500 text-sm">ID Number</span>
+                  <span className="font-medium text-gray-700">
+                    ID xx-xxxx-xxxx
+                  </span>
+                </div>
+
+                {/* STATUS */}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-2">
+                  <span className="text-gray-500 text-sm">Status</span>
+
+                  <div>
+                    {verificationStatus && birthdayNear && (
+                      <p className="text-blue-600 text-sm mb-1">
+                        🎉 Your birthday is near! You may get your payout.
+                      </p>
+                    )}
+
+                    {verificationStatus ? (
+                      <p className="text-green-600 font-medium">Verified</p>
+                    ) : (
+                      <p className="text-red-600 font-medium">Unverified</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <div className="bg-blue-100 p-2 hidden">
+              <h3>
+                Fullname: {info.first_name} {info.middle_name} {info.last_name}
+              </h3>
+              <h3>Birthday: {info.birthday}</h3>
+              <h3>Age: {info.age}</h3>
+
+              <h3>Gender: {info.gender}</h3>
+
+              <h3>Address: {info.address}</h3>
+              <h3>Email: {info.email}</h3>
+
+              <h3>
+                Emergency Contact Name: {info.emergency_fname}{" "}
+                {info.emergency_mname} {info.emergency_lname}
+              </h3>
+              <h3>Emergency Contact #: {info.emergency_number}</h3>
+              <h3>Card Picture:</h3>
+            </div> */}
           </li>
         </main>
       </div>

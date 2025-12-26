@@ -1,71 +1,91 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function UserRegister() {
+  // ---------------------------
+  // FORM STATES
+  // ---------------------------
+  const [step, setStep] = useState(1);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [birthday, setBirthday] = useState("1955-01-01");
+
+  const [birthday, setBirthday] = useState("1950-01-01");
   const [age, setAge] = useState(null);
 
-  const [status, setStatus] = useState(null);
-  const [response, setResponse] = useState("");
-  const [errors, setErrors] = useState({});
+  const [form, setForm] = useState({
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    house: "",
+    street: "",
+    subdivision: "",
+    barangay: "",
+    gender: "",
+    emergency_fname: "",
+    emergency_mname: "",
+    emergency_lname: "",
+    emergency_number: "",
+    birthday: "",
+  });
 
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  function handleSetAge() {
-    const date = new Date();
-    const yearNow = date.getFullYear();
-    const monthNow = date.getMonth();
-    const dayNow = date.getDate();
-
-    const yearThen = new Date(birthday).getFullYear();
-    const monthThen = new Date(birthday).getMonth();
-    const dayThen = new Date(birthday).getDate();
-
-    if (monthNow < monthThen || (
-      monthNow === monthThen && dayNow <= dayThen
-    )) {
-      setAge(yearNow - yearThen - 1)
-    } else {
-      setAge(yearNow - yearThen)
+  // ---------------------------
+  // AGE CALCULATION
+  // ---------------------------
+  function calcAge(dateString) {
+    const today = new Date();
+    const dob = new Date(dateString);
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
     }
+    return age;
   }
 
-  async function handleExists(e) {
+  // ---------------------------
+  // STEP 1 VALIDATION (ACC CREATION)
+  // ---------------------------
+  async function handleStep1(e) {
     e.preventDefault();
 
     try {
       const res = await fetch("/auth/exists", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email, 
-          password, 
-          confirm,
-        }),
-      })
-      const data = await res.json();
-      setStatus(data.success);
-      setResponse(data.response);
-      setErrors({...data.errors});
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirm }),
+      });
 
-      if (data.status === 429) {
-        navigate("/too-many-requests");
-      }
+      const data = await res.json();
+      setErrors({ ...data.errors });
+
+      if (data.success) setStep(2);
     } catch (err) {
       console.error(err);
     }
   }
 
-  async function handleRegister(e) {
+  // ---------------------------
+  // FINAL SUBMISSION
+  // ---------------------------
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const fd = new FormData(e.target);
+
+    // Account fields
     fd.append("email", email);
     fd.append("password", password);
+
+    // Add all Step 2 + Step 3 fields
+    Object.keys(form).forEach((key) => {
+      fd.append(key, form[key]);
+    });
+
     fd.append("age", age);
     fd.append("city", "San Juan");
     fd.append("province", "Metro Manila");
@@ -74,289 +94,97 @@ export default function UserRegister() {
       const res = await fetch("/auth/register", {
         method: "POST",
         body: fd,
-      })
-      const data = await res.json();
-      setErrors({...data.errors});
+      });
 
-      if (data.status === 429) {
-        navigate("/too-many-requests");
-      }
-      if (data.success) {
-        navigate("/");
-      }
+      const data = await res.json();
+      setErrors({ ...data.errors });
+
+      if (data.success) navigate("/");
     } catch (err) {
       console.error(err);
     }
   }
 
   return (
-    <>
-      {!status && <p style={{ color: "red" }}>{response}</p>}
+    <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-white">
+      {/* LEFT SIDE */}
+      <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 relative overflow-hidden border-8 border-white rounded-2xl">
+        <h3 className="text-3xl font-bold text-white mb-4">Senior Citizen</h3>
+        <p className="text-white text-sm max-w-md">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+      </div>
 
-      {status ? (
-        <div>
-          <h3>User Register</h3>
-          <form onSubmit={handleRegister}>
-            <label>1x1 / Passport Size Image</label>
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              name="id_picture"
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.id_picture}</small>
-            <br />
-
-            <label>Signature on white background</label>
-            <input type="file" name="signature_picture" />
-            <br />
-            <small style={{ color: "red" }}>{errors.signature_picture}</small>
-            <br />
-
-            <label>First Name</label>
-            <input type="text" placeholder="First name..." name="first_name" />
-            <br />
-            <small style={{ color: "red" }}>{errors.first_name}</small>
-            <br />
-
-            <label>Middle Name</label>
-            <input
-              type="text"
-              placeholder="Middle name..."
-              name="middle_name"
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.middle_name}</small>
-            <br />
-
-            <label>Last Name</label>
-            <input type="text" placeholder="Last name..." name="last_name" />
-            <br />
-            <small style={{ color: "red" }}>{errors.last_name}</small>
-            <br />
-
-            <label>Address</label>
-            <br />
-            <label>House No. / Building / Lot No. *</label>
-            <input type="text" placeholder="144" name="house" />
-            <br />
-            <small style={{ color: "red" }}>{errors.house}</small>
-            <br />
-
-            <label>Street *</label>
-            <input type="text" placeholder="Bayabas St." name="street" />
-            <br />
-            <small style={{ color: "red" }}>{errors.street}</small>
-            <br />
-
-            <label>Subdivision</label>
-            <input
-              type="text"
-              placeholder="Sayote Village"
-              name="subdivision"
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.subdivision}</small>
-            <br />
-
-            <label>Barangay *</label>
-            <select name="barangay">
-              <option>-- Please select an option --</option>
-              <option>Addition Hills</option>
-              <option>Balong-Bato</option>
-              <option>Batis</option>
-              <option>Corazon De Jesus</option>
-              <option>Ermitaño</option>
-              <option>Halo-halo</option>
-              <option>Isabelita</option>
-              <option>Kabayanan</option>
-              <option>Little Baguio</option>
-              <option>Maytunas</option>
-              <option>Onse</option>
-              <option>Pasadeña</option>
-              <option>Pedro Cruz</option>
-              <option>Progreso</option>
-              <option>Rivera</option>
-              <option>Salapan</option>
-              <option>San Perfecto</option>
-              <option>Santa Lucia</option>
-              <option>Tibagan</option>
-              <option>West Crame</option>
-              <option>Greenhills</option>
-            </select>
-            <br />
-            <small style={{ color: "red" }}>{errors.barangay}</small>
-            <br />
-
-            <label>City / Municipality</label>
-            <input
-              type="text"
-              placeholder="San Juan"
-              name="city"
-              value="San Juan"
-              disabled
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.city}</small>
-            <br />
-
-            <label>Province</label>
-            <input
-              type="text"
-              placeholder="Metro Manila"
-              name="province"
-              value="Metro Manila"
-              disabled
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.province}</small>
-            <br />
-
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              name="birthday"
-              value={birthday}
-              onChange={(e) => {
-                setBirthday(e.target.value);
-                handleSetAge();
-              }}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.birthday}</small>
-            <br />
-
-            <label>Age</label>
-            <input
-              type="number"
-              min="0"
-              max="150"
-              name="age"
-              value={age}
-              disabled
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.age}</small>
-            <br />
-
-            <label>Gender</label>
-            <select name="gender">
-              <option>-- Please select an option --</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
-            <br />
-            <small style={{ color: "red" }}>{errors.gender}</small>
-            <br />
-
-            <label>Emergency Contact's First Name</label>
-            <input type="text" name="emergency_fname" />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_fname}</small>
-            <br />
-
-            <label>Emergency Contact's Middle Name</label>
-            <input type="text" name="emergency_mname" />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_mname}</small>
-            <br />
-
-            <label>Emergency Contact's Last Name</label>
-            <input type="text" name="emergency_lname" />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_lname}</small>
-            <br />
-
-            <label>Emergency Contact's Contact Number</label>
-            <input type="tel" name="emergency_number" maxLength={13} />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_number}</small>
-            <br />
-
-            <button type="submit">Submit</button>
-          </form>
-          <button type="submit" onClick={() => setStatus(false)}>
-            Cancel
-          </button>
+      {/* RIGHT FORM SIDE */}
+      <div className="w-full  bg-white shadow-xl rounded-xl p-8">
+        {/* PROGRESS INDICATOR */}
+        <div className="flex justify-between mb-5">
+          {["Account", "Personal Info", "Contact Info", "Uploads"].map(
+            (label, index) => (
+              <div key={index} className="flex-1 text-center">
+                <div
+                  className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-white
+                  ${step === index + 1 ? "bg-blue-600" : "bg-gray-400"}`}
+                >
+                  {index + 1}
+                </div>
+                <p
+                  className={`mt-2 font-medium text-xs md:text-sm ${
+                    step === index + 1 ? "text-blue-600" : "text-gray-500"
+                  }`}
+                >
+                  {label}
+                </p>
+              </div>
+            )
+          )}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
-          {/* LEFT SIDE */}
-          <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 relative overflow-hidden border-4 border-white rounded-2xl">
-            <h3 className="text-3xl font-bold text-white mb-4">
-              Senior Citizen
-            </h3>
-            <p className="text-white text-sm max-w-md">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
-          </div>
 
-          {/* RIGHT SIDE - REGISTER FORM */}
-          <div className="flex flex-col justify-center  p-12 lg:p-20 ">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Create an Account
-            </h2>
+        {/* STEP 1 — ACCOUNT SETUP */}
+        {step === 1 && (
+          <form onSubmit={handleStep1} className="space-y-4">
+            <h2 className="text-2xl font-bold">Create an Account</h2>
 
-            <form onSubmit={handleExists} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 font-medium">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={email}
-                  placeholder="example@email.com"
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <p className="text-red-500">{errors.email}</p>
+            <div>
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                className="w-full border p-2 rounded"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <p className="text-red-500 text-xs">{errors.email}</p>
+            </div>
 
-              <div>
-                <label className="block text-gray-700 font-medium">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            <div>
+              <label>Password</label>
+              <input
+                type="password"
+                className="w-full border p-2 rounded"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <p className="text-red-500 text-xs">{errors.password}</p>
+            </div>
 
-                {/* <p className="text-xs text-gray-500 text-right">Must be 8 or more and no whitespace</p> */}
+            <div>
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                className="w-full border p-2 rounded"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+              />
+              <p className="text-red-500 text-xs">{errors.confirm}</p>
+            </div>
 
-                <p className="text-red-500">{errors.password}</p>
-              </div>
-
-              <div>
-                <label className="block text-gray-700 font-medium">
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  placeholder="Confirm Password"
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-
-                <p className="text-red-500">{errors.confirm}</p>
-              </div>
-
-              <button
-                className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer"
-                type="submit"
-              >
-                Create an account
-              </button>
-            </form>
+            <button className="w-full py-3 bg-blue-700 text-white rounded-lg">
+              Continue
+            </button>
 
             <div className="text-center my-6">
-              <span className="text-sm text-gray-600 cursor-pointer flex justify-center gap-1">
-                <span>Already have an account yet?</span>
+              <span className="text-sm text-gray-600 flex justify-center gap-1">
+                <span>Already have an account?</span>
                 <Link
                   to="/user-login"
                   className="hover:underline text-blue-600 font-semibold"
@@ -365,9 +193,231 @@ export default function UserRegister() {
                 </Link>
               </span>
             </div>
-          </div>
-        </div>
-      )}
-    </>
+          </form>
+        )}
+
+        {/* STEP 2 — PERSONAL INFO */}
+        {step === 2 && (
+          <form className="space-y-4">
+            <h2 className="text-2xl font-bold">Personal Information</h2>
+
+            {/* Name */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {["first_name", "middle_name", "last_name"].map((item) => (
+                <div key={item}>
+                  <label>{item.replace("_", " ").toUpperCase()}</label>
+                  <input
+                    name={item}
+                    className="w-full border p-2 rounded"
+                    onChange={(e) =>
+                      setForm({ ...form, [item]: e.target.value })
+                    }
+                  />
+                  <p className="text-red-500 text-xs">{errors[item]}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Address */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {["house", "street", "subdivision"].map((item) => (
+                <div key={item}>
+                  <label>{item.toUpperCase()}</label>
+                  <input
+                    name={item}
+                    className="w-full border p-2 rounded"
+                    onChange={(e) =>
+                      setForm({ ...form, [item]: e.target.value })
+                    }
+                  />
+                  <p className="text-red-500 text-xs">{errors[item]}</p>
+                </div>
+              ))}
+
+              {/* Barangay */}
+              <div>
+                <label>Barangay</label>
+                <select
+                  name="barangay"
+                  className="w-full border p-2 rounded"
+                  onChange={(e) =>
+                    setForm({ ...form, barangay: e.target.value })
+                  }
+                >
+                  <option>-- Select --</option>
+                  <option>Greenhills</option>
+                  <option>Maytunas</option>
+                  <option>Kabayanan</option>
+                  <option>Salapan</option>
+                  <option>West Crame</option>
+                  <option>Onse</option>
+                </select>
+                <p className="text-red-500 text-xs">{errors.barangay}</p>
+              </div>
+            </div>
+
+            {/* Birthday + Age + Gender */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  name="birthday"
+                  value={birthday}
+                  className="w-full border p-2 rounded"
+                  onChange={(e) => {
+                    setBirthday(e.target.value);
+                    setAge(calcAge(e.target.value));
+                    setForm({ ...form, birthday: e.target.value });
+                  }}
+                />
+                <p className="text-red-500 text-xs">{errors.birthday}</p>
+              </div>
+
+              <div>
+                <label>Age</label>
+                <input
+                  disabled
+                  value={age || ""}
+                  className="w-full border p-2 rounded bg-gray-100"
+                />
+              </div>
+
+              <div>
+                <label>Gender</label>
+                <select
+                  name="gender"
+                  className="w-full border p-2 rounded"
+                  onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                >
+                  <option>-- Select --</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+                <p className="text-red-500 text-xs">{errors.gender}</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => setStep(1)}
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 bg-blue-700 text-white rounded"
+                onClick={() => setStep(3)}
+              >
+                Continue
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* STEP 3 — CONTACT INFO */}
+        {step === 3 && (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="text-2xl font-bold">Emergency Contact</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {["emergency_fname", "emergency_mname", "emergency_lname"].map(
+                (item) => (
+                  <div key={item}>
+                    <label>{item.replace("_", " ").toUpperCase()}</label>
+                    <input
+                      name={item}
+                      className="w-full border p-2 rounded"
+                      onChange={(e) =>
+                        setForm({ ...form, [item]: e.target.value })
+                      }
+                    />
+                    <p className="text-red-500 text-xs">{errors[item]}</p>
+                  </div>
+                )
+              )}
+
+              <div>
+                <label>Emergency Number</label>
+                <input
+                  name="emergency_number"
+                  maxLength={13}
+                  className="w-full border p-2 rounded"
+                  onChange={(e) =>
+                    setForm({ ...form, emergency_number: e.target.value })
+                  }
+                />
+                <p className="text-red-500 text-xs">
+                  {errors.emergency_number}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => setStep(2)}
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 bg-blue-700 text-white rounded"
+                onClick={() => setStep(4)}
+              >
+                Continue
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* STEP 4 — UPLOADS */}
+        {step === 4 && (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="text-2xl font-bold">Upload Required Documents</h2>
+
+            <div>
+              <label>1x1 / Passport Image</label>
+              <input
+                type="file"
+                name="id_picture"
+                className="w-full border p-2 rounded"
+              />
+              <p className="text-red-500 text-xs">{errors.id_picture}</p>
+            </div>
+
+            <div>
+              <label>Signature (White BG)</label>
+              <input
+                type="file"
+                name="signature_picture"
+                className="w-full border p-2 rounded"
+              />
+              <p className="text-red-500 text-xs">{errors.signature_picture}</p>
+            </div>
+
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => setStep(3)}
+              >
+                Back
+              </button>
+
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+              >
+                Submit Registration
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
   );
 }

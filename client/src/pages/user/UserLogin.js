@@ -62,7 +62,9 @@ export default function UserLogin() {
               placeholder="example@email.com"
               className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-red-500">{errors.email}</p>
+            <p className="text-xs text-red-500 cursor-pointer">
+              {errors.email}
+            </p>
           </div>
 
           <div>
@@ -73,14 +75,15 @@ export default function UserLogin() {
               placeholder="Password"
               className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="text-right">
+            <div className="flex justify-between">
+              <p className="text-xs text-red-500 cursor-pointer">
+                {errors.password}
+              </p>
+
               <span className="text-xs hover:underline text-red-600 cursor-pointer">
                 <Link>Forgot Password?</Link>
               </span>
             </div>
-            <small className="text-sm underline text-red-600 cursor-pointer">
-              {errors.password}
-            </small>
           </div>
 
           {/* Forgot Password Link */}
