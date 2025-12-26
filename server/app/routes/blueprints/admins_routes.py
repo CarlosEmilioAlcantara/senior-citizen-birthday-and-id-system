@@ -4,7 +4,7 @@ import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
 from app.models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, total_seniors_filtered, update_senior
-from app.models.admins import check_email_admin, check_username_admin, exist_admin, get_today_celebrants, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
+from app.models.admins import check_email_admin, check_username_admin, exist_admin, get_today_celebrants, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, total_celebrants, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
 from app.services.sort_data import sort_data
 from app.services.check_password import check_password
@@ -427,7 +427,7 @@ def get_celebrants():
         }), 400
         
     celebrants = get_today_celebrants(page, per_page)
-    total_pages = len(celebrants) // per_page
+    total_pages = total_celebrants() // per_page
 
     if not celebrants:
         return jsonify({

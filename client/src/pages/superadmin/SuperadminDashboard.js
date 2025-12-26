@@ -8,7 +8,7 @@ export default function SuperadminDashboard() {
   const [pictures, setPictures] = useState([]);
   const [signatures, setSignatures] = useState([]);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(1);
+  const [perPage, setPerPage] = useState(15);
   const [pages, setPages] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();

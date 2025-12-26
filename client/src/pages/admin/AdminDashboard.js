@@ -7,6 +7,10 @@ export default function AdminDashboard() {
   const [celebrants, setCelebrants] = useState([]);
   const [pictures, setPictures] = useState([]);
   const [signatures, setSignatures] = useState([]);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(15);
+  const [pages, setPages] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,35 +69,43 @@ export default function AdminDashboard() {
     getAdminsInfo();
   }, [])
 
-  useEffect(() => {
-    async function getCelebrants() {
-      try {
-        const res = await fetch("/admins/get-celebrants", {
-          method: "GET"
+  async function fetchCelebrants() {
+    try {
+      const res = await fetch(
+        `/admins/get-celebrants?page=${page}&per_page=${perPage}`, 
+        { method: "GET" }
+      )
+      const data = await res.json();
+      const processedList = data.celebrants.map(u => ({
+        ...u,
+        birthday: new Date(u.birthday).toLocaleDateString("en-US", {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
         })
-        const data = await res.json();
-        const processedList = data.celebrants.map(u => ({
-          ...u,
-          birthday: new Date(u.birthday).toLocaleDateString("en-US", {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-          })
-        }));
-        setCelebrants(processedList);
-        setPictures(data.pictures);
-        setSignatures(data.signatures);
+      }));
+      setCelebrants(processedList);
+      setPictures(data.pictures);
+      setSignatures(data.signatures);
+      setTotalPages(data.total_pages);
 
-        if (data.status === 429) {
-          navigate("/too-many-requests");
-        }
-      } catch (err) {
-        console.error(err);
+      if (data.status === 429) {
+        navigate("/too-many-requests");
       }
+    } catch (err) {
+      console.error(err);
     }
+  }
 
-    getCelebrants();
-  }, [])
+  useEffect(() => {
+    fetchCelebrants();
+  }, [page])
+
+  useEffect(() => {
+    for (let i = 1; i <= totalPages; i++) {
+      setPages(Array.from({ length: totalPages }, (_, i) => i + 1));
+    }
+  }, [totalPages])
 
   return(
     <div>
@@ -167,6 +179,30 @@ export default function AdminDashboard() {
           )}
         </tbody>
       </table>
+
+      <div>
+        <button 
+          disabled={page <= 1} 
+          onClick={() => setPage(page - 1)}
+        >
+          Prev
+        </button>
+        {pages.map(num => (
+          <button 
+            key={num} 
+            style={page === num ? { color: "red" } : {}}
+            onClick={() => setPage(num)}
+          >
+            {num}
+          </button>
+        ))}
+        <button 
+          disabled={page >= totalPages} 
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

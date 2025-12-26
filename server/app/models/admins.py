@@ -221,7 +221,7 @@ def get_today_celebrants(page, per_page):
         SELECT *
         FROM senior_citizens
         WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
-        ORDER BY last_name DESC
+        ORDER BY last_name ASC
         LIMIT %s OFFSET %s
     """, (
         per_page, offset,
