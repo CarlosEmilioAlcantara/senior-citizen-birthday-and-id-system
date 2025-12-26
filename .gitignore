@@ -3,11 +3,13 @@ client/node_modules/
 
 # Python
 __pycache__/
-server/uploads/id-pictures/*
-server/uploads/signatures/*
-!server/uploads/id-pictures/.gitkeep
-!server/uploads/signatures/.gitkeep
+server/app/uploads/id-pictures/*
+server/app/uploads/signatures/*
+!server/app/uploads/id-pictures/.gitkeep
+!server/app/uploads/signatures/.gitkeep
 venv/
 .env
 server/.flaskenv
-.vscode
+
+# Jobs
+run-emailer.bat

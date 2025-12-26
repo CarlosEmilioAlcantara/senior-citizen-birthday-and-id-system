@@ -1,0 +1,1 @@
+C:\path\to\senior-citizen\jobs\venv\Scripts\activate.bat && C:\path\to\senior-citizen\jobs\emailer.py

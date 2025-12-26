@@ -4,7 +4,7 @@ import zipfile
 from flask import Blueprint, jsonify, request, send_file, session, current_app
 from werkzeug.datastructures import CombinedMultiDict
 from app.models.seniors import change_verify_status, select_id_picture, select_pictures, select_senior, select_senior_newest, select_senior_oldest, select_senior_unupdated, select_senior_updated, select_seniors, select_signature_picture, select_signatures, total_seniors_filtered, update_senior
-from app.models.admins import check_email_admin, check_username_admin, exist_admin, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, update_admin
+from app.models.admins import check_email_admin, check_username_admin, exist_admin, get_today_celebrants, select_admin, select_admin_newest, select_admin_oldest, select_admin_unupdated, select_admin_updated, select_admins, total_admin_accounts, total_admins, total_admins_filtered, total_celebrants, update_admin
 from app.forms.auth_forms import AdminEditForm, AdminEditUserForm, ChangeVerification, CheckIDForm, DeleteAccountForm, DownloadIDValidator, PrintIDValidator
 from app.services.sort_data import sort_data
 from app.services.check_password import check_password
@@ -161,7 +161,10 @@ def users_list():
         page = int(request.args.get("page"))
         per_page = int(request.args.get("per_page"))
     except ValueError as e:
-        print("Converting Unsuccessful", e)
+        return jsonify({
+            "success": False, 
+            "response": "Faulty Request"
+        }), 400
 
     match sort:
         case "Newest":
@@ -216,7 +219,7 @@ def admins_edit_senior_verification():
 
     return jsonify({
         "success": True, 
-        "response": "Verification Edit Unsuccessful", 
+        "response": "Verification Edit Successful", 
         "senior_id": id
     }), 200
 
@@ -306,12 +309,13 @@ def admins_delete_senior():
         delete_account(id, "senior")
         return jsonify({
             "success": True, 
-            "response": "Delete Account Successful"
+            "response": "Delete Senior Successful",
+            "exists": False
         }), 200
     else:
         return jsonify({
             "success": False, 
-            "response": "User Lookup Unsuccessful",
+            "response": "Senior Lookup Unsuccessful",
             "exists": False
         }), 400
 
@@ -407,3 +411,35 @@ def download_id():
         )
     else:
         return jsonify({"success": False, "response": "Folder not found"}), 400
+
+@admins_bp.route("/admins/get-celebrants", methods=["GET"])
+def get_celebrants():
+    pictures = select_pictures()
+    signatures = select_signatures()
+
+    try:
+        page = int(request.args.get("page"))
+        per_page = int(request.args.get("per_page"))
+    except ValueError as e:
+        return jsonify({
+            "success": False,
+            "response": "Faulty Request"
+        }), 400
+        
+    celebrants = get_today_celebrants(page, per_page)
+    total_pages = total_celebrants() // per_page
+
+    if not celebrants:
+        return jsonify({
+            "success": False,
+            "response": "No Celebrants Today"
+        }), 400
+
+    return jsonify({
+        "success": True,
+        "response": "Celebrants Fetch Successful",
+        "celebrants": celebrants,
+        "pictures": pictures,
+        "signatures": signatures,
+        "total_pages": total_pages
+    }), 200

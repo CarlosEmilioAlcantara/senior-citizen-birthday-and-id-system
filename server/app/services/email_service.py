@@ -5,7 +5,7 @@ from app.services.is_verified import is_verified
 
 def email_senior(recipient, verification):
     message = Message(
-        subject="Test",
+        subject="Account Verification",
         sender=current_app.config["MAIL_USERNAME"],
         recipients=[recipient]
     )

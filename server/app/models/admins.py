@@ -123,6 +123,15 @@ def change_password_admin(hash, identifier):
         hash.decode("utf-8"), identifier,
     ))
 
+def change_password_admin_email(hash, identifier):
+    modify_db("""
+        UPDATE admin_accounts
+        SET password_hash = %s
+        WHERE email = %s;
+    """, (
+        hash.decode("utf-8"), identifier,
+    ))
+
 def delete_admin(identifier):
     modify_db(
         "DELETE FROM admin_accounts WHERE admin_id = %s",
@@ -203,5 +212,28 @@ def total_admins_filtered(keyword):
         OR username LIKE %s
     """, (
         keyword, keyword,
+    ), True)["COUNT(*)"]
+    return total
+
+def get_today_celebrants(page, per_page):
+    offset = (page - 1) * per_page
+    recipients = query_db("""
+        SELECT *
+        FROM senior_citizens
+        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+        ORDER BY last_name ASC
+        LIMIT %s OFFSET %s
+    """, (
+        per_page, offset,
+    ), False)
+    return recipients
+
+def total_celebrants():
+    total = query_db("""
+        SELECT COUNT(*)
+        FROM senior_citizens
+        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+    """, (
+        None
     ), True)["COUNT(*)"]
     return total
