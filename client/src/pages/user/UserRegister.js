@@ -151,7 +151,7 @@ export default function UserRegister() {
       return;
     }
 
-  
+
       // success
       setStep(4);
   }
@@ -163,6 +163,8 @@ export default function UserRegister() {
     e.preventDefault();
 
     const fd = new FormData(e.target);
+    const id_picture = e.target.id_picture.files[0];
+    const signature_picture = e.target.signature_picture.files[0];
 
     // Account fields
     fd.append("email", email);
@@ -176,6 +178,18 @@ export default function UserRegister() {
     fd.append("age", age);
     fd.append("city", "San Juan");
     fd.append("province", "Metro Manila");
+
+    // check empty fields
+    if (
+      !id_picture ||
+      !signature_picture 
+    ) {
+      showAlert({
+        title: "Missing Information",
+        message: "Please fill out all fields to continue.",
+      });
+      return;
+    }
 
     try {
       const res = await fetch("/auth/register", {
@@ -427,7 +441,7 @@ export default function UserRegister() {
 
         {/* STEP 3 — CONTACT INFO */}
         {step === 3 && (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form className="space-y-4">
             <h2 className="text-2xl font-bold">Emergency Contact</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
