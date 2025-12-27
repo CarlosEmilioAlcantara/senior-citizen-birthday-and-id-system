@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function UserRegister() {
   // ---------------------------
@@ -39,8 +40,6 @@ export default function UserRegister() {
     emergency_lname: "Emergency Contact Last Name",
   };
 
-
-
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -61,24 +60,48 @@ export default function UserRegister() {
   // ---------------------------
   // STEP 1 VALIDATION (ACC CREATION)
   // ---------------------------
-  async function handleStep1(e) {
-    e.preventDefault();
+async function handleStep1(e) {
+  e.preventDefault();
 
-    try {
-      const res = await fetch("/auth/exists", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, confirm }),
-      });
-
-      const data = await res.json();
-      setErrors({ ...data.errors });
-
-      if (data.success) setStep(2);
-    } catch (err) {
-      console.error(err);
-    }
+  // check empty fields
+  if (!email || !password || !confirm) {
+    showAlert({
+      title: "Missing Information",
+      message: "Please fill out all fields to continue.",
+    });
+    return;
   }
+
+  try {
+    const res = await fetch("/auth/exists", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, confirm }),
+    });
+
+    const data = await res.json();
+    setErrors({ ...data.errors });
+
+    if (data.status === 429) {
+      navigate("/too-many-requests");
+      return;
+    }
+
+    if (!data.success) {
+      showAlert({
+        title: "Account Creation Failed",
+        message: data.message || "Please check your input.",
+      });
+      return;
+    }
+
+    // success
+    setStep(2);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 
   // ---------------------------
   // FINAL SUBMISSION
@@ -115,6 +138,28 @@ export default function UserRegister() {
       console.error(err);
     }
   }
+
+  // ---------------------------
+  // SWEET ALERT (POP-UP)
+  // ---------------------------
+  const showAlert = ({ title, message, icon = "error" }) => {
+    Swal.fire({
+      title: `<p class="text-2xl font-semibold text-gray-800">${title}</p>`,
+      html: `<p class="text-xl text-gray-600 mt-1">${message}</p>`,
+      icon,
+      iconColor: "#2563eb",
+      background: "#ffffff",
+      showConfirmButton: true,
+      confirmButtonText: "Okay",
+      buttonsStyling: false,
+      customClass: {
+        popup: "rounded-xl px-6 py-4",
+        confirmButton:
+          "mt-4 bg-blue-600 text-white px-6 py-2 rounded text-xl hover:bg-blue-700",
+      },
+    });
+  };
+
 
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-white">

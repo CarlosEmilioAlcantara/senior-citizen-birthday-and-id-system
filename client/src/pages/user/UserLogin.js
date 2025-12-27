@@ -11,18 +11,18 @@ export default function UserLogin() {
   // ---------------------------
   const showAlert = ({ title, message, icon = "error" }) => {
     Swal.fire({
-      title: `<p class="text-lg font-semibold text-gray-800">${title}</p>`,
-      html: `<p class="text-sm text-gray-600 mt-1">${message}</p>`,
+      title: `<p class="text-2xl font-semibold text-gray-800">${title}</p>`,
+      html: `<p class="text-xl text-gray-600 mt-1">${message}</p>`,
       icon,
       iconColor: "#2563eb",
       background: "#ffffff",
       showConfirmButton: true,
-      confirmButtonText: "OK",
+      confirmButtonText: "Okay",
       buttonsStyling: false,
       customClass: {
         popup: "rounded-xl px-6 py-4",
         confirmButton:
-          "mt-4 bg-blue-600 text-white px-6 py-2 rounded text-sm hover:bg-blue-700",
+          "mt-4 bg-blue-600 text-white px-6 py-2 rounded text-xl hover:bg-blue-700",
       },
     });
   };
