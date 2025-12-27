@@ -60,48 +60,76 @@ export default function UserRegister() {
   // ---------------------------
   // STEP 1 VALIDATION (ACC CREATION)
   // ---------------------------
-async function handleStep1(e) {
-  e.preventDefault();
+  async function handleStep1(e) {
+    e.preventDefault();
 
-  // check empty fields
-  if (!email || !password || !confirm) {
-    showAlert({
-      title: "Missing Information",
-      message: "Please fill out all fields to continue.",
-    });
-    return;
-  }
-
-  try {
-    const res = await fetch("/auth/exists", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, confirm }),
-    });
-
-    const data = await res.json();
-    setErrors({ ...data.errors });
-
-    if (data.status === 429) {
-      navigate("/too-many-requests");
-      return;
-    }
-
-    if (!data.success) {
+    // check empty fields
+    if (!email || !password || !confirm) {
       showAlert({
-        title: "Account Creation Failed",
-        message: data.message || "Please check your input.",
+        title: "Missing Information",
+        message: "Please fill out all fields to continue.",
       });
       return;
     }
 
-    // success
-    setStep(2);
-  } catch (err) {
-    console.error(err);
-  }
-}
+    try {
+      const res = await fetch("/auth/exists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirm }),
+      });
 
+      const data = await res.json();
+      setErrors({ ...data.errors });
+
+      if (data.status === 429) {
+        navigate("/too-many-requests");
+        return;
+      }
+
+      if (!data.success) {
+        showAlert({
+          title: "Account Creation Failed",
+          message: data.message || "Please check your input.",
+        });
+        return;
+      }
+
+      // success
+      setStep(2);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  // ---------------------------
+  // STEP 2 VALIDATION (PERSONAL INFO)
+  // ---------------------------
+  async function handleStep2(e) {
+    e.preventDefault();
+
+    // check empty fields
+    if (
+      !form.first_name ||
+      !form.middle_name ||
+      !form.last_name ||
+      !form.house ||
+      !form.street ||
+      !form.birthday ||
+      !form.subdivision ||
+      !form.barangay ||
+      !form.gender 
+    ) {
+      showAlert({
+        title: "Missing Information",
+        message: "Please fill out all fields to continue.",
+      });
+      return;
+    }
+
+  
+      // success
+      setStep(3);
+  }
 
   // ---------------------------
   // FINAL SUBMISSION
@@ -139,9 +167,9 @@ async function handleStep1(e) {
     }
   }
 
-  // ---------------------------
-  // SWEET ALERT (POP-UP)
-  // ---------------------------
+  // ------------------------------------------------------
+  // SWEET ALERT (POP-UP) FOR STEP 1 ACCOUNT CREATION
+  // ------------------------------------------------------
   const showAlert = ({ title, message, icon = "error" }) => {
     Swal.fire({
       title: `<p class="text-2xl font-semibold text-gray-800">${title}</p>`,
@@ -159,7 +187,6 @@ async function handleStep1(e) {
       },
     });
   };
-
 
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-white">
@@ -365,7 +392,7 @@ async function handleStep1(e) {
               <button
                 type="button"
                 className="px-4 py-2 bg-blue-700 text-white rounded"
-                onClick={() => setStep(3)}
+                onClick={handleStep2}
               >
                 Continue
               </button>
