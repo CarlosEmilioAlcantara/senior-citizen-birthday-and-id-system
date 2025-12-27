@@ -132,6 +132,31 @@ export default function UserRegister() {
   }
 
   // ---------------------------
+  // STEP 3 VALIDATION (EMERGENCY CONTACT INFO)
+  // ---------------------------
+  async function handleStep3(e) {
+    e.preventDefault();
+
+    // check empty fields
+    if (
+      !form.emergency_fname ||
+      !form.emergency_mname ||
+      !form.emergency_lname ||
+      !form.emergency_number 
+    ) {
+      showAlert({
+        title: "Missing Information",
+        message: "Please fill out all fields to continue.",
+      });
+      return;
+    }
+
+  
+      // success
+      setStep(4);
+  }
+
+  // ---------------------------
   // FINAL SUBMISSION
   // ---------------------------
   async function handleSubmit(e) {
@@ -447,7 +472,7 @@ export default function UserRegister() {
               <button
                 type="button"
                 className="px-4 py-2 bg-blue-700 text-white rounded"
-                onClick={() => setStep(4)}
+                onClick={handleStep3}
               >
                 Continue
               </button>
