@@ -30,6 +30,17 @@ export default function UserRegister() {
     birthday: "",
   });
 
+  // ---------------------------
+  // LABEL FOR EMERGENCY CONTACT
+  // ---------------------------
+  const emergencyLabels = {
+    emergency_fname: "Emergency Contact First Name",
+    emergency_mname: "Emergency Contact Middle Name",
+    emergency_lname: "Emergency Contact Last Name",
+  };
+
+
+
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -323,24 +334,22 @@ export default function UserRegister() {
             <h2 className="text-2xl font-bold">Emergency Contact</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {["emergency_fname", "emergency_mname", "emergency_lname"].map(
-                (item) => (
-                  <div key={item}>
-                    <label>{item.replace("_", " ").toUpperCase()}</label>
-                    <input
-                      name={item}
-                      className="w-full border p-2 rounded"
-                      onChange={(e) =>
-                        setForm({ ...form, [item]: e.target.value })
-                      }
-                    />
-                    <p className="text-red-500 text-xs">{errors[item]}</p>
-                  </div>
-                )
-              )}
+              {Object.keys(emergencyLabels).map((item) => (
+                <div key={item}>
+                  <label>{emergencyLabels[item]}</label>
+                  <input
+                    name={item}
+                    className="w-full border p-2 rounded"
+                    onChange={(e) =>
+                      setForm({ ...form, [item]: e.target.value })
+                    }
+                  />
+                  <p className="text-red-500 text-xs">{errors[item]}</p>
+                </div>
+              ))}
 
               <div>
-                <label>Emergency Number</label>
+                <label>Emergency Contact Number</label>
                 <input
                   name="emergency_number"
                   maxLength={13}
