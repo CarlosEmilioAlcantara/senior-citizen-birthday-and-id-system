@@ -44,6 +44,17 @@ export default function UserRegister() {
   const navigate = useNavigate();
 
   // ---------------------------
+  // HELPERS
+  // ---------------------------
+  const getMissingFields = (required, source) =>
+    required.filter((field) => !source[field]);
+
+  const inputClass = (field) =>
+    `w-full border p-2 rounded ${
+      errors[field] ? "border-red-500" : "border-gray-300"
+    }`;
+
+  // ---------------------------
   // AGE CALCULATION
   // ---------------------------
   function calcAge(dateString) {
@@ -102,37 +113,44 @@ export default function UserRegister() {
     }
   }
   // ---------------------------
-  // STEP 2 VALIDATION (PERSONAL INFO)
+  // STEP 2 VALIDATION (PERSONAL INFO) WITH HIGHLIGHT
   // ---------------------------
-  async function handleStep2(e) {
+
+  function handleStep2(e) {
     e.preventDefault();
 
-    // check empty fields
-    if (
-      !form.first_name ||
-      !form.middle_name ||
-      !form.last_name ||
-      !form.house ||
-      !form.street ||
-      !form.birthday ||
-      !form.subdivision ||
-      !form.barangay ||
-      !form.gender 
-    ) {
+    const required = [
+      "first_name",
+      "middle_name",
+      "last_name",
+      "house",
+      "street",
+      "subdivision",
+      "barangay",
+      "birthday",
+      "gender",
+    ];
+
+    const missing = getMissingFields(required, form);
+
+    if (missing.length) {
+      const newErrors = {};
+      missing.forEach((f) => (newErrors[f] = "This field is required"));
+      setErrors(newErrors);
+
       showAlert({
         title: "Missing Information",
-        message: "Please fill out all fields to continue.",
+        message: "Please complete the highlighted fields to continue.",
       });
       return;
     }
 
-  
-      // success
-      setStep(3);
+    setErrors({});
+    setStep(3);
   }
 
   // ---------------------------
-  // STEP 3 VALIDATION (EMERGENCY CONTACT INFO)
+  // STEP 3 VALIDATION (EMERGENCY CONTACT INFO) WITH HIGHLIGHT
   // ---------------------------
   async function handleStep3(e) {
     e.preventDefault();
@@ -142,7 +160,7 @@ export default function UserRegister() {
       !form.emergency_fname ||
       !form.emergency_mname ||
       !form.emergency_lname ||
-      !form.emergency_number 
+      !form.emergency_number
     ) {
       showAlert({
         title: "Missing Information",
@@ -151,9 +169,8 @@ export default function UserRegister() {
       return;
     }
 
-
-      // success
-      setStep(4);
+    // success
+    setStep(4);
   }
 
   // ---------------------------
@@ -180,10 +197,7 @@ export default function UserRegister() {
     fd.append("province", "Metro Manila");
 
     // check empty fields
-    if (
-      !id_picture ||
-      !signature_picture 
-    ) {
+    if (!id_picture || !signature_picture) {
       showAlert({
         title: "Missing Information",
         message: "Please fill out all fields to continue.",
@@ -330,11 +344,14 @@ export default function UserRegister() {
                   <label>{item.replace("_", " ").toUpperCase()}</label>
                   <input
                     name={item}
-                    className="w-full border p-2 rounded"
-                    onChange={(e) =>
-                      setForm({ ...form, [item]: e.target.value })
-                    }
+                    value={form[item] || ""}
+                    className={inputClass(item)}
+                    onChange={(e) => {
+                      setForm({ ...form, [item]: e.target.value });
+                      setErrors({ ...errors, [item]: "" });
+                    }}
                   />
+
                   <p className="text-red-500 text-xs">{errors[item]}</p>
                 </div>
               ))}
@@ -347,11 +364,14 @@ export default function UserRegister() {
                   <label>{item.toUpperCase()}</label>
                   <input
                     name={item}
-                    className="w-full border p-2 rounded"
-                    onChange={(e) =>
-                      setForm({ ...form, [item]: e.target.value })
-                    }
+                    value={form[item] || ""}
+                    className={inputClass(item)}
+                    onChange={(e) => {
+                      setForm({ ...form, [item]: e.target.value });
+                      setErrors({ ...errors, [item]: "" });
+                    }}
                   />
+
                   <p className="text-red-500 text-xs">{errors[item]}</p>
                 </div>
               ))}
@@ -361,18 +381,20 @@ export default function UserRegister() {
                 <label>Barangay</label>
                 <select
                   name="barangay"
-                  className="w-full border p-2 rounded"
-                  onChange={(e) =>
-                    setForm({ ...form, barangay: e.target.value })
-                  }
+                  value={form.barangay || ""}
+                  className={inputClass("barangay")}
+                  onChange={(e) => {
+                    setForm({ ...form, barangay: e.target.value });
+                    setErrors({ ...errors, barangay: "" });
+                  }}
                 >
-                  <option>-- Select --</option>
-                  <option>Greenhills</option>
-                  <option>Maytunas</option>
-                  <option>Kabayanan</option>
-                  <option>Salapan</option>
-                  <option>West Crame</option>
-                  <option>Onse</option>
+                  <option value="">-- Select --</option>
+                  <option value="Greenhills">Greenhills</option>
+                  <option value="Maytunas">Maytunas</option>
+                  <option value="Kabayanan">Kabayanan</option>
+                  <option value="Salapan">Salapan</option>
+                  <option value="West Crame">West Crame</option>
+                  <option value="Onse">Onse</option>
                 </select>
                 <p className="text-red-500 text-xs">{errors.barangay}</p>
               </div>
@@ -409,8 +431,12 @@ export default function UserRegister() {
                 <label>Gender</label>
                 <select
                   name="gender"
-                  className="w-full border p-2 rounded"
-                  onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                  value={form.gender || ""}
+                  className={inputClass("gender")}
+                  onChange={(e) => {
+                    setForm({ ...form, gender: e.target.value });
+                    setErrors({ ...errors, gender: "" });
+                  }}
                 >
                   <option>-- Select --</option>
                   <option>Male</option>
@@ -444,16 +470,18 @@ export default function UserRegister() {
           <form className="space-y-4">
             <h2 className="text-2xl font-bold">Emergency Contact</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {Object.keys(emergencyLabels).map((item) => (
                 <div key={item}>
                   <label>{emergencyLabels[item]}</label>
                   <input
                     name={item}
-                    className="w-full border p-2 rounded"
-                    onChange={(e) =>
-                      setForm({ ...form, [item]: e.target.value })
-                    }
+                    value={form[item] || ""}
+                    className={inputClass(item)}
+                    onChange={(e) => {
+                      setForm({ ...form, [item]: e.target.value });
+                      setErrors({ ...errors, [item]: "" });
+                    }}
                   />
                   <p className="text-red-500 text-xs">{errors[item]}</p>
                 </div>
@@ -463,6 +491,7 @@ export default function UserRegister() {
                 <label>Emergency Contact Number</label>
                 <input
                   name="emergency_number"
+                  value={form.emergency_number || ""}
                   maxLength={13}
                   className="w-full border p-2 rounded"
                   onChange={(e) =>
