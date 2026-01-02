@@ -260,11 +260,43 @@ export default function UserRegister() {
             (label, index) => (
               <div key={index} className="flex-1 text-center">
                 <div
-                  className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-white
-                  ${step === index + 1 ? "bg-blue-600" : "bg-gray-400"}`}
+                  onClick={() => {
+                    // Clickable PROGRESS INDICATOR Only allow jumping to completed steps
+                    if (step > index + 1) setStep(index + 1);
+                  }}
+                  className="cursor-pointer"
                 >
-                  {index + 1}
+                  <div
+                    className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-white
+                  ${
+                    step === index + 1
+                      ? "bg-blue-600"
+                      : step > index + 1
+                      ? "bg-blue-700"
+                      : "bg-gray-400"
+                  }`}
+                  >
+                    {step > index + 1 ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    ) : (
+                      index + 1
+                    )}
+                  </div>
                 </div>
+
                 <p
                   className={`mt-2 font-medium text-xs md:text-sm ${
                     step === index + 1 ? "text-blue-600" : "text-gray-500"
