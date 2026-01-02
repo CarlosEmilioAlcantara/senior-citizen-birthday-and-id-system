@@ -158,9 +158,27 @@ export default function UserRegister() {
       return;
     }
 
+    // limit phone number format validation 
+    if (
+      form.emergency_number.length !== 11 ||
+      !form.emergency_number.startsWith("09")
+    ) {
+      setErrors({
+        emergency_number: "Invalid phone number format",
+      });
+
+      showAlert({
+        title: "Invalid Contact Number",
+        message:
+          "Emergency contact number must be 11 digits and start with 09.",
+      });
+      return;
+    }
+
     setErrors({});
     setStep(4);
   }
+
 
   // ---------------------------
   // FINAL SUBMISSION
@@ -238,9 +256,24 @@ export default function UserRegister() {
     });
   };
 
-  //for Back button behavior (data persistence)
+  //for Back button behavior (data persistence) at Uploads
   const [idPicture, setIdPicture] = useState(null);
   const [signaturePicture, setSignaturePicture] = useState(null);
+
+  // Allow digits only
+  const digitsOnly = (value) => value.replace(/\D/g, "");
+
+  // Philippine mobile format (09XXXXXXXXX)
+  const formatPHPhone = (value) => {
+    let digits = value.replace(/\D/g, "");
+
+    // enforce starting 09
+    if (digits.length > 0 && !digits.startsWith("09")) {
+      digits = "09" + digits.replace(/^0+/, "").slice(0, 9);
+    }
+
+    return digits.slice(0, 11);
+  };
 
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-white">
@@ -392,22 +425,52 @@ export default function UserRegister() {
 
             {/* Address */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {["house", "street", "subdivision"].map((item) => (
-                <div key={item}>
-                  <label>{item.toUpperCase()}</label>
-                  <input
-                    name={item}
-                    value={form[item] || ""}
-                    className={inputClass(item)}
-                    onChange={(e) => {
-                      setForm({ ...form, [item]: e.target.value });
-                      setErrors({ ...errors, [item]: "" });
-                    }}
-                  />
+              {/* HOUSE NUMBER (digits only) */}
+              <div>
+                <label>HOUSE NUMBER</label>
+                <input
+                  name="house"
+                  value={form.house || ""}
+                  className={inputClass("house")}
+                  inputMode="numeric"
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "");
+                    setForm({ ...form, house: digits });
+                    setErrors({ ...errors, house: "" });
+                  }}
+                />
+                <p className="text-red-500 text-xs">{errors.house}</p>
+              </div>
 
-                  <p className="text-red-500 text-xs">{errors[item]}</p>
-                </div>
-              ))}
+              {/* STREET */}
+              <div>
+                <label>STREET</label>
+                <input
+                  name="street"
+                  value={form.street || ""}
+                  className={inputClass("street")}
+                  onChange={(e) => {
+                    setForm({ ...form, street: e.target.value });
+                    setErrors({ ...errors, street: "" });
+                  }}
+                />
+                <p className="text-red-500 text-xs">{errors.street}</p>
+              </div>
+
+              {/* SUBDIVISION */}
+              <div>
+                <label>SUBDIVISION</label>
+                <input
+                  name="subdivision"
+                  value={form.subdivision || ""}
+                  className={inputClass("subdivision")}
+                  onChange={(e) => {
+                    setForm({ ...form, subdivision: e.target.value });
+                    setErrors({ ...errors, subdivision: "" });
+                  }}
+                />
+                <p className="text-red-500 text-xs">{errors.subdivision}</p>
+              </div>
 
               {/* Barangay */}
               <div>
@@ -524,12 +587,15 @@ export default function UserRegister() {
                 <label>Emergency Contact Number</label>
                 <input
                   name="emergency_number"
+                  inputMode="numeric"
+                  placeholder="09XXXXXXXXX"
                   value={form.emergency_number || ""}
-                  maxLength={13}
                   className={inputClass("emergency_number")}
-                  onChange={(e) =>
-                    setForm({ ...form, emergency_number: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const formatted = formatPHPhone(e.target.value);
+                    setForm({ ...form, emergency_number: formatted });
+                    setErrors({ ...errors, emergency_number: "" });
+                  }}
                 />
                 <p className="text-red-500 text-xs">
                   {errors.emergency_number}
