@@ -169,8 +169,8 @@ export default function UserRegister() {
     e.preventDefault();
 
     const fd = new FormData(e.target);
-    const id_picture = e.target.id_picture.files[0];
-    const signature_picture = e.target.signature_picture.files[0];
+    const id_picture = idPicture;
+    const signature_picture = signaturePicture;
 
     // Account fields
     fd.append("email", email);
@@ -561,7 +561,7 @@ export default function UserRegister() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <h2 className="text-2xl font-bold">Upload Required Documents</h2>
 
-            <div>
+            {/* <div>
               <label>1x1 / Passport Image</label>
               <input
                 type="file"
@@ -586,6 +586,100 @@ export default function UserRegister() {
                 }`}
                 onChange={(e) => setSignaturePicture(e.target.files[0])}
               />
+              <p className="text-red-500 text-xs">{errors.signature_picture}</p>
+            </div> */}
+
+            {/* second */}
+            {/* <div>
+              <label>1x1 / Passport Image</label>
+              <input
+                type="file"
+                name="id_picture"
+                className={`w-full border p-2 rounded ${
+                  errors.id_picture ? "border-red-500" : "border-gray-300"
+                }`}
+                onChange={(e) => setIdPicture(e.target.files[0])}
+              />
+              {idPicture && (
+                <p className="text-green-600 text-sm mt-1">
+                  Selected file: {idPicture.name}
+                </p>
+              )}
+              <p className="text-red-500 text-xs">{errors.id_picture}</p>
+            </div>
+
+            <div>
+              <label>Signature (White BG)</label>
+              <input
+                type="file"
+                name="signature_picture"
+                className={`w-full border p-2 rounded ${
+                  errors.signature_picture
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+                onChange={(e) => setSignaturePicture(e.target.files[0])}
+              />
+              {signaturePicture && (
+                <p className="text-blue-600 text-sm mt-1">
+                  Selected file: {signaturePicture.name}
+                </p>
+              )}
+              <p className="text-red-500 text-xs">{errors.signature_picture}</p>
+            </div> */}
+
+            {/* THIRD */}
+            <div className="relative">
+              <label>1x1 / Passport Image</label>
+
+              <div
+                className={`w-full border p-2 rounded cursor-pointer flex justify-between items-center ${
+                  errors.id_picture ? "border-red-500" : "border-gray-300"
+                }`}
+                onClick={() =>
+                  document.getElementById("id_picture_input").click()
+                }
+              >
+                <span>{idPicture ? idPicture.name : "Choose file..."}</span>
+                <span className="text-gray-500">Browse</span>
+              </div>
+
+              <input
+                type="file"
+                id="id_picture_input"
+                className="hidden"
+                onChange={(e) => setIdPicture(e.target.files[0])}
+              />
+
+              <p className="text-red-500 text-xs">{errors.id_picture}</p>
+            </div>
+
+            <div className="relative mt-4">
+              <label>Signature (White BG)</label>
+
+              <div
+                className={`w-full border p-2 rounded cursor-pointer flex justify-between items-center ${
+                  errors.signature_picture
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+                onClick={() =>
+                  document.getElementById("signature_input").click()
+                }
+              >
+                <span>
+                  {signaturePicture ? signaturePicture.name : "Choose file..."}
+                </span>
+                <span className="text-gray-500">Browse</span>
+              </div>
+
+              <input
+                type="file"
+                id="signature_input"
+                className="hidden"
+                onChange={(e) => setSignaturePicture(e.target.files[0])}
+              />
+
               <p className="text-red-500 text-xs">{errors.signature_picture}</p>
             </div>
 
