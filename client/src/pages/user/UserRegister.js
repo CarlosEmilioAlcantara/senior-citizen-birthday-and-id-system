@@ -74,48 +74,30 @@ export default function UserRegister() {
   async function handleStep1(e) {
     e.preventDefault();
 
-    // check empty fields
-    if (!email || !password || !confirm) {
+    const required = ["email", "password", "confirm"];
+    const source = { email, password, confirm };
+
+    const missing = getMissingFields(required, source);
+
+    if (missing.length) {
+      const newErrors = {};
+      missing.forEach((f) => (newErrors[f] = "This field is required"));
+      setErrors(newErrors);
+
       showAlert({
         title: "Missing Information",
-        message: "Please fill out all fields to continue.",
+        message: "Please complete the highlighted fields to continue.",
       });
       return;
     }
 
-    try {
-      const res = await fetch("/auth/exists", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, confirm }),
-      });
-
-      const data = await res.json();
-      setErrors({ ...data.errors });
-
-      if (data.status === 429) {
-        navigate("/too-many-requests");
-        return;
-      }
-
-      if (!data.success) {
-        showAlert({
-          title: "Account Creation Failed",
-          message: data.message || "Please check your input.",
-        });
-        return;
-      }
-
-      // success
-      setStep(2);
-    } catch (err) {
-      console.error(err);
-    }
+    setErrors({});
+    setStep(2);
   }
+
   // ---------------------------
   // STEP 2 VALIDATION (PERSONAL INFO) WITH HIGHLIGHT
   // ---------------------------
-
   function handleStep2(e) {
     e.preventDefault();
 
@@ -155,21 +137,28 @@ export default function UserRegister() {
   async function handleStep3(e) {
     e.preventDefault();
 
-    // check empty fields
-    if (
-      !form.emergency_fname ||
-      !form.emergency_mname ||
-      !form.emergency_lname ||
-      !form.emergency_number
-    ) {
+    const required = [
+      "emergency_fname",
+      "emergency_mname",
+      "emergency_lname",
+      "emergency_number",
+    ];
+
+    const missing = getMissingFields(required, form);
+
+    if (missing.length) {
+      const newErrors = {};
+      missing.forEach((f) => (newErrors[f] = "This field is required"));
+      setErrors(newErrors);
+
       showAlert({
         title: "Missing Information",
-        message: "Please fill out all fields to continue.",
+        message: "Please complete the highlighted fields to continue.",
       });
       return;
     }
 
-    // success
+    setErrors({});
     setStep(4);
   }
 
@@ -198,9 +187,16 @@ export default function UserRegister() {
 
     // check empty fields
     if (!id_picture || !signature_picture) {
+      const newErrors = {};
+      if (!id_picture) newErrors.id_picture = "This field is required";
+      if (!signature_picture)
+        newErrors.signature_picture = "This field is required";
+
+      setErrors(newErrors);
+
       showAlert({
         title: "Missing Information",
-        message: "Please fill out all fields to continue.",
+        message: "Please upload all required documents.",
       });
       return;
     }
@@ -220,6 +216,7 @@ export default function UserRegister() {
     }
   }
 
+  // Please fill out all fields to complete the registration
   // ------------------------------------------------------
   // SWEET ALERT (POP-UP) FOR STEP 1 ACCOUNT CREATION
   // ------------------------------------------------------
@@ -240,6 +237,10 @@ export default function UserRegister() {
       },
     });
   };
+
+  //for Back button behavior (data persistence)
+  const [idPicture, setIdPicture] = useState(null);
+  const [signaturePicture, setSignaturePicture] = useState(null);
 
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-white">
@@ -286,7 +287,7 @@ export default function UserRegister() {
               <input
                 type="email"
                 value={email}
-                className="w-full border p-2 rounded"
+                className={inputClass("email")}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <p className="text-red-500 text-xs">{errors.email}</p>
@@ -296,7 +297,7 @@ export default function UserRegister() {
               <label>Password</label>
               <input
                 type="password"
-                className="w-full border p-2 rounded"
+                className={inputClass("password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -307,7 +308,7 @@ export default function UserRegister() {
               <label>Confirm Password</label>
               <input
                 type="password"
-                className="w-full border p-2 rounded"
+                className={inputClass("confirm")}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
               />
@@ -493,7 +494,7 @@ export default function UserRegister() {
                   name="emergency_number"
                   value={form.emergency_number || ""}
                   maxLength={13}
-                  className="w-full border p-2 rounded"
+                  className={inputClass("emergency_number")}
                   onChange={(e) =>
                     setForm({ ...form, emergency_number: e.target.value })
                   }
@@ -533,7 +534,10 @@ export default function UserRegister() {
               <input
                 type="file"
                 name="id_picture"
-                className="w-full border p-2 rounded"
+                className={`w-full border p-2 rounded ${
+                  errors.id_picture ? "border-red-500" : "border-gray-300"
+                }`}
+                onChange={(e) => setIdPicture(e.target.files[0])}
               />
               <p className="text-red-500 text-xs">{errors.id_picture}</p>
             </div>
@@ -543,7 +547,12 @@ export default function UserRegister() {
               <input
                 type="file"
                 name="signature_picture"
-                className="w-full border p-2 rounded"
+                className={`w-full border p-2 rounded ${
+                  errors.signature_picture
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+                onChange={(e) => setSignaturePicture(e.target.files[0])}
               />
               <p className="text-red-500 text-xs">{errors.signature_picture}</p>
             </div>
