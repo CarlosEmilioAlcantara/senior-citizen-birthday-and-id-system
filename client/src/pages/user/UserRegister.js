@@ -560,130 +560,93 @@ export default function UserRegister() {
         {step === 4 && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <h2 className="text-2xl font-bold">Upload Required Documents</h2>
+            <div className="border border-gray-200 p-4 rounded shadow-md md:shadow-none ">
+              <div className="grid md:grid-cols-2 justify-center md:justify-evenly gap-4 ">
+                {/* ID Picture */}
+                <div>
+                  <label className="block mb-1">1x1 / Passport Image</label>
+                  <div>
+                    {/* <div className="border border-gray-400 p-2 rounded w-full flex flex-col items-center"> */}
+                    {idPicture ? (
+                      <img
+                        src={URL.createObjectURL(idPicture)}
+                        alt="ID Preview"
+                        className="w-32 h-32 object-cover mb-2 border border-gray-400"
+                      />
+                    ) : (
+                      <div className="w-32 h-32 flex items-center justify-center text-gray-500 mb-2 border border-gray-400">
+                        Preview
+                      </div>
+                    )}
 
-            {/* <div>
-              <label>1x1 / Passport Image</label>
-              <input
-                type="file"
-                name="id_picture"
-                className={`w-full border p-2 rounded ${
-                  errors.id_picture ? "border-red-500" : "border-gray-300"
-                }`}
-                onChange={(e) => setIdPicture(e.target.files[0])}
-              />
-              <p className="text-red-500 text-xs">{errors.id_picture}</p>
-            </div>
+                    {/* Button to choose file */}
+                    <button
+                      type="button"
+                      className="px-6 py-1 bg-blue-600 text-white rounded"
+                      onClick={() =>
+                        document.getElementById("id_picture_input").click()
+                      }
+                    >
+                      Choose File
+                    </button>
 
-            <div>
-              <label>Signature (White BG)</label>
-              <input
-                type="file"
-                name="signature_picture"
-                className={`w-full border p-2 rounded ${
-                  errors.signature_picture
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }`}
-                onChange={(e) => setSignaturePicture(e.target.files[0])}
-              />
-              <p className="text-red-500 text-xs">{errors.signature_picture}</p>
-            </div> */}
+                    <input
+                      type="file"
+                      id="id_picture_input"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => setIdPicture(e.target.files[0])}
+                    />
+                  </div>
 
-            {/* second */}
-            {/* <div>
-              <label>1x1 / Passport Image</label>
-              <input
-                type="file"
-                name="id_picture"
-                className={`w-full border p-2 rounded ${
-                  errors.id_picture ? "border-red-500" : "border-gray-300"
-                }`}
-                onChange={(e) => setIdPicture(e.target.files[0])}
-              />
-              {idPicture && (
-                <p className="text-green-600 text-sm mt-1">
-                  Selected file: {idPicture.name}
-                </p>
-              )}
-              <p className="text-red-500 text-xs">{errors.id_picture}</p>
-            </div>
+                  <p className="text-red-500 text-xs">{errors.id_picture}</p>
+                </div>
 
-            <div>
-              <label>Signature (White BG)</label>
-              <input
-                type="file"
-                name="signature_picture"
-                className={`w-full border p-2 rounded ${
-                  errors.signature_picture
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }`}
-                onChange={(e) => setSignaturePicture(e.target.files[0])}
-              />
-              {signaturePicture && (
-                <p className="text-blue-600 text-sm mt-1">
-                  Selected file: {signaturePicture.name}
-                </p>
-              )}
-              <p className="text-red-500 text-xs">{errors.signature_picture}</p>
-            </div> */}
+                {/* Signature Picture */}
+                <div>
+                  <label className="block mb-1">Signature (White BG)</label>
+                  <div>
+                    {/* <div className="border border-gray-400 p-2 rounded w-full flex flex-col items-center"> */}
+                    {signaturePicture ? (
+                      <img
+                        src={URL.createObjectURL(signaturePicture)}
+                        alt="Signature Preview"
+                        className="w-100 h-32 object-cover mb-2 border border-gray-400"
+                      />
+                    ) : (
+                      <div className="w-100 h-32 flex items-center justify-center text-gray-500 mb-2 border border-gray-400">
+                        Preview
+                      </div>
+                    )}
 
-            {/* THIRD */}
-            <div className="relative">
-              <label>1x1 / Passport Image</label>
+                    <button
+                      type="button"
+                      className="px-6 py-1 bg-blue-600 text-white rounded"
+                      onClick={() =>
+                        document.getElementById("signature_input").click()
+                      }
+                    >
+                      Choose File
+                    </button>
 
-              <div
-                className={`w-full border p-2 rounded cursor-pointer flex justify-between items-center ${
-                  errors.id_picture ? "border-red-500" : "border-gray-300"
-                }`}
-                onClick={() =>
-                  document.getElementById("id_picture_input").click()
-                }
-              >
-                <span>{idPicture ? idPicture.name : "Choose file..."}</span>
-                <span className="text-gray-500">Browse</span>
+                    <input
+                      type="file"
+                      id="signature_input"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => setSignaturePicture(e.target.files[0])}
+                    />
+                  </div>
+
+                  <p className="text-red-500 text-xs">
+                    {errors.signature_picture}
+                  </p>
+                </div>
               </div>
-
-              <input
-                type="file"
-                id="id_picture_input"
-                className="hidden"
-                onChange={(e) => setIdPicture(e.target.files[0])}
-              />
-
-              <p className="text-red-500 text-xs">{errors.id_picture}</p>
             </div>
 
-            <div className="relative mt-4">
-              <label>Signature (White BG)</label>
-
-              <div
-                className={`w-full border p-2 rounded cursor-pointer flex justify-between items-center ${
-                  errors.signature_picture
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }`}
-                onClick={() =>
-                  document.getElementById("signature_input").click()
-                }
-              >
-                <span>
-                  {signaturePicture ? signaturePicture.name : "Choose file..."}
-                </span>
-                <span className="text-gray-500">Browse</span>
-              </div>
-
-              <input
-                type="file"
-                id="signature_input"
-                className="hidden"
-                onChange={(e) => setSignaturePicture(e.target.files[0])}
-              />
-
-              <p className="text-red-500 text-xs">{errors.signature_picture}</p>
-            </div>
-
-            <div className="flex justify-between">
+            {/* Navigation Buttons */}
+            <div className="flex justify-between mt-4">
               <button
                 type="button"
                 className="px-4 py-2 bg-gray-300 rounded"
