@@ -183,58 +183,68 @@ export default function UserRegister() {
   // ---------------------------
   // FINAL SUBMISSION
   // ---------------------------
-  async function handleSubmit(e) {
-    e.preventDefault();
+ async function handleSubmit(e) {
+   e.preventDefault();
 
-    const fd = new FormData(e.target);
-    const id_picture = idPicture;
-    const signature_picture = signaturePicture;
+   const fd = new FormData();
 
-    // Account fields
-    fd.append("email", email);
-    fd.append("password", password);
+   // ✅ append files
+   fd.append("id_picture", idPicture);
+   fd.append("signature_picture", signaturePicture);
 
-    // Add all Step 2 + Step 3 fields
-    Object.keys(form).forEach((key) => {
-      fd.append(key, form[key]);
-    });
+   // Account fields
+   fd.append("email", email);
+   fd.append("password", password);
 
-    fd.append("age", age);
-    fd.append("city", "San Juan");
-    fd.append("province", "Metro Manila");
+   // Step 2 & 3 fields
+   Object.keys(form).forEach((key) => {
+     fd.append(key, form[key]);
+   });
 
-    // check empty fields
-    if (!id_picture || !signature_picture) {
-      const newErrors = {};
-      if (!id_picture) newErrors.id_picture = "This field is required";
-      if (!signature_picture)
-        newErrors.signature_picture = "This field is required";
+   fd.append("age", age);
+   fd.append("city", "San Juan");
+   fd.append("province", "Metro Manila");
 
-      setErrors(newErrors);
+   // front-end file check
+   if (!idPicture || !signaturePicture) {
+     const newErrors = {};
+     if (!idPicture) newErrors.id_picture = "This field is required";
+     if (!signaturePicture)
+       newErrors.signature_picture = "This field is required";
 
-      showAlert({
-        title: "Missing Information",
-        message: "Please upload all required documents.",
-      });
-      return;
-    }
+     setErrors(newErrors);
+     showAlert({
+       title: "Missing Information",
+       message: "Please upload all required documents.",
+     });
+     return;
+   }
 
-    try {
-      const res = await fetch("/auth/register", {
-        method: "POST",
-        body: fd,
-      });
+   try {
+     const res = await fetch("/auth/register", {
+       method: "POST",
+       body: fd,
+     });
 
-      const data = await res.json();
-      setErrors({ ...data.errors });
+     const data = await res.json();
 
-      if (data.success) navigate("/");
-    } catch (err) {
-      console.error(err);
-    }
-  }
+     if (data.success) {
+       Swal.fire({
+         icon: "success",
+         title: "Registration Successful",
+         text: "Your account has been registered successfully.",
+         confirmButtonColor: "#2563eb",
+       });
+       navigate("/");
+     } else {
+       setErrors(data.errors || {});
+     }
+   } catch (err) {
+     console.error(err);
+   }
+ }
 
-  // Please fill out all fields to complete the registration
+
   // ------------------------------------------------------
   // SWEET ALERT (POP-UP) FOR STEP 1 ACCOUNT CREATION
   // ------------------------------------------------------
