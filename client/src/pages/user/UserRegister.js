@@ -285,6 +285,20 @@ export default function UserRegister() {
     return digits.slice(0, 11);
   };
 
+  //Date of Birth format
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+
+    const date = new Date(dateStr);
+
+    const month = date.toLocaleString("en-US", { month: "short" });
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+
+
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-white">
       {/* LEFT SIDE */}
@@ -358,7 +372,7 @@ export default function UserRegister() {
             <h2 className="text-2xl font-bold">Create an Account</h2>
 
             <div>
-              <label>Email</label>
+              <label className="block text-gray-700 font-medium">Email</label>
               <input
                 type="email"
                 value={email}
@@ -369,7 +383,9 @@ export default function UserRegister() {
             </div>
 
             <div>
-              <label>Password</label>
+              <label className="block text-gray-700 font-medium">
+                Password
+              </label>
               <input
                 type="password"
                 className={inputClass("password")}
@@ -380,7 +396,9 @@ export default function UserRegister() {
             </div>
 
             <div>
-              <label>Confirm Password</label>
+              <label className="block text-gray-700 font-medium">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 className={inputClass("confirm")}
@@ -417,7 +435,9 @@ export default function UserRegister() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {["first_name", "middle_name", "last_name"].map((item) => (
                 <div key={item}>
-                  <label>{item.replace("_", " ").toUpperCase()}</label>
+                  <label className="block text-gray-700 font-medium capitalize">
+                    {item.replace(/_/g, " ")}
+                  </label>
                   <input
                     name={item}
                     value={form[item] || ""}
@@ -437,7 +457,9 @@ export default function UserRegister() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* HOUSE NUMBER (digits only) */}
               <div>
-                <label>HOUSE NUMBER</label>
+                <label className="block text-gray-700 font-medium">
+                  House Number
+                </label>
                 <input
                   name="house"
                   value={form.house || ""}
@@ -454,7 +476,9 @@ export default function UserRegister() {
 
               {/* STREET */}
               <div>
-                <label>STREET</label>
+                <label className="block text-gray-700 font-medium">
+                  Street
+                </label>
                 <input
                   name="street"
                   value={form.street || ""}
@@ -469,7 +493,9 @@ export default function UserRegister() {
 
               {/* SUBDIVISION */}
               <div>
-                <label>SUBDIVISION</label>
+                <label className="block text-gray-700 font-medium">
+                  Subdivision
+                </label>
                 <input
                   name="subdivision"
                   value={form.subdivision || ""}
@@ -484,7 +510,9 @@ export default function UserRegister() {
 
               {/* Barangay */}
               <div>
-                <label>Barangay</label>
+                <label className="block text-gray-700 font-medium">
+                  Barangay
+                </label>
                 <select
                   name="barangay"
                   value={form.barangay || ""}
@@ -509,9 +537,18 @@ export default function UserRegister() {
             {/* Birthday + Age + Gender */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label>Date of Birth</label>
+                <div>
+                  <label className="block text-gray-700 font-medium">
+                    Date of Birth
+                  </label>
+                  <p className="text-xs text-gray-500 mb-1 lg:hidden">
+                    (Click the calendar and select your birth date)
+                  </p>  
+                </div>
+
                 <input
                   type="date"
+                  max={new Date().toISOString().split("T")[0]}
                   name="birthday"
                   value={birthday}
                   className="w-full border p-2 rounded"
@@ -521,11 +558,12 @@ export default function UserRegister() {
                     setForm({ ...form, birthday: e.target.value });
                   }}
                 />
+
                 <p className="text-red-500 text-xs">{errors.birthday}</p>
               </div>
 
               <div>
-                <label>Age</label>
+                <label className="block text-gray-700 font-medium">Age</label>
                 <input
                   disabled
                   value={age || ""}
@@ -534,7 +572,9 @@ export default function UserRegister() {
               </div>
 
               <div>
-                <label>Gender</label>
+                <label className="block text-gray-700 font-medium">
+                  Gender
+                </label>
                 <select
                   name="gender"
                   value={form.gender || ""}
