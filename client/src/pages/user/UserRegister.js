@@ -686,94 +686,100 @@ export default function UserRegister() {
         )}
 
         {/* STEP 4 — UPLOADS */}
+        {/* STEP 4 — UPLOADS */}
         {step === 4 && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <h2 className="text-2xl font-bold">Upload Required Documents</h2>
-            <div className="border border-gray-200 p-4 rounded shadow-md md:shadow-none ">
-              <div className="grid md:grid-cols-2 justify-center md:justify-evenly gap-4 ">
+
+            <div className="border border-gray-200 p-4 rounded shadow-md md:shadow-none">
+              <div className="grid md:grid-cols-2 justify-center md:justify-evenly gap-4">
                 {/* ID Picture */}
                 <div>
                   <label className="block mb-1">1x1 / Passport Image</label>
-                  <div>
-                    {/* <div className="border border-gray-400 p-2 rounded w-full flex flex-col items-center"> */}
+                  <div
+                    className={`w-32 h-32 flex items-center justify-center text-gray-500 border p-2 rounded ${
+                      errors.id_picture ? "border-red-500" : "border-gray-400"
+                    }`}
+                  >
                     {idPicture ? (
                       <img
                         src={URL.createObjectURL(idPicture)}
                         alt="ID Preview"
-                        className="w-32 h-32 object-cover mb-2 border border-gray-400"
+                        className="w-32 h-32 object-cover"
                       />
                     ) : (
-                      <div className="w-32 h-32 flex items-center justify-center text-gray-500 border border-gray-400">
-                        Preview
-                      </div>
+                      "Preview"
                     )}
-                    <p className="text-red-500 text-xs mb-2">
-                      {errors.id_picture}
-                    </p>
-
-                    {/* Button to choose file */}
-                    <button
-                      type="button"
-                      className="px-6 py-1 bg-blue-600 text-white rounded"
-                      onClick={() =>
-                        document.getElementById("id_picture_input").click()
-                      }
-                    >
-                      Choose File
-                    </button>
-
-                    <input
-                      type="file"
-                      id="id_picture_input"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => setIdPicture(e.target.files[0])}
-                    />
                   </div>
+                  <p className="text-red-500 text-xs mb-2">
+                    {errors.id_picture}
+                  </p>
+
+                  <button
+                    type="button"
+                    className="px-6 py-1 bg-blue-600 text-white rounded mt-2"
+                    onClick={() =>
+                      document.getElementById("id_picture_input").click()
+                    }
+                  >
+                    Choose File
+                  </button>
+                  <input
+                    type="file"
+                    id="id_picture_input"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (idPicture) URL.revokeObjectURL(idPicture); // clean previous preview
+                      setIdPicture(e.target.files[0]);
+                    }}
+                  />
                 </div>
 
                 {/* Signature Picture */}
                 <div>
                   <label className="block mb-1">Signature (White BG)</label>
-                  <div>
-                    {/* <div className="border border-gray-400 p-2 rounded w-full flex flex-col items-center"> */}
+                  <div
+                    className={`w-100 h-32 flex items-center justify-center text-gray-500 border p-2 rounded ${
+                      errors.signature_picture
+                        ? "border-red-500"
+                        : "border-gray-400"
+                    }`}
+                  >
                     {signaturePicture ? (
                       <img
                         src={URL.createObjectURL(signaturePicture)}
                         alt="Signature Preview"
-                        className="w-100 h-32 object-cover mb-2 border border-gray-400"
+                        className="w-full h-32 object-cover"
                       />
                     ) : (
-                      <div className="w-100 h-32 flex items-center justify-center text-gray-500 border border-gray-400">
-                        Preview
-                      </div>
+                      "Preview"
                     )}
-                    <p className="text-red-500 text-xs mb-2">
-                      {errors.signature_picture}
-                    </p>
-
-                    <button
-                      type="button"
-                      className="px-6 py-1 bg-blue-600 text-white rounded"
-                      onClick={() =>
-                        document.getElementById("signature_input").click()
-                      }
-                    >
-                      Choose File
-                    </button>
-
-                    <input
-                      type="file"
-                      id="signature_input"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => setSignaturePicture(e.target.files[0])}
-                    />
                   </div>
-
-                  {/* <p className="text-red-500 text-xs">
+                  <p className="text-red-500 text-xs mb-2">
                     {errors.signature_picture}
-                  </p> */}
+                  </p>
+
+                  <button
+                    type="button"
+                    className="px-6 py-1 bg-blue-600 text-white rounded mt-2"
+                    onClick={() =>
+                      document.getElementById("signature_input").click()
+                    }
+                  >
+                    Choose File
+                  </button>
+                  <input
+                    type="file"
+                    id="signature_input"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (signaturePicture)
+                        URL.revokeObjectURL(signaturePicture); // clean previous preview
+                      setSignaturePicture(e.target.files[0]);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -790,9 +796,14 @@ export default function UserRegister() {
 
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className={`px-4 py-2 rounded text-white ${
+                  isSubmitting
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600"
+                }`}
+                disabled={isSubmitting}
               >
-                Submit Registration
+                {isSubmitting ? "Submitting..." : "Submit Registration"}
               </button>
             </div>
           </form>
