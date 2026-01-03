@@ -240,26 +240,25 @@ export default function UserRegister() {
      const data = await res.json();
 
      if (data.success) {
-       Swal.fire({
-         icon: "success",
-         title: "Registration Successful",
-         text: "Your account has been registered successfully.",
-         confirmButtonColor: "#2563eb",
-       });
+        showAlert({
+          title: "Registration Successful",
+          message: "Your account has been registered successfully.",
+          icon: "success",
+        });
        navigate("/");
      } else {
        setErrors(data.errors || {});
-       setIsSubmitting(false); // backend error → allow retry
+       setIsSubmitting(false); 
      }
    } catch (err) {
      console.error(err);
-     setIsSubmitting(false); // network error → allow retry
+     setIsSubmitting(false); 
    }
  }
 
 
   // ------------------------------------------------------
-  // SWEET ALERT (POP-UP) FOR STEP 1 ACCOUNT CREATION
+  // SWEET ALERT (POP-UP) ]if field is missing
   // ------------------------------------------------------
   const showAlert = ({ title, message, icon = "error" }) => {
     Swal.fire({
@@ -279,7 +278,7 @@ export default function UserRegister() {
     });
   };
 
-  //for Back button behavior (data persistence) at Uploads
+  // Back button behavior (data persistence) at Uploads
   const [idPicture, setIdPicture] = useState(null);
   const [signaturePicture, setSignaturePicture] = useState(null);
 
