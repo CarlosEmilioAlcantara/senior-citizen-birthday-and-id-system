@@ -31,6 +31,10 @@ export default function UserRegister() {
     birthday: "",
   });
 
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
   // ---------------------------
   // LABEL FOR EMERGENCY CONTACT
   // ---------------------------
@@ -543,7 +547,7 @@ export default function UserRegister() {
                   </label>
                   <p className="text-xs text-gray-500 mb-1 lg:hidden">
                     (Click the calendar and select your birth date)
-                  </p>  
+                  </p>
                 </div>
 
                 <input
@@ -690,10 +694,13 @@ export default function UserRegister() {
                         className="w-32 h-32 object-cover mb-2 border border-gray-400"
                       />
                     ) : (
-                      <div className="w-32 h-32 flex items-center justify-center text-gray-500 mb-2 border border-gray-400">
+                      <div className="w-32 h-32 flex items-center justify-center text-gray-500 border border-gray-400">
                         Preview
                       </div>
                     )}
+                    <p className="text-red-500 text-xs mb-2">
+                      {errors.id_picture}
+                    </p>
 
                     {/* Button to choose file */}
                     <button
@@ -714,8 +721,6 @@ export default function UserRegister() {
                       onChange={(e) => setIdPicture(e.target.files[0])}
                     />
                   </div>
-
-                  <p className="text-red-500 text-xs">{errors.id_picture}</p>
                 </div>
 
                 {/* Signature Picture */}
@@ -730,10 +735,13 @@ export default function UserRegister() {
                         className="w-100 h-32 object-cover mb-2 border border-gray-400"
                       />
                     ) : (
-                      <div className="w-100 h-32 flex items-center justify-center text-gray-500 mb-2 border border-gray-400">
+                      <div className="w-100 h-32 flex items-center justify-center text-gray-500 border border-gray-400">
                         Preview
                       </div>
                     )}
+                    <p className="text-red-500 text-xs mb-2">
+                      {errors.signature_picture}
+                    </p>
 
                     <button
                       type="button"
@@ -754,9 +762,9 @@ export default function UserRegister() {
                     />
                   </div>
 
-                  <p className="text-red-500 text-xs">
+                  {/* <p className="text-red-500 text-xs">
                     {errors.signature_picture}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
