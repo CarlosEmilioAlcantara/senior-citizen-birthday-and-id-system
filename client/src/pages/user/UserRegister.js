@@ -31,7 +31,7 @@ export default function UserRegister() {
     birthday: "",
   });
 
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
@@ -190,9 +190,12 @@ export default function UserRegister() {
  async function handleSubmit(e) {
    e.preventDefault();
 
+   if (isSubmitting) return; // prevent double submit
+   setIsSubmitting(true);
+
    const fd = new FormData();
 
-   // ✅ append files
+   // append files
    fd.append("id_picture", idPicture);
    fd.append("signature_picture", signaturePicture);
 
@@ -210,19 +213,23 @@ export default function UserRegister() {
    fd.append("province", "Metro Manila");
 
    // front-end file check
-   if (!idPicture || !signaturePicture) {
-     const newErrors = {};
-     if (!idPicture) newErrors.id_picture = "This field is required";
-     if (!signaturePicture)
-       newErrors.signature_picture = "This field is required";
+ if (!idPicture || !signaturePicture) {
+   const newErrors = {};
 
-     setErrors(newErrors);
-     showAlert({
-       title: "Missing Information",
-       message: "Please upload all required documents.",
-     });
-     return;
-   }
+   if (!idPicture) newErrors.id_picture = "This field is required";
+   if (!signaturePicture)
+     newErrors.signature_picture = "This field is required";
+
+   setErrors(newErrors); 
+   setIsSubmitting(false); // allow retry
+
+   showAlert({
+     title: "Missing Information",
+     message: "Please upload all required documents.",
+   });
+   return;
+ }
+
 
    try {
      const res = await fetch("/auth/register", {
@@ -242,9 +249,11 @@ export default function UserRegister() {
        navigate("/");
      } else {
        setErrors(data.errors || {});
+       setIsSubmitting(false); // backend error → allow retry
      }
    } catch (err) {
      console.error(err);
+     setIsSubmitting(false); // network error → allow retry
    }
  }
 
