@@ -30,17 +30,16 @@ export default function ProtectedRoute({ allowedRoles }) {
   }, []);
 
   if (auth === null) return <div>Loading...</div>;
-  if (!auth) return <Navigate to="/user-login" replace/>;
+  if (!auth) return <Navigate to="/user-login" replace />;
 
   const roleAccess = {
-    user: ["/"],
+    user: ["/user-dashboard"],
     admin: ["/admin-dashboard"],
     superadmin: ["/superadmin-dashboard", "/admin-dashboard"],
   };
 
   if (!allowedRoles.includes(role)) {
-    const redirectPath =
-      roleAccess[role]?.[0] || "/"; 
+    const redirectPath = roleAccess[role]?.[0] || "/user-dashboard";
     return <Navigate to={redirectPath} replace />;
   }
 

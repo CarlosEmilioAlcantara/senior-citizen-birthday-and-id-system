@@ -22,10 +22,10 @@ export default function ForgotPassword({ accountType }) {
       const res = await fetch("/auth/reset-password", {
         method: "POST",
         body: fd,
-      })
+      });
       const data = await res.json();
       setResponse(data.response);
-      setErrors({...data.errors});
+      setErrors({ ...data.errors });
 
       if (data.status === 429) {
         navigate("/too-many-requests");
@@ -42,26 +42,30 @@ export default function ForgotPassword({ accountType }) {
     e.preventDefault();
     const fd = new FormData(e.target);
     fd.append("email", email);
-    fd.append("password", password)
+    fd.append("password", password);
     fd.append("role", accountType);
 
     try {
       const res = await fetch("/auth/otp", {
         method: "POST",
         body: fd,
-      })
+      });
       const data = await res.json();
       setStatus(data.success);
       setResponse(data.response);
-      setErrors({...data.errors});
+      setErrors({ ...data.errors });
 
       if (data.status === 429) {
         navigate("/too-many-requests");
       }
       if (res.ok && data.success) {
         alert(`${data.response}, redirecting you back to login page`);
-        if (accountType === "senior") {navigate("/user-dashboard");}
-        if (accountType === "admin") {navigate("/admins-login");}
+        if (accountType === "senior") {
+          navigate("/user-dashboard");
+        }
+        if (accountType === "admin") {
+          navigate("/admins-login");
+        }
       }
     } catch (err) {
       console.error(err);
@@ -74,13 +78,13 @@ export default function ForgotPassword({ accountType }) {
     try {
       const res = await fetch("/auth/resend-otp", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({email, password, confirm})
-      })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirm }),
+      });
       const data = await res.json();
       setStatus(data.success);
       setResponse(data.response);
-      
+
       if (data.status === 429) {
         navigate("/too-many-requests");
       }
@@ -97,9 +101,9 @@ export default function ForgotPassword({ accountType }) {
       try {
         const res = await fetch("/auth/timecheck-otp", {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({email, password, confirm})
-        })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, confirm }),
+        });
         const data = await res.json();
         setTimeCheck(data.time_check);
 
@@ -110,13 +114,13 @@ export default function ForgotPassword({ accountType }) {
         console.error(err);
       }
     }
-    const intervalMinutes = 30
+    const intervalMinutes = 30;
     const runInterval = setInterval(timeCheckOTP, intervalMinutes * 60 * 1000);
 
     return () => {
       clearInterval(runInterval);
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
@@ -188,17 +192,17 @@ export default function ForgotPassword({ accountType }) {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col justify-center  p-12 lg:p-20 ">
+        <div className="flex flex-col justify-center p-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">
             Forgot Password
           </h2>
 
-          {!status && <p style={{ color: "red" }}>{response}</p>}
+          {!status && <p className="text-red-500 text-xs">{response}</p>}
 
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div className="text-gray-500 font-medium px-2">
-              Please enter your registered email address below and we'll send
-              you a link to reset your password.
+              Please provide your registered email address and set a new
+              password. An OTP will be sent for password reset verification.
             </div>
             <div>
               <label className="block text-gray-700 font-medium">Email</label>
@@ -213,9 +217,9 @@ export default function ForgotPassword({ accountType }) {
               <p className="text-red-500 text-xs">{errors.email}</p>
             </div>
 
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium">
-                Password
+                New Password
               </label>
               <input
                 type="password"
@@ -226,12 +230,12 @@ export default function ForgotPassword({ accountType }) {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <p className="text-red-500">{errors.password}</p>
+              <p className="text-red-500 text-xs">{errors.password}</p>
             </div>
 
             <div>
               <label className="block text-gray-700 font-medium">
-                Confirm Password
+                Confirm New Password
               </label>
               <input
                 type="password"
@@ -242,14 +246,14 @@ export default function ForgotPassword({ accountType }) {
                 onChange={(e) => setConfirm(e.target.value)}
               />
 
-              <p className="text-red-500">{errors.confirm}</p>
-            </div> */}
+              <p className="text-red-500 text-sm">{errors.confirm}</p>
+            </div>
 
             <button
               className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer"
               type="submit"
             >
-              Reset Password
+              Send OTP
             </button>
 
             <div className="text-center my-6 text-sm text-gray-600">

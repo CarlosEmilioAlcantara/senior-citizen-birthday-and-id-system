@@ -245,7 +245,7 @@ export default function UserRegister() {
           message: "Your account has been registered successfully.",
           icon: "success",
         });
-       navigate("/");
+       navigate("/user-dashboard");
      } else {
        setErrors(data.errors || {});
        setIsSubmitting(false); 

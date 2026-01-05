@@ -46,7 +46,11 @@ export default function UserDelete() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex bg-white md:h-screen">
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
+        
         {/* SCROLLABLE  USER Delete Account CONTENT */}
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {!status && <p style={{ color: "red" }}>{response}</p>}
