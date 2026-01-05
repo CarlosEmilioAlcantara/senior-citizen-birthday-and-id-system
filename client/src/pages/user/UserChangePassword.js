@@ -48,8 +48,7 @@ export default function UserChangePassword() {
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
-        {/* HEADER */}
-      
+        {/* HEADER */} 
 
         {/* SCROLLABLE  USER CHANGE PASSWORD CONTENT */}
         <main className="flex-1 overflow-y-auto p-5 bg-white">

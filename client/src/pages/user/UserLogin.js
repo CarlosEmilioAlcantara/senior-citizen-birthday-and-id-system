@@ -72,7 +72,7 @@ export default function UserLogin() {
 
       //  SUCCESS
       if (res.ok && data.success) {
-        navigate("/");
+        navigate("/user-dashboard");
       }
     } catch (err) {
       console.error(err);

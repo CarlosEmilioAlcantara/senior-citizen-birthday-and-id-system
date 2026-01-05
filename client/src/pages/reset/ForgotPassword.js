@@ -60,7 +60,7 @@ export default function ForgotPassword({ accountType }) {
       }
       if (res.ok && data.success) {
         alert(`${data.response}, redirecting you back to login page`);
-        if (accountType === "senior") {navigate("/");}
+        if (accountType === "senior") {navigate("/user-dashboard");}
         if (accountType === "admin") {navigate("/admins-login");}
       }
     } catch (err) {

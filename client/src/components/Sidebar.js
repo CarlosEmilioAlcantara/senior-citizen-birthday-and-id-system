@@ -41,7 +41,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
           </svg>
         ),
 
-        link: "/dashboard",
+        link: "/user-dashboard",
       },
       {
         name: "Edit Account",

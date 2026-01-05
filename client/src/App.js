@@ -42,7 +42,7 @@ function App() {
         <Route path="/unauthorized" element={<Forbidden />} />
 
         <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
-          <Route path="/" element={<UserDashboard />} />
+          <Route path="/user-dashboard" element={<UserDashboard />} />
           <Route path="/user-edit" element={<UserEdit />} />
           <Route
             path="/user-change-password"
