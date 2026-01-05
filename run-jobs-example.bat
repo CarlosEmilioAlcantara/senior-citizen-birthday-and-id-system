@@ -1,0 +1,1 @@
+D:\path\to\jobs\activate.bat && D:\path\to\jobs\emailer.py && D:\path\to\jobs\cleaner.py

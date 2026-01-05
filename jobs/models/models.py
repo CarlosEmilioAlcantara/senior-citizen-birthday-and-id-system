@@ -55,9 +55,44 @@ def update_senior_age(new_age, identifier):
 def clean_password_resets():
     modify_db("""
         DELETE FROM password_resets
-        WHERE (
-            (DAYOFYEAR(CURDATE()) - DAYOFYEAR(created_at) + 366) % 366
-        ) >= 2;
+        WHERE DATEDIFF(CURDATE(), created_at) >= 30
+    """, (
+        None
+    ))
+
+def get_unverified_seniors():
+    seniors = query_db("""
+        SELECT * FROM senior_citizens
+        WHERE DATEDIFF(CURDATE(), updated_at) >= 30
+        AND verify_status = 0;
+    """, (
+        None
+    ), False)
+    return seniors
+
+def select_id_path(identifier):
+    path = query_db("""
+        SELECT picture_name FROM picture_images
+        WHERE senior_id = %s
+    """, (
+        (identifier),
+    ), True)["picture_name"]
+    return path
+
+def select_signature_path(identifier):
+    path = query_db("""
+        SELECT image_name FROM signature_images
+        WHERE senior_id = %s
+    """, (
+        (identifier),
+    ), True)["image_name"]
+    return path
+
+def clean_unverified_seniors():
+    modify_db("""
+        DELETE FROM senior_citizens
+        WHERE DATEDIFF(CURDATE(), updated_at) >= 30
+        AND verify_status = 0;
     """, (
         None
     ))
