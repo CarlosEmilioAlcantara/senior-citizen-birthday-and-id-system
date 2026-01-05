@@ -48,7 +48,33 @@ export default function UserChangePassword() {
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
-        {/* HEADER */} 
+        {/* HEADER */}
+        <header className="bg-white flex justify-between items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="cursor-pointer p-2 hover:text-cyan-700 hover:scale-110 lg:hidden"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+          </div>
+
+          {/* Profile Container */}
+        </header>
 
         {/* SCROLLABLE  USER CHANGE PASSWORD CONTENT */}
         <main className="flex-1 overflow-y-auto p-5 bg-white">
@@ -74,14 +100,20 @@ export default function UserChangePassword() {
             <small style={{ color: "red" }}>{errors.confirm}</small>
             <br />
 
-            <button type="submit">Change Password</button>
+            <div className="flex justify-between">
+              <nav>
+                <button className="px-4 py-2 bg-gray-300 rounded">
+                  <Link to="/user-dashboard">Cancel</Link>
+                </button>
+              </nav>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-700 text-white rounded"
+              >
+                Change Password
+              </button>
+            </div>
           </form>
-
-          <nav>
-            <button>
-              <Link to="/">Cancel</Link>
-            </button>
-          </nav>
         </main>
       </div>
     </div>

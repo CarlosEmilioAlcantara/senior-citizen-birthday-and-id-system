@@ -127,7 +127,7 @@ export default function UserEdit() {
   return (
     <div className="flex bg-white md:h-screen">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      
+
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
         {/* HEADER */}
@@ -188,7 +188,7 @@ export default function UserEdit() {
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {!status && <p style={{ color: "red" }}>{response}</p>}
 
-          <h3>User Edit</h3>
+          {/* <h3>User Edit</h3> */}
           <form onSubmit={handleEdit}>
             <label>1x1 / Passport Size Image</label>
             <input
@@ -436,11 +436,18 @@ export default function UserEdit() {
             <small style={{ color: "red" }}>{errors.emergency_number}</small>
             <br />
 
-            <button type="submit">Submit</button>
+            <div className="flex justify-between">
+              <button className="px-4 py-2 bg-gray-300 rounded">
+                <Link to="/user-dashboard">Cancel</Link>
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-700 text-white rounded"
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
           </form>
-          <button>
-            <Link to="/">Cancel</Link>
-          </button>
         </main>
       </div>
     </div>

@@ -106,7 +106,7 @@ export default function UserDashboard() {
             <h1 className="text-2xl font-bold">Dashboard</h1>
           </div>
 
-          {/* Admin Profile Container */}
+          {/* Profile Container */}
           <div className="flex gap-2">
             {/* <div className=" mx-2 hidden md:block">
                 <div className="font-bold flex gap-1">
