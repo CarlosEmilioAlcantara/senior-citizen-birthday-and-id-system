@@ -76,7 +76,7 @@ export default function UserDashboard() {
   // SideBar
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="flex bg-white md:h-screen ">
+    <div className="flex bg-white md:h-screen">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* MAIN CONTENT AREA */}
@@ -149,7 +149,7 @@ export default function UserDashboard() {
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <img
-                    className="w-24 h-24 rounded-full object-cover border shadow"
+                    className="w-32 h-32 object-cover border shadow"
                     src={`http://localhost:5000/${info.picture_name}`}
                     alt="Profile"
                   />
@@ -173,7 +173,7 @@ export default function UserDashboard() {
 
                 <div className="flex justify-center">
                   <img
-                    width="150 "
+                    className="w-100 h-32 object-cover border shadow"
                     src={`http://localhost:5000/${info.image_name}`}
                   ></img>
                 </div>
@@ -213,7 +213,7 @@ export default function UserDashboard() {
 
               {/* Contact Information */}
               <div className="bg-white rounded-xl border p-4 sm:p-5">
-                <h3 className="text-base sm:text-lg font-semibold mb-3">
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
                   Contact Information
                 </h3>
 
@@ -230,7 +230,7 @@ export default function UserDashboard() {
                       key={label}
                       className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2"
                     >
-                      <span className="text-gray-500 text-sm">{label}</span>
+                      <span className="text-gray-500 text-base">{label}</span>
                       <span className="font-medium text-gray-700 text-sm sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]">
                         {value}
                       </span>
@@ -247,7 +247,9 @@ export default function UserDashboard() {
 
                 {/* CARD PICTURE */}
                 <div className="mb-4">
-                  <p className="text-gray-500 text-sm mb-2">Card Picture</p>
+                  <p className="text-gray-500 text-base mb-2">
+                    Card Picture
+                  </p>
 
                   <div className="flex justify-center sm:justify-start">
                     <div className="w-64 h-40 bg-gray-100 border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden">
@@ -263,7 +265,7 @@ export default function UserDashboard() {
 
                 {/* ID NUMBER */}
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                  <span className="text-gray-500 text-sm">ID Number</span>
+                  <span className="text-gray-500 text-base">ID Number</span>
                   <span className="font-medium text-gray-700">
                     ID xx-xxxx-xxxx
                   </span>
@@ -271,7 +273,7 @@ export default function UserDashboard() {
 
                 {/* STATUS */}
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-2">
-                  <span className="text-gray-500 text-sm">Status</span>
+                  <span className="text-gray-500 text-base">Status</span>
 
                   <div>
                     {verificationStatus && birthdayNear && (

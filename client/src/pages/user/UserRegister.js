@@ -553,7 +553,7 @@ export default function UserRegister() {
                   <label className="block text-gray-700 font-medium">
                     Date of Birth
                   </label>
-                  <p className="text-xs text-gray-500 mb-1 lg:hidden">
+                  <p className="text-xs text-gray-500 mb-1 md:hidden">
                     (Click the calendar and select your birth date)
                   </p>
                 </div>
@@ -631,7 +631,9 @@ export default function UserRegister() {
             <div className="grid grid-cols-1 gap-4">
               {Object.keys(emergencyLabels).map((item) => (
                 <div key={item}>
-                  <label>{emergencyLabels[item]}</label>
+                  <label className="block text-gray-700 font-medium">
+                    {emergencyLabels[item]}
+                  </label>
                   <input
                     name={item}
                     value={form[item] || ""}
@@ -646,7 +648,9 @@ export default function UserRegister() {
               ))}
 
               <div>
-                <label>Emergency Contact Number</label>
+                <label className="block text-gray-700 font-medium">
+                  Emergency Contact Number
+                </label>
                 <input
                   name="emergency_number"
                   inputMode="numeric"
@@ -685,16 +689,17 @@ export default function UserRegister() {
         )}
 
         {/* STEP 4 — UPLOADS */}
-        {/* STEP 4 — UPLOADS */}
         {step === 4 && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <h2 className="text-2xl font-bold">Upload Required Documents</h2>
 
             <div className="border border-gray-200 p-4 rounded shadow-md md:shadow-none">
               <div className="grid md:grid-cols-2 justify-center md:justify-evenly gap-4">
-                {/* ID Picture */}
+                {/* Passport ID Picture */}
                 <div>
-                  <label className="block mb-1">1x1 / Passport Image</label>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    1x1 / Passport Size Image
+                  </label>
                   <div
                     className={`w-32 h-32 flex items-center justify-center text-gray-500 border p-2 rounded ${
                       errors.id_picture ? "border-red-500" : "border-gray-400"
@@ -737,7 +742,9 @@ export default function UserRegister() {
 
                 {/* Signature Picture */}
                 <div>
-                  <label className="block mb-1">Signature (White BG)</label>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Signature (White BG)
+                  </label>
                   <div
                     className={`w-100 h-32 flex items-center justify-center text-gray-500 border p-2 rounded ${
                       errors.signature_picture
