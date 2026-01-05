@@ -57,8 +57,7 @@ def admin_info():
         return jsonify({
             "success": True, 
             "response": "Info Gathered", 
-            "info": admins,
-            "total_pages": total_pages
+            "info": admin
         }), 200
 
     admin = select_admin(session["admin_id"])
