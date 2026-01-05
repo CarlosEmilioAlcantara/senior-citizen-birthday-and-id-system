@@ -13,3 +13,5 @@ server/.flaskenv
 
 # Jobs
 run-emailer.bat
+*.exe
+client/tailwindcss-windows-x64.exe

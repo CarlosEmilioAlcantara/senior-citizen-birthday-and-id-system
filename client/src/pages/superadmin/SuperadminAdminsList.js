@@ -46,6 +46,27 @@ export default function SuperadminAdminsList() {
     }
   }
 
+  async function fetchAdmins() {
+    try {
+      const res = await fetch(
+        `/admins/info?get_all=${getAll}&page=${page}&per_page=${perPage}&keyword=${emailOrUsername}&sort=${sort}`,
+        { method: "GET" }
+      )
+      const data = await res.json();
+      setAdmins([...data.info]);
+      setTotalPages(data.total_pages);
+
+      if (data.status === 429) {
+        navigate("/too-many-requests");
+      }
+      if (data.status === 403) {
+        navigate("/forbidden");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function fetchAdmin(e) {
     e.preventDefault();
 
