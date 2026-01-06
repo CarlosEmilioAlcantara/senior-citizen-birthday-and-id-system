@@ -88,7 +88,7 @@ def update_senior_age(new_age, identifier):
 def clean_password_resets():
     modify_db("""
         DELETE FROM password_resets
-        WHERE DATEDIFF(CURDATE(), created_at) = 0
+        WHERE DATEDIFF(CURDATE(), created_at) >= 2
     """, (
         None
     ))
