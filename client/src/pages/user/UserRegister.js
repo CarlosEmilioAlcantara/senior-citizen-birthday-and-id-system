@@ -535,12 +535,27 @@ export default function UserRegister() {
                   }}
                 >
                   <option value="">-- Select --</option>
-                  <option value="Greenhills">Greenhills</option>
-                  <option value="Maytunas">Maytunas</option>
-                  <option value="Kabayanan">Kabayanan</option>
-                  <option value="Salapan">Salapan</option>
-                  <option value="West Crame">West Crame</option>
-                  <option value="Onse">Onse</option>
+                  <option>Addition Hills</option>
+                  <option>Balong-Bato</option>
+                  <option>Batis</option>
+                  <option>Corazon De Jesus</option>
+                  <option>Ermitaño</option>
+                  <option>Halo-halo</option>
+                  <option>Isabelita</option>
+                  <option>Kabayanan</option>
+                  <option>Little Baguio</option>
+                  <option>Maytunas</option>
+                  <option>Onse</option>
+                  <option>Pasadeña</option>
+                  <option>Pedro Cruz</option>
+                  <option>Progreso</option>
+                  <option>Rivera</option>
+                  <option>Salapan</option>
+                  <option>San Perfecto</option>
+                  <option>Santa Lucia</option>
+                  <option>Tibagan</option>
+                  <option>West Crame</option>
+                  <option>Greenhills</option>
                 </select>
                 <p className="text-red-500 text-xs">{errors.barangay}</p>
               </div>
@@ -596,7 +611,7 @@ export default function UserRegister() {
                     setErrors({ ...errors, gender: "" });
                   }}
                 >
-                  <option>-- Select --</option>
+                  <option value="">-- Select --</option>
                   <option>Male</option>
                   <option>Female</option>
                 </select>

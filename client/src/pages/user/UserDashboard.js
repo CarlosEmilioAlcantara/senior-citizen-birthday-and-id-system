@@ -138,7 +138,7 @@ export default function UserDashboard() {
         {/* SCROLLABLE  USER DASHBOARD CONTENT */}
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {/* <h3>User Dashboard</h3> */}
-          <li className="list-none ">
+          <li className="list-none">
             {/* Profile Photo & Senior Signature */}
             <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 mb-5 flex flex-col gap-5 md:flex-row md:justify-around">
               {/* Profile Photo */}
@@ -293,6 +293,7 @@ export default function UserDashboard() {
                 </div>
               </div>
             </div>
+            
             {/* <div className="bg-blue-100 p-2 hidden">
               <h3>
                 Fullname: {info.first_name} {info.middle_name} {info.last_name}

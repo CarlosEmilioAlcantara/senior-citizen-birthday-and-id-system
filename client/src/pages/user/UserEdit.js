@@ -189,8 +189,8 @@ export default function UserEdit() {
           {!status && <p style={{ color: "red" }}>{response}</p>}
 
           {/* <h3>User Edit</h3> */}
-          <form onSubmit={handleEdit}>
-            <label>1x1 / Passport Size Image</label>
+          <form onSubmit={handleEdit} className="flex flex-col gap-5">
+            {/* <label>1x1 / Passport Size Image</label>
             <input
               type="file"
               accept="image/png, image/jpeg"
@@ -204,7 +204,52 @@ export default function UserEdit() {
             <input type="file" name="signature_picture" />
             <br />
             <small style={{ color: "red" }}>{errors.signature_picture}</small>
-            <br />
+            <br /> */}
+
+            {/* Personal Information */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                Personal Information
+              </h3>
+
+              <div>
+                <label>First Name</label>
+                <input
+                  type="text"
+                  placeholder="First name..."
+                  name="first_name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.first_name}</small>
+                <br />
+
+                <label>Middle Name</label>
+                <input
+                  type="text"
+                  placeholder="Middle name..."
+                  name="middle_name"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.middle_name}</small>
+                <br />
+
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  placeholder="Last name..."
+                  name="last_name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.last_name}</small>
+                <br />
+              </div>
+            </div>
 
             <label>Email</label>
             <input
@@ -216,42 +261,6 @@ export default function UserEdit() {
             />
             <br />
             <small style={{ color: "red" }}>{errors.email}</small>
-            <br />
-
-            <label>First Name</label>
-            <input
-              type="text"
-              placeholder="First name..."
-              name="first_name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.first_name}</small>
-            <br />
-
-            <label>Middle Name</label>
-            <input
-              type="text"
-              placeholder="Middle name..."
-              name="middle_name"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.middle_name}</small>
-            <br />
-
-            <label>Last Name</label>
-            <input
-              type="text"
-              placeholder="Last name..."
-              name="last_name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.last_name}</small>
             <br />
 
             <label>Address</label>
@@ -298,7 +307,7 @@ export default function UserEdit() {
               value={barangay}
               onChange={(e) => setBarangay(e.target.value)}
             >
-              <option>-- Please select an option --</option>
+              <option value="">-- Select --</option>
               <option>Addition Hills</option>
               <option>Balong-Bato</option>
               <option>Batis</option>
@@ -384,7 +393,7 @@ export default function UserEdit() {
               value={gender}
               onChange={(e) => setGender(e.target.value)}
             >
-              <option>-- Please select an option --</option>
+              <option value="">-- Please select an option --</option>
               <option>Male</option>
               <option>Female</option>
             </select>
