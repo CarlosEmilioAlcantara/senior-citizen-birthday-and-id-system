@@ -103,7 +103,7 @@ export default function UserDashboard() {
             </svg>
           </button>
           <div>
-            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <h1 className="text-2xl font-bold">Profile</h1>
           </div>
 
           {/* Profile Container */}
@@ -293,7 +293,7 @@ export default function UserDashboard() {
                 </div>
               </div>
             </div>
-            
+
             {/* <div className="bg-blue-100 p-2 hidden">
               <h3>
                 Fullname: {info.first_name} {info.middle_name} {info.last_name}

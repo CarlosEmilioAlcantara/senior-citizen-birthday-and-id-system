@@ -79,12 +79,12 @@ export default function UserDelete() {
         </header>
         {/* SCROLLABLE  USER Delete Account CONTENT */}
         <main className="flex-1 overflow-y-auto p-5 bg-white">
-          {!status && <p style={{ color: "red" }}>{response}</p>}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <h3 className="text-lg font-semibold text-gray-700 mb-3">
-              Personal Information
+          <div className="bg-red-700 rounded-xl shadow-sm border border-gray-100 p-5">
+            <h3 className="text-lg font-semibold text-gray-100  text-center p-5">
+              NO DELETION OF ACCOUNT (Remove)
             </h3>
           </div>
+          {!status && <p style={{ color: "red" }}>{response}</p>}
           <form onSubmit={handleDeleteAccount}>
             <h3>User Delete Account</h3>
             <h3 style={{ color: "red" }}>
