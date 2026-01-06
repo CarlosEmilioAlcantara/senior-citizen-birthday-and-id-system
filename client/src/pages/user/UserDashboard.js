@@ -231,7 +231,7 @@ export default function UserDashboard() {
                       className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2"
                     >
                       <span className="text-gray-500 text-base">{label}</span>
-                      <span className="font-medium text-gray-700 text-sm sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]">
+                      <span className="font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]">
                         {value}
                       </span>
                     </div>
@@ -247,9 +247,7 @@ export default function UserDashboard() {
 
                 {/* CARD PICTURE */}
                 <div className="mb-4">
-                  <p className="text-gray-500 text-base mb-2">
-                    Card Picture
-                  </p>
+                  <p className="text-gray-500 text-base mb-2">Card Picture</p>
 
                   <div className="flex justify-center sm:justify-start">
                     <div className="w-64 h-40 bg-gray-100 border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden">
@@ -266,7 +264,7 @@ export default function UserDashboard() {
                 {/* ID NUMBER */}
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
                   <span className="text-gray-500 text-base">ID Number</span>
-                  <span className="font-medium text-gray-700">
+                  <span className="font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]">
                     ID xx-xxxx-xxxx
                   </span>
                 </div>
@@ -283,9 +281,13 @@ export default function UserDashboard() {
                     )}
 
                     {verificationStatus ? (
-                      <p className="text-green-600 font-medium">Verified</p>
+                      <p className="font-medium text-green-600 text-lg sm:text-base break-words sm:text-right max-w-full">
+                        Verified
+                      </p>
                     ) : (
-                      <p className="text-red-600 font-medium">Unverified</p>
+                      <p className="font-medium text-red-600 text-lg sm:text-base break-words sm:text-right max-w-full">
+                        Unverified
+                      </p>
                     )}
                   </div>
                 </div>
