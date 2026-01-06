@@ -6,9 +6,21 @@ def get_future_recipients():
             first_name, middle_name, last_name,
             birthday, age, email
         FROM senior_citizens
-        WHERE (
-            (DAYOFYEAR(birthday) - DAYOFYEAR(CURDATE()) + 366) % 366
-        ) = 15;
+        WHERE DATEDIFF(
+            CASE 
+                WHEN MONTH(birthday) = 1 AND DAY(birthday) < 15 THEN
+                    DATE_ADD(
+                        birthday, 
+                        INTERVAL YEAR(CURDATE()) - YEAR(birthday) + 1 YEAR
+                    )
+                ELSE
+                    DATE_ADD(
+                        birthday, 
+                        INTERVAL YEAR(CURDATE()) - YEAR(birthday) YEAR
+                    )
+            END,
+            CURDATE()
+        ) = 15 ;
     """, None, False)
     return recipients
 
@@ -18,7 +30,13 @@ def get_today_recipients():
             first_name, middle_name, last_name,
             birthday, age, email
         FROM senior_citizens
-        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+        WHERE DATEDIFF(
+            DATE_ADD(
+                birthday, 
+                INTERVAL YEAR(CURDATE()) - YEAR(birthday) YEAR
+            ),
+            CURDATE()
+        ) = 0 ;
     """, None, False)
     return recipients
 
@@ -28,9 +46,21 @@ def get_past_recipients():
             first_name, middle_name, last_name,
             birthday, age, email
         FROM senior_citizens
-        WHERE (
-            (DAYOFYEAR(CURDATE()) - DAYOFYEAR(birthday) + 366) % 366
-        ) = 15;
+        WHERE DATEDIFF(
+            CURDATE(), 
+            CASE 
+                WHEN MONTH(CURDATE()) = 1 AND DAY(CURDATE()) < 15 THEN
+                    DATE_ADD(
+                        birthday, 
+                        INTERVAL YEAR(CURDATE()) - YEAR(birthday) - 1 YEAR
+                    )
+                ELSE
+                    DATE_ADD(
+                        birthday, 
+                        INTERVAL YEAR(CURDATE()) - YEAR(birthday) YEAR
+                    )
+            END
+        ) = 15 ;
     """, None, False)
     return recipients
 
@@ -39,7 +69,10 @@ def get_today_celebrants():
         SELECT 
             senior_id, age
         FROM senior_citizens
-        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+        WHERE DATEDIFF(
+            DATE_ADD(birthday, INTERVAL YEAR(CURDATE()) - YEAR(birthday) YEAR),
+            CURDATE()
+        ) = 0;
     """, None, False)
     return recipients
 
@@ -55,7 +88,7 @@ def update_senior_age(new_age, identifier):
 def clean_password_resets():
     modify_db("""
         DELETE FROM password_resets
-        WHERE DATEDIFF(CURDATE(), created_at) >= 30
+        WHERE DATEDIFF(CURDATE(), created_at) = 0
     """, (
         None
     ))

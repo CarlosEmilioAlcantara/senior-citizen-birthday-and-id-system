@@ -37,7 +37,7 @@ This message is automated. Please do not reply.
             body = f"""
 Happy birthday! {first_name} {middle_name} {last_name}
 
-You are nowelse {age}, your birthday was on {birthday}. 
+You are now {age}, your birthday was on {birthday}. 
 Please remember to visit the establishment to earn your birthday payout if you haven't yet.
 
 This message is automated. Please do not reply.
@@ -85,7 +85,6 @@ This message is automated. Please do not reply.
 
 def emailer():
     load_dotenv()
-    update_age()
 
     future_recipients = who_has_birthday_near()
     today_recipients = who_has_birthday_today()
