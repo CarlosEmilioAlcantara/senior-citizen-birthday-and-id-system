@@ -220,7 +220,13 @@ def get_today_celebrants(page, per_page):
     recipients = query_db("""
         SELECT *
         FROM senior_citizens
-        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+        WHERE DATEDIFF(
+            DATE_ADD(
+                birthday, 
+                INTERVAL YEAR(CURDATE()) - YEAR(birthday) YEAR
+            ),
+            CURDATE()
+        ) = 0
         ORDER BY last_name ASC
         LIMIT %s OFFSET %s
     """, (
@@ -232,7 +238,13 @@ def total_celebrants():
     total = query_db("""
         SELECT COUNT(*)
         FROM senior_citizens
-        WHERE DAYOFYEAR(birthday) = DAYOFYEAR(CURDATE())
+        WHERE DATEDIFF(
+            DATE_ADD(
+                birthday, 
+                INTERVAL YEAR(CURDATE()) - YEAR(birthday) YEAR
+            ),
+            CURDATE()
+        ) = 0;
     """, (
         None
     ), True)["COUNT(*)"]
