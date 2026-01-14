@@ -193,7 +193,7 @@ export default function UserDashboard() {
                     ["First Name", info.first_name],
                     ["Middle Name", info.middle_name],
                     ["Last Name", info.last_name],
-                    ["Birthday", info.birthday],
+                    ["Date of Birth", info.birthday],
                     ["Age", info.age],
                     ["Gender", info.gender],
                     ["Address", info.address],
