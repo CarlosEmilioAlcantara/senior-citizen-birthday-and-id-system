@@ -122,6 +122,29 @@ export default function UserEdit() {
     }
   }
 
+ const InputField = ({
+   label,
+   type = "text",
+   name,
+   value,
+   onChange,
+   error,
+ }) => {
+   return (
+     <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+       <label className="text-gray-500 text-base">{label}</label>
+       <input
+         type={type}
+         name={name}
+         value={value}
+         onChange={onChange}
+         className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+       />
+       {error && <small className="text-red-500">{error}</small>}
+     </div>
+   );
+ };
+
   // SideBar
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -155,18 +178,8 @@ export default function UserEdit() {
             <h1 className="text-2xl font-bold">Edit Account</h1>
           </div>
 
-          {/* Admin Profile Container */}
+          {/* Profile Container */}
           <div className="flex gap-2">
-            {/* <div className=" mx-2 hidden md:block">
-                <div className="font-bold flex gap-1">
-                  {info.first_name}
-
-                  {info.last_name}
-                </div>
-                <p className="uppercase font-semibold text-sm text-right">
-                  Senior Citizen
-                </p>
-              </div> */}
             <div className="hidden md:block">
               <p className="font-bold">
                 {info.first_name} {info.last_name}
@@ -176,7 +189,6 @@ export default function UserEdit() {
               </p>
             </div>
 
-            {/* <div className="bg-blue-300 size-11 rounded-full"></div> */}
             <img
               className="w-12 h-12 rounded-full object-cover border shadow"
               src={`http://localhost:5000/${info.picture_name}`}
@@ -392,55 +404,70 @@ export default function UserEdit() {
             <small style={{ color: "red" }}>{errors.gender}</small>
             <br />
 
-            <label>Emergency Contact's First Name</label>
-            <input
-              type="text"
-              name="emergency_fname"
-              value={emergencyFirstName}
-              onChange={(e) => setEmergencyFirstName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_fname}</small>
-            <br />
-
-            <label>Emergency Contact's Middle Name</label>
-            <input
-              type="text"
-              name="emergency_mname"
-              value={emergencyMiddleName}
-              onChange={(e) => setEmergencyMiddleName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_mname}</small>
-            <br />
-
-            <label>Emergency Contact's Last Name</label>
-            <input
-              type="text"
-              name="emergency_lname"
-              value={emergencyLastName}
-              onChange={(e) => setEmergencyLastName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.emergency_lname}</small>
-            <br />
-
-            <label>Emergency Contact's Contact Number</label>
-            <input
-              type="tel"
-              name="emergency_number"
-              value={emergencyNumber}
-              onChange={(e) => setEmergencyNumber(e.target.value)}
-            />
-            <br />
             <small style={{ color: "red" }}>{errors.emergency_number}</small>
-            <br />
 
-            <button type="submit">Submit</button>
+            {/* Contact Information */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                Contact Information
+              </h3>
+
+              <InputField
+                label="Email"
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={errors.email}
+              />
+
+              <InputField
+                label="Emergency Contact's First Name"
+                name="emergency_fname"
+                value={emergencyFirstName}
+                onChange={(e) => setEmergencyFirstName(e.target.value)}
+                error={errors.emergency_fname}
+              />
+
+              <InputField
+                label="Emergency Contact's Middle Name"
+                name="emergency_mname"
+                value={emergencyMiddleName}
+                onChange={(e) => setEmergencyMiddleName(e.target.value)}
+                error={errors.emergency_mname}
+              />
+
+              <InputField
+                label="Emergency Contact's Last Name"
+                name="emergency_lname"
+                value={emergencyLastName}
+                onChange={(e) => setEmergencyLastName(e.target.value)}
+                error={errors.emergency_lname}
+              />
+
+              <InputField
+                label="Emergency Contact's Contact Number"
+                type="tel"
+                name="emergency_number"
+                value={emergencyNumber}
+                onChange={(e) => setEmergencyNumber(e.target.value)}
+                error={errors.emergency_number}
+              />
+            </div>
+
+            {/* CANCEL AND SUBMIT BUTTONS */}
+            <div className="flex justify-between">
+              <button className="px-4 py-2 bg-gray-300 rounded">
+                <Link to="/user-dashboard">Cancel</Link>
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-700 text-white rounded"
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
           </form>
-          <button>
-            <Link to="/">Cancel</Link>
-          </button>
         </main>
       </div>
     </div>
