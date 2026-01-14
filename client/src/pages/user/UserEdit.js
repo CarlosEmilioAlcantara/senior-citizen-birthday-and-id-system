@@ -122,29 +122,6 @@ export default function UserEdit() {
     }
   }
 
- const InputField = ({
-   label,
-   type = "text",
-   name,
-   value,
-   onChange,
-   error,
- }) => {
-   return (
-     <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-       <label className="text-gray-500 text-base">{label}</label>
-       <input
-         type={type}
-         name={name}
-         value={value}
-         onChange={onChange}
-         className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-       />
-       {error && <small className="text-red-500">{error}</small>}
-     </div>
-   );
- };
-
   // SideBar
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -178,8 +155,18 @@ export default function UserEdit() {
             <h1 className="text-2xl font-bold">Edit Account</h1>
           </div>
 
-          {/* Profile Container */}
+          {/* Admin Profile Container */}
           <div className="flex gap-2">
+            {/* <div className=" mx-2 hidden md:block">
+                <div className="font-bold flex gap-1">
+                  {info.first_name}
+
+                  {info.last_name}
+                </div>
+                <p className="uppercase font-semibold text-sm text-right">
+                  Senior Citizen
+                </p>
+              </div> */}
             <div className="hidden md:block">
               <p className="font-bold">
                 {info.first_name} {info.last_name}
@@ -189,6 +176,7 @@ export default function UserEdit() {
               </p>
             </div>
 
+            {/* <div className="bg-blue-300 size-11 rounded-full"></div> */}
             <img
               className="w-12 h-12 rounded-full object-cover border shadow"
               src={`http://localhost:5000/${info.picture_name}`}
@@ -202,61 +190,57 @@ export default function UserEdit() {
 
           {/* <h3>User Edit</h3> */}
           <form onSubmit={handleEdit}>
-            <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 mb-5 flex flex-col gap-5 md:flex-row md:justify-around">
-              <div>
-                <label>1x1 / Passport Size Image</label>
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  name="id_picture"
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.id_picture}</small>
-                <br />
-              </div>
+            <label>1x1 / Passport Size Image</label>
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              name="id_picture"
+            />
+            <br />
+            <small style={{ color: "red" }}>{errors.id_picture}</small>
+            <br />
 
-              <div>
-                <label>Signature on white background</label>
-                <input type="file" name="signature_picture" />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.signature_picture}
-                </small>
-                <br />
-              </div>
-            </div>
+            <label>Signature on white background</label>
+            <input type="file" name="signature_picture" />
+            <br />
+            <small style={{ color: "red" }}>{errors.signature_picture}</small>
+            <br />
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">
-                Personal Information
-              </h3>
-              <InputField
-                label="First Name"
-                type="text"
-                name="first_name"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                error={errors.first_name}
-              />
+            <label>First Name</label>
+            <input
+              type="text"
+              placeholder="First name..."
+              name="first_name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <br />
+            <small style={{ color: "red" }}>{errors.first_name}</small>
+            <br />
 
-        
-              <InputField
-                label="Middle Name"
-                type="text"
-                name="middle_name"
-                value={middleName}
-                onChange={(e) => setMiddleName(e.target.value)}
-                error={errors.middle_name}
-              />
-              <InputField
-                label="Last Name"
-                type="text"
-                name="last_name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                error={errors.last_name}
-              />
-            </div>
+            <label>Middle Name</label>
+            <input
+              type="text"
+              placeholder="Middle name..."
+              name="middle_name"
+              value={middleName}
+              onChange={(e) => setMiddleName(e.target.value)}
+            />
+            <br />
+            <small style={{ color: "red" }}>{errors.middle_name}</small>
+            <br />
+
+            <label>Last Name</label>
+            <input
+              type="text"
+              placeholder="Last name..."
+              name="last_name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <br />
+            <small style={{ color: "red" }}>{errors.last_name}</small>
+            <br />
 
             <label>Address</label>
             <br />
@@ -396,60 +380,98 @@ export default function UserEdit() {
             <small style={{ color: "red" }}>{errors.gender}</small>
             <br />
 
-            {/* Contact Information */}
+            {/* CONTACT INFO */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
               <h3 className="text-lg font-semibold text-gray-700 mb-3">
                 Contact Information
               </h3>
 
-              <InputField
-                label="Email"
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                error={errors.email}
-              />
+              <div>
+                <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                  <label className="text-gray-500 text-base">Email</label>
+                  <input
+                    type="email"
+                    className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                    placeholder="Email..."
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
 
-              <InputField
-                label="Emergency Contact's First Name"
-                name="emergency_fname"
-                value={emergencyFirstName}
-                onChange={(e) => setEmergencyFirstName(e.target.value)}
-                error={errors.emergency_fname}
-              />
+                <small className="text-red-500">{errors.email}</small>
+              </div>
+              <div>
+                <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                  <label className="text-gray-500 text-base">
+                    Emergency Contact's First Name
+                  </label>
+                  <input
+                    type="text"
+                    name="emergency_fname"
+                    className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                    value={emergencyFirstName}
+                    onChange={(e) => setEmergencyFirstName(e.target.value)}
+                  />
+                </div>
+                <small className="text-red-500">{errors.emergency_fname}</small>
+              </div>
+              <div>
+                <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                  <label className="text-gray-500 text-base">
+                    Emergency Contact's Middle Name
+                  </label>
+                  <input
+                    type="text"
+                    name="emergency_mname"
+                    className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                    value={emergencyMiddleName}
+                    onChange={(e) => setEmergencyMiddleName(e.target.value)}
+                  />
+                </div>
+                <small className="text-red-500">{errors.emergency_mname}</small>
+              </div>
+              <div>
+                <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                  <label className="text-gray-500 text-base">
+                    Emergency Contact's Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="emergency_lname"
+                    className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                    value={emergencyLastName}
+                    onChange={(e) => setEmergencyLastName(e.target.value)}
+                  />
+                </div>
+                <small className="text-red-500">{errors.emergency_lname}</small>        
+              </div>
+              <div>
+                <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                  <label className="text-gray-500 text-base">
+                    Emergency Contact's Contact Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="emergency_number"
+                    className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                    value={emergencyNumber}
+                    onChange={(e) => setEmergencyNumber(e.target.value)}
+                  />
+                </div>
 
-              <InputField
-                label="Emergency Contact's Middle Name"
-                name="emergency_mname"
-                value={emergencyMiddleName}
-                onChange={(e) => setEmergencyMiddleName(e.target.value)}
-                error={errors.emergency_mname}
-              />
-
-              <InputField
-                label="Emergency Contact's Last Name"
-                name="emergency_lname"
-                value={emergencyLastName}
-                onChange={(e) => setEmergencyLastName(e.target.value)}
-                error={errors.emergency_lname}
-              />
-
-              <InputField
-                label="Emergency Contact's Contact Number"
-                type="tel"
-                name="emergency_number"
-                value={emergencyNumber}
-                onChange={(e) => setEmergencyNumber(e.target.value)}
-                error={errors.emergency_number}
-              />
+                <small className="text-red-500">
+                  {errors.emergency_number}
+                </small>
+              </div>
             </div>
 
-            {/* CANCEL AND SUBMIT BUTTONS */}
+              {/* SUBMIT & CANCEL BUTTON */}
             <div className="flex justify-between my-2">
               <button className="px-4 py-2 bg-gray-300 rounded">
                 <Link to="/user-dashboard">Cancel</Link>
               </button>
+
               <button
                 className="px-4 py-2 bg-blue-700 text-white rounded"
                 type="submit"
