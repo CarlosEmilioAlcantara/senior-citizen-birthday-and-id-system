@@ -200,71 +200,63 @@ export default function UserEdit() {
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {!status && <p style={{ color: "red" }}>{response}</p>}
 
-          <h3>User Edit</h3>
+          {/* <h3>User Edit</h3> */}
           <form onSubmit={handleEdit}>
-            <label>1x1 / Passport Size Image</label>
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              name="id_picture"
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.id_picture}</small>
-            <br />
+            <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 mb-5 flex flex-col gap-5 md:flex-row md:justify-around">
+              <div>
+                <label>1x1 / Passport Size Image</label>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  name="id_picture"
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.id_picture}</small>
+                <br />
+              </div>
 
-            <label>Signature on white background</label>
-            <input type="file" name="signature_picture" />
-            <br />
-            <small style={{ color: "red" }}>{errors.signature_picture}</small>
-            <br />
+              <div>
+                <label>Signature on white background</label>
+                <input type="file" name="signature_picture" />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.signature_picture}
+                </small>
+                <br />
+              </div>
+            </div>
 
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="Email..."
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.email}</small>
-            <br />
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                Personal Information
+              </h3>
+              <InputField
+                label="First Name"
+                type="text"
+                name="first_name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                error={errors.first_name}
+              />
 
-            <label>First Name</label>
-            <input
-              type="text"
-              placeholder="First name..."
-              name="first_name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.first_name}</small>
-            <br />
-
-            <label>Middle Name</label>
-            <input
-              type="text"
-              placeholder="Middle name..."
-              name="middle_name"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.middle_name}</small>
-            <br />
-
-            <label>Last Name</label>
-            <input
-              type="text"
-              placeholder="Last name..."
-              name="last_name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.last_name}</small>
-            <br />
+        
+              <InputField
+                label="Middle Name"
+                type="text"
+                name="middle_name"
+                value={middleName}
+                onChange={(e) => setMiddleName(e.target.value)}
+                error={errors.middle_name}
+              />
+              <InputField
+                label="Last Name"
+                type="text"
+                name="last_name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                error={errors.last_name}
+              />
+            </div>
 
             <label>Address</label>
             <br />
@@ -404,8 +396,6 @@ export default function UserEdit() {
             <small style={{ color: "red" }}>{errors.gender}</small>
             <br />
 
-            <small style={{ color: "red" }}>{errors.emergency_number}</small>
-
             {/* Contact Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
               <h3 className="text-lg font-semibold text-gray-700 mb-3">
@@ -456,7 +446,7 @@ export default function UserEdit() {
             </div>
 
             {/* CANCEL AND SUBMIT BUTTONS */}
-            <div className="flex justify-between">
+            <div className="flex justify-between my-2">
               <button className="px-4 py-2 bg-gray-300 rounded">
                 <Link to="/user-dashboard">Cancel</Link>
               </button>
