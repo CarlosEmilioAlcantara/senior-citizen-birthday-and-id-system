@@ -190,57 +190,74 @@ export default function UserEdit() {
 
           {/* <h3>User Edit</h3> */}
           <form onSubmit={handleEdit}>
-            <label>1x1 / Passport Size Image</label>
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              name="id_picture"
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.id_picture}</small>
-            <br />
+            <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 mb-5 flex flex-col gap-5 md:flex-row md:justify-around">
+              <div>
+                <label>1x1 / Passport Size Image</label>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  name="id_picture"
+                />
 
-            <label>Signature on white background</label>
-            <input type="file" name="signature_picture" />
-            <br />
-            <small style={{ color: "red" }}>{errors.signature_picture}</small>
-            <br />
+                <small style={{ color: "red" }}>{errors.id_picture}</small>
+              </div>
 
-            <label>First Name</label>
-            <input
-              type="text"
-              placeholder="First name..."
-              name="first_name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.first_name}</small>
-            <br />
+              <div>
+                <label>Signature on white background</label>
+                <input type="file" name="signature_picture" />
 
-            <label>Middle Name</label>
-            <input
-              type="text"
-              placeholder="Middle name..."
-              name="middle_name"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.middle_name}</small>
-            <br />
+                <small style={{ color: "red" }}>
+                  {errors.signature_picture}
+                </small>
+              </div>
+            </div>
 
-            <label>Last Name</label>
-            <input
-              type="text"
-              placeholder="Last name..."
-              name="last_name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <br />
-            <small style={{ color: "red" }}>{errors.last_name}</small>
-            <br />
+            <div>
+              <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                <label className="text-gray-500 text-base">First Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter First Name"
+                  name="first_name"
+                  className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+
+              <small style={{ color: "red" }}>{errors.first_name}</small>
+            </div>
+            <div>
+              <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                <label className="text-gray-500 text-base">Middle Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter Middle Name"
+                  className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                  name="middle_name"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                />
+              </div>
+
+              <small className="text-red-500">{errors.middle_name}</small>
+            </div>
+
+            <div>
+              <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                <label className="text-gray-500 text-base">Last Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter Last Name"
+                  className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                  name="last_name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+
+              <small className="text-red-500">{errors.last_name}</small>
+            </div>
 
             <label>Address</label>
             <br />
@@ -444,7 +461,7 @@ export default function UserEdit() {
                     onChange={(e) => setEmergencyLastName(e.target.value)}
                   />
                 </div>
-                <small className="text-red-500">{errors.emergency_lname}</small>        
+                <small className="text-red-500">{errors.emergency_lname}</small>
               </div>
               <div>
                 <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
@@ -466,7 +483,7 @@ export default function UserEdit() {
               </div>
             </div>
 
-              {/* SUBMIT & CANCEL BUTTON */}
+            {/* SUBMIT & CANCEL BUTTON */}
             <div className="flex justify-between my-2">
               <button className="px-4 py-2 bg-gray-300 rounded">
                 <Link to="/user-dashboard">Cancel</Link>
