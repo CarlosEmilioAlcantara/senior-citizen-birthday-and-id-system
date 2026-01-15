@@ -88,6 +88,36 @@ export default function UserEdit() {
     }
   }
 
+  // Img Preview
+  const [idPreview, setIdPreview] = useState(null);
+  const [signaturePreview, setSignaturePreview] = useState(null);
+
+  useEffect(() => {
+    if (info.picture_name) {
+      setIdPreview(`http://localhost:5000/${info.picture_name}`);
+    }
+  }, [info.picture_name]);
+
+  function handleIdImageChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setIdPreview(URL.createObjectURL(file));
+    }
+  }
+
+  // add signature
+  const [signatureFileName, setSignatureFileName] = useState("");
+
+  function handleSignatureChange(e) {
+    const file = e.target.files[0];
+    console.log(file);
+    if (file) {
+      setSignaturePreview(URL.createObjectURL(file));
+      setSignatureFileName(file.name);
+
+    }
+  }
+
   async function handleEdit(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -198,16 +228,60 @@ export default function UserEdit() {
                   type="file"
                   accept="image/png, image/jpeg"
                   name="id_picture"
+                  id="idUpload"
+                  className="hidden"
+                  onChange={handleIdImageChange}
                 />
 
-                <small style={{ color: "red" }}>{errors.id_picture}</small>
+                {idPreview && (
+                  <img
+                    src={idPreview}
+                    alt="ID Preview"
+                    className="mt-3 w-32 h-32 object-cover rounded border"
+                  />
+                )}
+
+                <small className="text-red-500">{errors.id_picture}</small>
+                <label
+                  htmlFor="idUpload"
+                  className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Choose ID Image
+                </label>
               </div>
 
               <div>
                 <label>Signature on white background</label>
-                <input type="file" name="signature_picture" />
+                <input
+                  type="file"
+                  name="signature_picture"
+                  accept="image/png, image/jpeg"
+                  className="hidden"
+                  onChange={handleSignatureChange}
+                />
 
-                <small style={{ color: "red" }}>
+                {signaturePreview && (
+                  <img
+                    src={signaturePreview}
+                    alt="Signature Preview"
+                    className="mt-3 w-48 h-24 object-contain bg-white border rounded"
+                  />
+                )}
+
+                {signatureFileName && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    Selected: {signatureFileName}
+                  </p>
+                )}
+                {/* 
+                <label
+                  htmlFor="signatureUpload"
+                  className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Choose Signature Image
+                </label> */}
+
+                <small className="text-red-500">
                   {errors.signature_picture}
                 </small>
               </div>
