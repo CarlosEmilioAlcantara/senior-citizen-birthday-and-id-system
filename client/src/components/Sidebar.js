@@ -166,7 +166,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       <div className="p-4 flex justify-between">
         <div className="text-xl font-bold flex items-center gap-5">
           <img
-            src="seniorLogo.jpg"
+            // src="seniorLogo.jpg"
             className="bg-white rounded-full w-12 h-12 md:mx-1"
           />
           <h2 className="uppercase text-sm font-bold text-white text-center">

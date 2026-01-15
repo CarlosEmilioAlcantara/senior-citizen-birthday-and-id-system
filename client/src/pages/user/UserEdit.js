@@ -52,23 +52,23 @@ export default function UserEdit() {
   const [emergencyNumber, setEmergencyNumber] = useState("");
 
   useEffect(() => {
-    setEmail(info.email);
-    setFirstName(info.first_name);
-    setMiddleName(info.middle_name);
-    setLastName(info.last_name);
-    setHouse(info.house);
-    setStreet(info.street);
-    setSubdivision(info.subdivision);
-    setBarangay(info.barangay);
-    setCity(info.city);
-    setProvince(info.province);
-    setBirthday(info.birthday);
-    setAge(info.age);
-    setGender(info.gender);
-    setEmergencyFirstName(info.emergency_fname);
-    setEmergencyMiddleName(info.emergency_mname);
-    setEmergencyLastName(info.emergency_lname);
-    setEmergencyNumber(info.emergency_number);
+    setEmail(info.email ?? "");
+    setFirstName(info.first_name ?? "");
+    setMiddleName(info.middle_name ?? "");
+    setLastName(info.last_name ?? "");
+    setHouse(info.house ?? "");
+    setStreet(info.street ?? "");
+    setSubdivision(info.subdivision ?? "");
+    setBarangay(info.barangay ?? "");
+    setCity(info.city ?? "");
+    setProvince(info.province ?? "");
+    setBirthday(info.birthday ?? "");
+    setAge(info.age ?? "");
+    setGender(info.gender ?? "");
+    setEmergencyFirstName(info.emergency_fname ?? "");
+    setEmergencyMiddleName(info.emergency_mname ?? "");
+    setEmergencyLastName(info.emergency_lname ?? "");
+    setEmergencyNumber(info.emergency_number ?? "");
   }, [info]);
 
   function handleSetAge() {
@@ -230,7 +230,7 @@ export default function UserEdit() {
                   />
                 </div>
 
-                <small style={{ color: "red" }}>{errors.first_name}</small>
+                <small className="text-red-500">{errors.first_name}</small>
               </div>
               <div>
                 <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
@@ -262,135 +262,140 @@ export default function UserEdit() {
                 <small className="text-red-500">{errors.last_name}</small>
               </div>
 
-              {/* ADDRESS NO UI DESIGN YET */}
+              {/* ADDRESS*/}
               <div>
                 <label className="text-base font-semibold text-gray-600 mb-3">
                   Address
                 </label>
 
-                <div>
-                  <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <label className="text-gray-500 text-base">
-                      House No. / Building / Lot No. *
-                    </label>
-                    <input
-                      type="text"
-                      INPUT
-                      className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-                      name="house"
-                      value={house}
-                      onChange={(e) => setHouse(e.target.value)}
-                    />
+                <div className="">
+                  <div>
+                    <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                      <label className="text-gray-500 text-base">
+                        House No. / Building / Lot No. *
+                      </label>
+                      <input
+                        type="text"
+                        className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                        name="house"
+                        value={house}
+                        onChange={(e) => setHouse(e.target.value)}
+                      />
+                    </div>
+
+                    <small className="text-red-500">{errors.house}</small>
                   </div>
 
-                  <small className="text-red-500">{errors.house}</small>
-                </div>
+                  <div>
+                    <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                      <label className="text-gray-500 text-base">
+                        Street *
+                      </label>
+                      <input
+                        type="text"
+                        className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                        name="street"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                      />
+                    </div>
 
-                <div>
-                  <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <label className="text-gray-500 text-base">Street *</label>
-                    <input
-                      type="text"
-                      className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-                      name="street"
-                      value={street}
-                      onChange={(e) => setStreet(e.target.value)}
-                    />
+                    <small className="text-red-500">{errors.street}</small>
                   </div>
 
-                  <small className="text-red-500">{errors.street}</small>
-                </div>
+                  <div>
+                    <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                      <label className="text-gray-500 text-base">
+                        Subdivision
+                      </label>
+                      <input
+                        type="text"
+                        name="subdivision"
+                        className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                        value={subdivision}
+                        onChange={(e) => setSubdivision(e.target.value)}
+                      />
+                    </div>
 
-                <div>
-                  <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <label className="text-gray-500 text-base">
-                      Subdivision
-                    </label>
-                    <input
-                      type="text"
-                      name="subdivision"
-                      className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-                      value={subdivision}
-                      onChange={(e) => setSubdivision(e.target.value)}
-                    />
+                    <small className="text-red-500">{errors.subdivision}</small>
                   </div>
 
-                  <small className="text-red-500">{errors.subdivision}</small>
-                </div>
+                  <div>
+                    <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                      <label className="text-gray-500 text-base">
+                        Barangay *
+                      </label>
+                      <select
+                        name="barangay"
+                        className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                        value={barangay}
+                        onChange={(e) => setBarangay(e.target.value)}
+                      >
+                        <option>-- Please select an option --</option>
+                        <option>Addition Hills</option>
+                        <option>Balong-Bato</option>
+                        <option>Batis</option>
+                        <option>Corazon De Jesus</option>
+                        <option>Ermitaño</option>
+                        <option>Halo-halo</option>
+                        <option>Isabelita</option>
+                        <option>Kabayanan</option>
+                        <option>Little Baguio</option>
+                        <option>Maytunas</option>
+                        <option>Onse</option>
+                        <option>Pasadeña</option>
+                        <option>Pedro Cruz</option>
+                        <option>Progreso</option>
+                        <option>Rivera</option>
+                        <option>Salapan</option>
+                        <option>San Perfecto</option>
+                        <option>Santa Lucia</option>
+                        <option>Tibagan</option>
+                        <option>West Crame</option>
+                        <option>Greenhills</option>
+                      </select>
+                    </div>
 
-                <div>
-                  <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <label className="text-gray-500 text-base">
-                      Barangay *
-                    </label>
-                    <select
-                      name="barangay"
-                      className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-                      value={barangay}
-                      onChange={(e) => setBarangay(e.target.value)}
-                    >
-                      <option>-- Please select an option --</option>
-                      <option>Addition Hills</option>
-                      <option>Balong-Bato</option>
-                      <option>Batis</option>
-                      <option>Corazon De Jesus</option>
-                      <option>Ermitaño</option>
-                      <option>Halo-halo</option>
-                      <option>Isabelita</option>
-                      <option>Kabayanan</option>
-                      <option>Little Baguio</option>
-                      <option>Maytunas</option>
-                      <option>Onse</option>
-                      <option>Pasadeña</option>
-                      <option>Pedro Cruz</option>
-                      <option>Progreso</option>
-                      <option>Rivera</option>
-                      <option>Salapan</option>
-                      <option>San Perfecto</option>
-                      <option>Santa Lucia</option>
-                      <option>Tibagan</option>
-                      <option>West Crame</option>
-                      <option>Greenhills</option>
-                    </select>
+                    <small className="text-red-500">{errors.barangay}</small>
                   </div>
 
-                  <small className="text-red-500">{errors.barangay}</small>
-                </div>
+                  <div>
+                    <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                      <label className="text-gray-500 text-base">
+                        City / Municipality
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="San Juan"
+                        className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                        name="city"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        disabled
+                      />
+                    </div>
 
-                <div>
-                  <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <label className="text-gray-500 text-base">
-                      City / Municipality
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="San Juan"
-                      className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-                      name="city"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      disabled
-                    />
+                    <small className="text-red-500">{errors.city}</small>
                   </div>
 
-                  <small className="text-red-500">{errors.city}</small>
-                </div>
+                  <div>
+                    <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                      <label className="text-gray-500 text-base">
+                        Province
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Metro Manila"
+                        className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+                        name="province"
+                        value={province}
+                        onChange={(e) => setProvince(e.target.value)}
+                        disabled
+                      />
+                    </div>
 
-                <div>
-                  <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <label className="text-gray-500 text-base">Province</label>
-                    <input
-                      type="text"
-                      placeholder="Metro Manila"
-                      className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
-                      name="province"
-                      value={province}
-                      onChange={(e) => setProvince(e.target.value)}
-                      disabled
-                    />
+                    <small style={{ color: "red" }}>{errors.province}</small>
                   </div>
-
-                  <small style={{ color: "red" }}>{errors.province}</small>
                 </div>
               </div>
 
