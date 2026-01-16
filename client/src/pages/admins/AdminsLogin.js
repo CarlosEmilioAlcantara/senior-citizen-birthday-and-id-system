@@ -57,26 +57,51 @@ export default function AdminsLogin() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-gray-700 font-medium">
-              Email/Username
+              Email o Username
             </label>
             <input
               type="text"
-              placeholder="example@email.com"
               name="email_or_username"
+              placeholder="example@email.com"
               className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
-            <small className="text-red-500">{errors.email_or_username}</small>
+            <small className="text-xs text-red-500">
+              {errors.email_or_username}
+            </small>
           </div>
 
-          <label>Password</label>
-          <input type="password" placeholder="password" name="password" />
-          <br />
-          <small style={{ color: "red" }}>{errors.password}</small>
-          <br />
-          <Link to="/admin-reset-password">Forgot Password?</Link>
+          <div>
+            <div>
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Password
+                </label>
+                <input
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="password"
+                  placeholder="password"
+                  name="password"
+                />
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <p className="text-xs text-red-500">{errors.password}</p>
+              <Link
+                to="/admin-reset-password"
+                className="text-xs text-red-600 hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+          </div>
 
-          <button type="submit">Login</button>
+          <button
+            className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:scale-105 transition"
+            type="submit"
+          >
+            Login
+          </button>
         </form>
       </div>
     </div>
