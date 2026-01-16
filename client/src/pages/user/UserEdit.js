@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
 import Sidebar from "../../components/Sidebar";
+import ChangePass from "../../pages/user/UserChangePassword"
 
 export default function UserEdit() {
   const [status, setStatus] = useState(null);
@@ -90,6 +91,8 @@ export default function UserEdit() {
 
   // Img Preview
   const [idPreview, setIdPreview] = useState(null);
+ const [idFileName, setIdFileName] = useState("");
+     
   // signature preview state
   const [signaturePreview, setSignaturePreview] = useState(null);
   const [signatureFileName, setSignatureFileName] = useState("");
@@ -234,6 +237,7 @@ export default function UserEdit() {
           <form onSubmit={handleEdit} className="flex flex-col gap-5">
             {/* UPLOADED IMG */}
             <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 flex flex-col gap-5 md:flex-row md:justify-around">
+              {/* ID/PASSPORT PIC */}
               <div>
                 <label className="text-lg font-semibold text-gray-700 mb-3">
                   1x1 / Passport Size Image
@@ -247,15 +251,25 @@ export default function UserEdit() {
                   onChange={handleIdImageChange}
                 />
 
-                {idPreview && (
-                  <img
-                    src={idPreview}
-                    alt="ID Preview"
-                    className="mt-3 w-32 h-32 object-cover rounded border"
-                  />
-                )}
+                <div className="flex flex-col">
+                  {idPreview && (
+                    <img
+                      src={idPreview}
+                      alt="ID Preview"
+                      className="mt-3 w-32 h-32 object-cover rounded border"
+                    />
+                  )}
 
-                <small className="text-red-500">{errors.id_picture}</small>
+                  {/* no filename preview yet */}
+                  {/* {idFileName && (
+                  <p className="text-sm text-gray-500 mt-1">
+                    {idFileName}
+                  </p>
+                )} */}
+
+                  <small className="text-red-500">{errors.id_picture}</small>
+                </div>
+
                 <label
                   htmlFor="idUpload"
                   className="inline-block cursor-pointer px-4 py-2 mt-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -264,7 +278,7 @@ export default function UserEdit() {
                 </label>
               </div>
 
-                {/* SIGNATURE */}
+              {/* SIGNATURE */}
               <div>
                 <label className="text-lg font-semibold text-gray-700 mb-3">
                   Signature on white background
@@ -283,7 +297,7 @@ export default function UserEdit() {
                   <img
                     src={signaturePreview}
                     alt="Signature Preview"
-                    className="mt-3 w-48 h-24 object-contain bg-white border rounded"
+                    className="mt-3 w-100 h-32 object-contain bg-white border rounded"
                     style={{ minHeight: "50px" }}
                   />
                 )}
@@ -690,6 +704,8 @@ export default function UserEdit() {
               </button>
             </div>
           </form>
+
+          <ChangePass />
         </main>
       </div>
     </div>

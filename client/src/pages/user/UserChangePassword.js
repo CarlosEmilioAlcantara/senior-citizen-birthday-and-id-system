@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
-import Sidebar from "../../components/Sidebar";
+// import Sidebar from "../../components/Sidebar";
 
 export default function UserChangePassword() {
   const [status, setStatus] = useState("");
@@ -41,81 +41,78 @@ export default function UserChangePassword() {
   }
 
   // SideBar
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="flex bg-white md:h-screen">
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+    // <div className="flex bg-white md:h-screen">
+    //   <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
-        {/* HEADER */}
-        <header className="bg-white flex justify-between items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="cursor-pointer p-2 hover:text-cyan-700 hover:scale-110 lg:hidden"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold">Dashboard</h1>
+    // </div>
+
+    <div className="flex-1 overflow-y-auto  bg-white">
+      {!status && <p style={{ color: "red" }}>{response}</p>}
+
+      <form
+        onSubmit={handleChangePassword}
+        className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mt-5"
+      >
+        <h3 className="text-lg font-semibold text-gray-700 mb-3">
+          Change Password
+        </h3>
+        <div>
+          <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+            <label className="text-gray-500 text-base">Old Password</label>
+            <input
+              className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+              type="password"
+              name="old_password"
+            />
           </div>
 
-          {/* Profile Container */}
-        </header>
+          <small className="text-red-500">{errors.old_password}</small>
+        </div>
 
-        {/* SCROLLABLE  USER CHANGE PASSWORD CONTENT */}
-        <main className="flex-1 overflow-y-auto p-5 bg-white">
-          {!status && <p style={{ color: "red" }}>{response}</p>}
+        <div>
+          <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+            <label className="text-gray-500 text-base">New Password</label>
+            <input
+              className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+              type="password"
+              name="password"
+            />
+          </div>
 
-          <form onSubmit={handleChangePassword}>
-            <h3>User Change Password</h3>
-            <label>Old Password</label>
-            <input type="password" placeholder="password" name="old_password" />
-            <br />
-            <small style={{ color: "red" }}>{errors.old_password}</small>
-            <br />
+          <small className="text-red-500">{errors.password}</small>
+        </div>
 
-            <label>New Password</label>
-            <input type="password" placeholder="password" name="password" />
-            <br />
-            <small style={{ color: "red" }}>{errors.password}</small>
-            <br />
+        <div>
+          <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+            <label className="text-gray-500 text-base">
+              Confirm New Password
+            </label>
+            <input
+              className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"
+              type="password"
+              name="confirm"
+            />
+          </div>
 
-            <label>Confirm New Password</label>
-            <input type="password" placeholder="password" name="confirm" />
-            <br />
-            <small style={{ color: "red" }}>{errors.confirm}</small>
-            <br />
+          <small className="text-red-500">{errors.confirm}</small>
+        </div>
 
-            <div className="flex justify-between">
-              <nav>
-                <button className="px-4 py-2 bg-gray-300 rounded">
-                  <Link to="/user-dashboard">Cancel</Link>
-                </button>
-              </nav>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-700 text-white rounded"
-              >
-                Change Password
-              </button>
-            </div>
-          </form>
-        </main>
-      </div>
+        <div className="flex justify-between">
+          <nav>
+            <button className="px-4 py-2 bg-gray-300 rounded">
+              <Link to="/user-dashboard">Cancel</Link>
+            </button>
+          </nav>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-700 text-white rounded"
+          >
+            Change Password
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
