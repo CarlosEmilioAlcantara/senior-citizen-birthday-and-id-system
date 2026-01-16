@@ -219,7 +219,7 @@ export default function UserDashboard() {
 
                 <div>
                   {[
-                    ["Contact Number", "0999-888-7777"],
+                    
                     ["Email", info.email],
                     ["Emergency First Name", info.emergency_fname],
                     ["Emergency Middle Initial", info.emergency_mname],

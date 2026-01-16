@@ -90,8 +90,33 @@ export default function UserEdit() {
 
   // Img Preview
   const [idPreview, setIdPreview] = useState(null);
+  // signature preview state
   const [signaturePreview, setSignaturePreview] = useState(null);
+  const [signatureFileName, setSignatureFileName] = useState("");
 
+  // set from backend
+  useEffect(() => {
+    if (info.signature_name) {
+      const url = `http://localhost:5000/${info.signature_name}`;
+      console.log("Loading backend signature URL:", url);
+      setSignaturePreview(url);
+    }
+  }, [info.signature_name]);
+
+  // on file change (upload new)
+  function handleSignatureChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // revoke old blob URL if exists
+    if (signaturePreview && signaturePreview.startsWith("blob:")) {
+      URL.revokeObjectURL(signaturePreview);
+    }
+
+    const blobURL = URL.createObjectURL(file);
+    setSignaturePreview(blobURL);
+    setSignatureFileName(file.name);
+  }
   useEffect(() => {
     if (info.picture_name) {
       setIdPreview(`http://localhost:5000/${info.picture_name}`);
@@ -102,19 +127,6 @@ export default function UserEdit() {
     const file = e.target.files[0];
     if (file) {
       setIdPreview(URL.createObjectURL(file));
-    }
-  }
-
-  // add signature
-  const [signatureFileName, setSignatureFileName] = useState("");
-
-  function handleSignatureChange(e) {
-    const file = e.target.files[0];
-    console.log(file);
-    if (file) {
-      setSignaturePreview(URL.createObjectURL(file));
-      setSignatureFileName(file.name);
-
     }
   }
 
@@ -223,7 +235,9 @@ export default function UserEdit() {
             {/* UPLOADED IMG */}
             <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 flex flex-col gap-5 md:flex-row md:justify-around">
               <div>
-                <label>1x1 / Passport Size Image</label>
+                <label className="text-lg font-semibold text-gray-700 mb-3">
+                  1x1 / Passport Size Image
+                </label>
                 <input
                   type="file"
                   accept="image/png, image/jpeg"
@@ -244,16 +258,21 @@ export default function UserEdit() {
                 <small className="text-red-500">{errors.id_picture}</small>
                 <label
                   htmlFor="idUpload"
-                  className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="inline-block cursor-pointer px-4 py-2 mt-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
                   Choose ID Image
                 </label>
               </div>
 
+                {/* SIGNATURE */}
               <div>
-                <label>Signature on white background</label>
+                <label className="text-lg font-semibold text-gray-700 mb-3">
+                  Signature on white background
+                </label>
+
                 <input
                   type="file"
+                  id="signatureUpload"
                   name="signature_picture"
                   accept="image/png, image/jpeg"
                   className="hidden"
@@ -265,26 +284,70 @@ export default function UserEdit() {
                     src={signaturePreview}
                     alt="Signature Preview"
                     className="mt-3 w-48 h-24 object-contain bg-white border rounded"
+                    style={{ minHeight: "50px" }}
                   />
                 )}
 
                 {signatureFileName && (
-                  <p className="text-sm text-gray-600 mt-1">
-                    Selected: {signatureFileName}
+                  <p className="text-sm text-gray-500 mt-1">
+                    {signatureFileName}
                   </p>
                 )}
-                {/* 
+
                 <label
                   htmlFor="signatureUpload"
-                  className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-2"
                 >
                   Choose Signature Image
-                </label> */}
+                </label>
 
-                <small className="text-red-500">
-                  {errors.signature_picture}
-                </small>
+                {errors?.signature_picture && (
+                  <p className="text-red-500 mt-1">
+                    {errors.signature_picture}
+                  </p>
+                )}
               </div>
+
+              {/* <div className="mt-4">
+                <label className="block font-medium mb-1">
+                  Signature on white background
+                </label>
+
+                <input
+                  type="file"
+                  id="signatureUpload"
+                  name="signature_picture"
+                  accept="image/png, image/jpeg"
+                  className="hidden"
+                  onChange={handleSignatureChange}
+                />
+
+                {signaturePreview ? (
+                  <img
+                    src={signaturePreview}
+                    alt="Signature Preview"
+                    className="mt-3 w-48 h-24 object-contain bg-white border rounded"
+                    style={{ minHeight: "50px" }}
+                  />
+                ) : (
+                  <div className="mt-3 w-48 h-24 bg-gray-100 border rounded flex items-center justify-center text-gray-400">
+                    No signature uploaded
+                  </div>
+                )}
+
+                <label
+                  htmlFor="signatureUpload"
+                  className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-2"
+                >
+                  Choose Signature Image
+                </label>
+
+                {errors?.signature_picture && (
+                  <p className="text-red-500 mt-1">
+                    {errors.signature_picture}
+                  </p>
+                )}
+              </div> */}
             </div>
 
             {/* PERSONAL INFO */}
