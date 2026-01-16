@@ -80,7 +80,7 @@ export default function AdminsLogin() {
                 <input
                   className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="password"
-                  placeholder="password"
+                  placeholder="Password"  
                   name="password"
                 />
               </div>

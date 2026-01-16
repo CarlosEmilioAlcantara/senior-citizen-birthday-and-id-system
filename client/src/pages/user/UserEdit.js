@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
 import Sidebar from "../../components/Sidebar";
-import ChangePass from "../../pages/user/UserChangePassword"
+import ChangePass from "../../pages/user/UserChangePassword";
 
 export default function UserEdit() {
   const [status, setStatus] = useState(null);
@@ -91,20 +91,20 @@ export default function UserEdit() {
 
   // Img Preview
   const [idPreview, setIdPreview] = useState(null);
- const [idFileName, setIdFileName] = useState("");
-     
+  const [idFileName, setIdFileName] = useState("");
+
   // signature preview state
   const [signaturePreview, setSignaturePreview] = useState(null);
   const [signatureFileName, setSignatureFileName] = useState("");
 
   // set from backend
   useEffect(() => {
-    if (info.signature_name) {
-      const url = `http://localhost:5000/${info.signature_name}`;
+    if (info.image_name) {
+      const url = `http://localhost:5000/${info.image_name}`;
       console.log("Loading backend signature URL:", url);
       setSignaturePreview(url);
     }
-  }, [info.signature_name]);
+  }, [info.image_name]);
 
   // on file change (upload new)
   function handleSignatureChange(e) {

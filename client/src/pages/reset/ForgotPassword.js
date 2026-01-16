@@ -258,7 +258,7 @@ export default function ForgotPassword({ accountType }) {
 
             <div className="text-center my-6 text-sm text-gray-600">
               <Link
-                to="/user-login"
+                to="/admins-login"
                 className="text-blue-600 font-semibold hover:underline"
               >
                 Go back to Login
