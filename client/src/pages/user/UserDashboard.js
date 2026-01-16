@@ -143,9 +143,14 @@ export default function UserDashboard() {
             <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 mb-5 flex flex-col gap-5 md:flex-row md:justify-around">
               {/* Profile Photo */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">
-                  Profile Photo
-                </h3>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    Profile Photo
+                  </h3>
+                  <h4 className="text-xs font-semibold text-gray-700">
+                    1x1 / Passport Size Image
+                  </h4>
+                </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <img
@@ -168,7 +173,7 @@ export default function UserDashboard() {
               {/*(SIGNATURE) */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-700 mb-3">
-                  Senior Signature
+                  Signature on white background
                 </h3>
 
                 <div className="flex justify-center">
@@ -219,7 +224,6 @@ export default function UserDashboard() {
 
                 <div>
                   {[
-                    
                     ["Email", info.email],
                     ["Emergency First Name", info.emergency_fname],
                     ["Emergency Middle Initial", info.emergency_mname],
@@ -295,7 +299,7 @@ export default function UserDashboard() {
             </div>
 
             {/* <div className="bg-blue-100 p-2 hidden">
-              <h3>
+              <h3>  
                 Fullname: {info.first_name} {info.middle_name} {info.last_name}
               </h3>
               <h3>Birthday: {info.birthday}</h3>

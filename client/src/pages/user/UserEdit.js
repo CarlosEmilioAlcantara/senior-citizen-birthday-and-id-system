@@ -239,9 +239,15 @@ export default function UserEdit() {
             <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 flex flex-col gap-5 md:flex-row md:justify-around">
               {/* ID/PASSPORT PIC */}
               <div>
-                <label className="text-lg font-semibold text-gray-700 mb-3">
-                  1x1 / Passport Size Image
-                </label>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    Profile Photo
+                  </h3>
+                  <h4 className="text-xs font-semibold text-gray-700">
+                    1x1 / Passport Size Image
+                  </h4>
+                </div>
+
                 <input
                   type="file"
                   accept="image/png, image/jpeg"
@@ -297,8 +303,8 @@ export default function UserEdit() {
                   <img
                     src={signaturePreview}
                     alt="Signature Preview"
-                    className="mt-3 w-100 h-32 object-contain bg-white border rounded"
-                    style={{ minHeight: "50px" }}
+                    className="mt-7 w-100 h-32 object-contain bg-white border rounded"
+                    
                   />
                 )}
 

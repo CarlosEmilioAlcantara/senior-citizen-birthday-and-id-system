@@ -57,7 +57,7 @@ export default function AdminsLogin() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-gray-700 font-medium">
-              Email o Username
+              Email or Username
             </label>
             <input
               type="text"
