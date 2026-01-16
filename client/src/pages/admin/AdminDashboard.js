@@ -194,7 +194,7 @@ export default function AdminDashboard() {
           </ol>
 
           <h3>Seniors with birthdays</h3>
-          <table className="bg-red-500 hidden">
+          <table className="bg-red-500 ">
             <thead>
               <tr>
                 <th>ID</th>

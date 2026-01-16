@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
+import Sidebar from "../../components/Sidebar";
 
 export default function UsersList() {
   const [users, setUsers] = useState([]);
@@ -10,8 +11,8 @@ export default function UsersList() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openCard, setOpenCard] = useState(false);
-  const [cardFront, setCardFront] = useState("")
-  const [cardBack, setCardBack] = useState("")
+  const [cardFront, setCardFront] = useState("");
+  const [cardBack, setCardBack] = useState("");
   const [emailOrFullname, setEmailOrFullname] = useState("");
   const [sort, setSort] = useState("Newest");
   const [page, setPage] = useState(1);
@@ -20,30 +21,30 @@ export default function UsersList() {
   const [pages, setPages] = useState([]);
   const [filter, setFilter] = useState("all");
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState(null)
-  const [response, setResponse] = useState("")
+  const [status, setStatus] = useState(null);
+  const [response, setResponse] = useState("");
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
 
   async function fetchUsers() {
     try {
       const res = await fetch(
-        `/admins/users-list?page=${page}&per_page=${perPage}&keyword=${emailOrFullname}&sort=${sort}`, 
-        { method: "GET", }
-      )
+        `/admins/users-list?page=${page}&per_page=${perPage}&keyword=${emailOrFullname}&sort=${sort}`,
+        { method: "GET" }
+      );
       const data = await res.json();
-      const processedList = data.list.map(u => ({
+      const processedList = data.list.map((u) => ({
         ...u,
         birthday: new Date(u.birthday).toLocaleDateString("en-US", {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        })
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
       }));
       setUsers([...processedList]);
       setPictures([...data.pictures]);
       setSignatures([...data.signatures]);
-      setTotalPages(data.total_pages)
+      setTotalPages(data.total_pages);
 
       if (data.status === 429) {
         navigate("/too-many-requests");
@@ -59,28 +60,31 @@ export default function UsersList() {
   const handleFetchUsers = (e) => {
     e.preventDefault();
     fetchUsers();
-  }
+  };
 
   useEffect(() => {
     fetchUsers();
-  }, [sort, page])
+  }, [sort, page]);
 
   useEffect(() => {
     for (let i = 1; i <= totalPages; i++) {
-      setPages(Array.from({ length: totalPages }, (_, i) => i + 1));;
+      setPages(Array.from({ length: totalPages }, (_, i) => i + 1));
     }
-  }, [totalPages])
+  }, [totalPages]);
 
   useEffect(() => {
     setVerifications(
-      Object.fromEntries(users.map(user => [
-        user.senior_id, user.verify_status && "Verified" || "Unverified"
-      ]))
-    )
-  }, [users])
+      Object.fromEntries(
+        users.map((user) => [
+          user.senior_id,
+          (user.verify_status && "Verified") || "Unverified",
+        ])
+      )
+    );
+  }, [users]);
 
   async function handleVerificationChange(id, email, verification) {
-    setVerifications(prev => ({...prev, [id]: verification}));
+    setVerifications((prev) => ({ ...prev, [id]: verification }));
 
     try {
       const res = await fetch("/admins/edit-senior-verification", {
@@ -90,8 +94,8 @@ export default function UsersList() {
           "X-CSRF-Token": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify({id, email, verification}),
-      })
+        body: JSON.stringify({ id, email, verification }),
+      });
       const data = await res.json();
       if (!data.exists) {
         alert(data.response);
@@ -131,13 +135,26 @@ export default function UsersList() {
   const [emergencyNumber, setEmergencyNumber] = useState("");
 
   const setUserInfo = (
-    id, first_name, middle_name, last_name,
-    email, age, birthday, gender, 
-    house, street, subdivision, barangay, city, province,
-    emergency_fname, emergency_mname, emergency_lname,
-    emergency_number, edit=false
+    id,
+    first_name,
+    middle_name,
+    last_name,
+    email,
+    age,
+    birthday,
+    gender,
+    house,
+    street,
+    subdivision,
+    barangay,
+    city,
+    province,
+    emergency_fname,
+    emergency_mname,
+    emergency_lname,
+    emergency_number,
+    edit = false
   ) => {
-    
     if (edit) {
       const [month, day, year] = birthday.split("/");
       const isoDate = `${year}-${month}-${day}`;
@@ -146,7 +163,7 @@ export default function UsersList() {
       setBirthday(birthday);
     }
 
-    setID(id)
+    setID(id);
     setEmail(email);
     setFirstName(first_name);
     setMiddleName(middle_name);
@@ -163,31 +180,43 @@ export default function UsersList() {
     setEmergencyMiddleName(emergency_mname);
     setEmergencyLastName(emergency_lname);
     setEmergencyNumber(emergency_number);
-  }
+  };
 
   async function fetchUser(e) {
     e.preventDefault();
 
     try {
-      const res = await fetch(
-        `/admins/users-list?id=${id}`, 
-        { method: "GET", }
-      )
+      const res = await fetch(`/admins/users-list?id=${id}`, { method: "GET" });
       const data = await res.json();
-      const processedBirthday = new Date(data.info.birthday)
-      .toLocaleDateString("en-US", {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        })
+      const processedBirthday = new Date(data.info.birthday).toLocaleDateString(
+        "en-US",
+        {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }
+      );
       setUserInfo(
-        id, data.info.first_name, data.info.middle_name, data.info.last_name,
-        data.info.email, data.info.age, processedBirthday, data.info.gender, 
-        data.info.house, data.info.street, data.info.subdivision, 
-        data.info.barangay, data.info.city, data.info.province,
-        data.info.emergency_fname, data.info.emergency_mname, 
-        data.info.emergency_lname, data.info.emergency_number, true
-      )
+        id,
+        data.info.first_name,
+        data.info.middle_name,
+        data.info.last_name,
+        data.info.email,
+        data.info.age,
+        processedBirthday,
+        data.info.gender,
+        data.info.house,
+        data.info.street,
+        data.info.subdivision,
+        data.info.barangay,
+        data.info.city,
+        data.info.province,
+        data.info.emergency_fname,
+        data.info.emergency_mname,
+        data.info.emergency_lname,
+        data.info.emergency_number,
+        true
+      );
 
       if (data.status === 429) {
         navigate("/too-many-requests");
@@ -210,10 +239,10 @@ export default function UsersList() {
     const monthThen = new Date(birthday).getMonth();
     const dayThen = new Date(birthday).getDate();
 
-    if (monthNow < monthThen || ( monthNow === monthThen && dayNow <= dayThen)) {
-      setAge(yearNow - yearThen - 1)
+    if (monthNow < monthThen || (monthNow === monthThen && dayNow <= dayThen)) {
+      setAge(yearNow - yearThen - 1);
     } else {
-      setAge(yearNow - yearThen)
+      setAge(yearNow - yearThen);
     }
   }
 
@@ -231,11 +260,11 @@ export default function UsersList() {
         method: "POST",
         credentials: "include",
         body: fd,
-      })
+      });
       const data = await res.json();
       setStatus(data.success);
       setResponse(data.response);
-      setErrors({...data.errors});
+      setErrors({ ...data.errors });
 
       if (data.status === 429) {
         navigate("/too-many-requests");
@@ -256,7 +285,7 @@ export default function UsersList() {
   async function handleDeleteUser(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
-    fd.append("id", id)
+    fd.append("id", id);
     fd.set("csrf_token", csrfToken);
 
     try {
@@ -264,7 +293,7 @@ export default function UsersList() {
         method: "POST",
         credentials: "include",
         body: fd,
-      })
+      });
       const data = await res.json();
       if (!data.exists) {
         alert(data.response);
@@ -290,11 +319,11 @@ export default function UsersList() {
       const res = await fetch("/admins/print-id", {
         method: "POST",
         credentials: "include",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": csrfToken,
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           id: id,
           first_name: firstName,
           middle_name: middleName,
@@ -314,7 +343,7 @@ export default function UsersList() {
           emergency_lname: emergencyLastName,
           emergency_number: emergencyNumber,
         }),
-      })
+      });
       const data = await res.json();
       if (!data.success) {
         alert(data.response);
@@ -336,28 +365,28 @@ export default function UsersList() {
 
   const [hold, setHold] = useState(false);
   useEffect(() => {
-    if (hold && id) { 
-      handlePrintID(); 
+    if (hold && id) {
+      handlePrintID();
       setOpenCard(true);
       setHold(false);
     }
-  }, [id, hold])
+  }, [id, hold]);
 
   async function handleDownloadID() {
     try {
       const res = await fetch("/download-id", {
         method: "POST",
-        credentials: 'include',
-        headers: { 
+        credentials: "include",
+        headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": csrfToken,
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           first_name: firstName,
           middle_name: middleName,
           last_name: lastName,
         }),
-      })
+      });
       if (!res.ok) {
         const data = await res.json();
         alert(data.response);
@@ -376,107 +405,190 @@ export default function UsersList() {
       console.error(err);
     }
   }
+  // SideBar
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  return(
-    <div>
-      <div>
-        <h3>List of Senior Citizens</h3>
-        <div style={{"display": "flex", "alignItems": "center", "gap": "1em"}}>
-          <form onSubmit={handleFetchUsers}>
-            <input 
-              type="text" 
-              placeholder="Search by email/full name"
-              value={emailOrFullname}
-              // onKeyDown={(e) => {
-              //   if (e.key === "Enter") {
-              //     e.preventDefault();
-              //   }}
-              // }
-              onChange={(e) => setEmailOrFullname(e.target.value)}
-            />
-            <button type="submit">Search</button>
-          </form>
+  return (
+    <div className="flex bg-white md:h-screen">
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
+        {/* HEADER */}
+        <header className="bg-white flex items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="cursor-pointer p-2 hover:text-cyan-700 hover:scale-110 lg:hidden"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
           <div>
-            <p>Filter By</p>
-            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <option value={"all"}>All</option>
-              <option value={1} >Verified</option>
-              <option value={0} >Unverified</option>
-            </select>
+            <h1 className="text-2xl font-bold">List of Users</h1>
           </div>
 
+          {/* Profile Container */}
+          {/* <div className="flex gap-2">
+          
+            <div className="hidden md:block">
+              <p className="font-bold">
+                {info.first_name} {info.last_name}
+              </p>
+              <p className="text-sm font-semibold uppercase text-right">
+                ADMIN
+              </p>
+            </div>
+
+
+            <img
+              className="w-12 h-12 rounded-full object-cover border shadow"
+              src={`http://localhost:5000/${info.picture_name}`}
+            ></img>
+          </div> */}
+          {/* <div className="flex gap-2">
+            <div className="text-xl font-bold flex items-center">
+              <h2 className="uppercase text-sm font-bold text-blue-700 text-center">
+                Senior Citizen System
+              </h2>
+
+              <img
+                // src="seniorLogo.jpg"
+                className="bg-cyan-700 rounded-full w-12 h-12 md:mx-1"
+              />
+            </div>
+          </div> */}
+        </header>
+
+        {/* SCROLLABLE  ADMIN LIST ACC CONTENT */}
+        <main className="flex-1 overflow-y-auto p-5 bg-white">
           <div>
-            <p>Sort By</p>
-            <select value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value={"Newest"}>Newest to Oldest</option>
-              <option value={"Oldest"}>Oldest to Newest</option>
-              <option value={"Updated"}>Last Updated</option>
-              <option value={"Unupdated"}>Last Unupdated</option>
-            </select>
+            <h3>List of Senior Citizens</h3>
+            <div style={{ display: "flex", alignItems: "center", gap: "1em" }}>
+              <form onSubmit={handleFetchUsers}>
+                <input
+                  type="text"
+                  placeholder="Search by email/full name"
+                  value={emailOrFullname}
+                  // onKeyDown={(e) => {
+                  //   if (e.key === "Enter") {
+                  //     e.preventDefault();
+                  //   }}
+                  // }
+                  onChange={(e) => setEmailOrFullname(e.target.value)}
+                />
+                <button type="submit">Search</button>
+              </form>
+
+              <div>
+                <p>Filter By</p>
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value={"all"}>All</option>
+                  <option value={1}>Verified</option>
+                  <option value={0}>Unverified</option>
+                </select>
+              </div>
+
+              <div>
+                <p>Sort By</p>
+                <select value={sort} onChange={(e) => setSort(e.target.value)}>
+                  <option value={"Newest"}>Newest to Oldest</option>
+                  <option value={"Oldest"}>Oldest to Newest</option>
+                  <option value={"Updated"}>Last Updated</option>
+                  <option value={"Unupdated"}>Last Unupdated</option>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Picture</th>
-            <th>Signature</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>Birthday<br/><small>mm/dd/yyyy</small></th>
-            <th>Gender</th>
-            <th>Address</th>
-            <th>Emergency Contact Name</th>
-            <th>Emergency Contact #</th>
-            <th>Verification Status</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Picture</th>
+                <th>Signature</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>
+                  Birthday
+                  <br />
+                  <small>mm/dd/yyyy</small>
+                </th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Emergency Contact Name</th>
+                <th>Emergency Contact #</th>
+                <th>Verification Status</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {users
-          // .filter(user => {
-          //   if (emailOrFullname === "") return user
-          //   const q = emailOrFullname.toLowerCase();
+            <tbody>
+              {users
+                // .filter(user => {
+                //   if (emailOrFullname === "") return user
+                //   const q = emailOrFullname.toLowerCase();
 
-          //   return (
-          //     user.first_name.toLowerCase().includes(q) || 
-          //     user.middle_name.toLowerCase().includes(q) || 
-          //     user.last_name.toLowerCase().includes(q)
-          //   )
-          // })
-          .filter(user => {
-            return filter === "all" ? user :
-            user.verify_status === Number(filter)
-          })
-          .map((user) => (
-            <tr key={user.senior_id}>
-              {user.verify_status === filter && (<p>Yes</p>)}
-              <td>{user.senior_id}</td>
+                //   return (
+                //     user.first_name.toLowerCase().includes(q) ||
+                //     user.middle_name.toLowerCase().includes(q) ||
+                //     user.last_name.toLowerCase().includes(q)
+                //   )
+                // })
+                .filter((user) => {
+                  return filter === "all"
+                    ? user
+                    : user.verify_status === Number(filter);
+                })
+                .map((user) => (
+                  <tr key={user.senior_id}>
+                    {user.verify_status === filter && <p>Yes</p>}
+                    <td>{user.senior_id}</td>
 
-              <td>
-                {pictures.map((picture) => (
-                  picture.senior_id === user.senior_id && (
-                    <img id={picture.picture_id} src={picture.picture_name} width={"50px"}></img>
-                  )
-                ))}
-              </td>
+                    <td>
+                      {pictures.map(
+                        (picture) =>
+                          picture.senior_id === user.senior_id && (
+                            <img
+                              id={picture.picture_id}
+                              src={picture.picture_name}
+                              width={"50px"}
+                            ></img>
+                          )
+                      )}
+                    </td>
 
-              <td>
-                {signatures.map((signature) => (
-                  signature.senior_id === user.senior_id && (
-                    <img id={signature.signature_id} src={signature.image_name} width={"50px"}></img>
-                  )
-                ))}
-              </td>
+                    <td>
+                      {signatures.map(
+                        (signature) =>
+                          signature.senior_id === user.senior_id && (
+                            <img
+                              id={signature.signature_id}
+                              src={signature.image_name}
+                              width={"50px"}
+                            ></img>
+                          )
+                      )}
+                    </td>
 
-              {/* <td>
+                    {/* <td>
                 {(() => {
                   const userCards = cards.filter(
                     card => String(card.senior_id) === String(user.senior_id)
@@ -495,404 +607,466 @@ export default function UsersList() {
                 })()}
               </td> */}
 
-              <td>{user.first_name} {user.middle_name} {user.last_name}</td>
-              <td>{user.email}</td>
-              <td>{user.age}</td>
-              <td>{user.birthday}</td>
-              <td>{user.gender}</td>
-              <td>
-                {user.house} {user.street}, {user.subdivision && user.barangay 
-                || user.barangay}, {user.city}, {user.province}
-              </td>
-              <td>{user.emergency_fname} {user.emergency_mname} {user.emergency_lname}</td>
-              <td>{user.emergency_number}</td>
+                    <td>
+                      {user.first_name} {user.middle_name} {user.last_name}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>{user.age}</td>
+                    <td>{user.birthday}</td>
+                    <td>{user.gender}</td>
+                    <td>
+                      {user.house} {user.street},{" "}
+                      {(user.subdivision && user.barangay) || user.barangay},{" "}
+                      {user.city}, {user.province}
+                    </td>
+                    <td>
+                      {user.emergency_fname} {user.emergency_mname}{" "}
+                      {user.emergency_lname}
+                    </td>
+                    <td>{user.emergency_number}</td>
 
-              <td>
-                <select 
-                  value={verifications[user.senior_id]}
-                  onChange={(e) => handleVerificationChange(
-                    user.senior_id, user.email, e.target.value)}
+                    <td>
+                      <select
+                        value={verifications[user.senior_id]}
+                        onChange={(e) =>
+                          handleVerificationChange(
+                            user.senior_id,
+                            user.email,
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option>Verified</option>
+                        <option>Unverified</option>
+                      </select>
+                    </td>
+
+                    <td>{user.created_at}</td>
+                    <td>{user.updated_at}</td>
+
+                    <td>
+                      <button
+                        onClick={() => {
+                          setUserInfo(
+                            user.senior_id,
+                            user.first_name,
+                            user.middle_name,
+                            user.last_name,
+                            user.email,
+                            user.age,
+                            user.birthday,
+                            user.gender,
+                            user.house,
+                            user.street,
+                            user.subdivision,
+                            user.barangay,
+                            user.city,
+                            user.province,
+                            user.emergency_fname,
+                            user.emergency_mname,
+                            user.emergency_lname,
+                            user.emergency_number,
+                            true
+                          );
+                          setOpenDelete(false);
+                          setOpenCard(false);
+                          setOpenEdit(true);
+                        }}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        disabled={!user.verify_status}
+                        onClick={() => {
+                          setUserInfo(
+                            user.senior_id,
+                            user.first_name,
+                            user.middle_name,
+                            user.last_name,
+                            user.email,
+                            user.age,
+                            user.birthday,
+                            user.gender,
+                            user.house,
+                            user.street,
+                            user.subdivision,
+                            user.barangay,
+                            user.city,
+                            user.province,
+                            user.emergency_fname,
+                            user.emergency_mname,
+                            user.emergency_lname,
+                            user.emergency_number,
+                            true
+                          );
+                          setOpenDelete(false);
+                          setOpenEdit(false);
+                          setHold(true);
+                        }}
+                      >
+                        Print ID
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setUserInfo(user.senior_id);
+                          setOpenCard(false);
+                          setOpenEdit(false);
+                          setOpenDelete(true);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+
+          <div>
+            <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              Prev
+            </button>
+            {pages.map((num) => (
+              <button
+                key={num}
+                style={page === num ? { color: "red" } : {}}
+                onClick={() => setPage(num)}
+              >
+                {num}
+              </button>
+            ))}
+            <button
+              disabled={page >= totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              Next
+            </button>
+          </div>
+
+          {openEdit && (
+            <div className="popup">
+              {!status && <p style={{ color: "red" }}>{response}</p>}
+
+              <h3>User Edit</h3>
+              <form onSubmit={handleEditUser}>
+                <label>1x1 / Passport Size Image</label>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  name="id_picture"
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.id_picture_error}
+                </small>
+                <br />
+
+                <label>Signature on white background</label>
+                <input type="file" name="signature_picture" />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.signature_picture_error}
+                </small>
+                <br />
+
+                <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="Email..."
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.email_error}</small>
+                <br />
+
+                <label>First Name</label>
+                <input
+                  type="text"
+                  placeholder="First name..."
+                  name="first_name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.first_name_error}
+                </small>
+                <br />
+
+                <label>Middle Name</label>
+                <input
+                  type="text"
+                  placeholder="Middle name..."
+                  name="middle_name"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.middle_name_error}
+                </small>
+                <br />
+
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  placeholder="Last name..."
+                  name="last_name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.last_name_error}</small>
+                <br />
+
+                <label>Address</label>
+                <br />
+                <label>House No. / Building / Lot No. *</label>
+                <input
+                  type="text"
+                  placeholder="144"
+                  name="house"
+                  value={house}
+                  onChange={(e) => setHouse(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.house}</small>
+                <br />
+
+                <label>Street *</label>
+                <input
+                  type="text"
+                  placeholder="Bayabas St."
+                  name="street"
+                  value={street}
+                  onChange={(e) => setStreet(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.street}</small>
+                <br />
+
+                <label>Subdivision</label>
+                <input
+                  type="text"
+                  placeholder="Sayote Village"
+                  name="subdivision"
+                  value={subdivision}
+                  onChange={(e) => setSubdivision(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.subdivision}</small>
+                <br />
+
+                <label>Barangay *</label>
+                <select
+                  name="barangay"
+                  value={barangay}
+                  onChange={(e) => setBarangay(e.target.value)}
                 >
-                  <option>Verified</option>
-                  <option>Unverified</option>
+                  <option>-- Please select an option --</option>
+                  <option>Addition Hills</option>
+                  <option>Balong-Bato</option>
+                  <option>Batis</option>
+                  <option>Corazon De Jesus</option>
+                  <option>Ermitaño</option>
+                  <option>Halo-halo</option>
+                  <option>Isabelita</option>
+                  <option>Kabayanan</option>
+                  <option>Little Baguio</option>
+                  <option>Maytunas</option>
+                  <option>Onse</option>
+                  <option>Pasadeña</option>
+                  <option>Pedro Cruz</option>
+                  <option>Progreso</option>
+                  <option>Rivera</option>
+                  <option>Salapan</option>
+                  <option>San Perfecto</option>
+                  <option>Santa Lucia</option>
+                  <option>Tibagan</option>
+                  <option>West Crame</option>
+                  <option>Greenhills</option>
                 </select>
-              </td>
+                <br />
+                <small style={{ color: "red" }}>{errors.barangay}</small>
+                <br />
 
-              <td>{user.created_at}</td>
-              <td>{user.updated_at}</td>
+                <label>City / Municipality</label>
+                <input
+                  type="text"
+                  placeholder="San Juan"
+                  name="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  disabled
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.city}</small>
+                <br />
 
-              <td>
-                <button onClick={() => {
-                  setUserInfo(
-                    user.senior_id, user.first_name, user.middle_name, 
-                    user.last_name, user.email, user.age, user.birthday, 
-                    user.gender, user.house, user.street, user.subdivision, 
-                    user.barangay, user.city, user.province, 
-                    user.emergency_fname, user.emergency_mname, 
-                    user.emergency_lname, user.emergency_number, true
-                  ); 
-                  setOpenDelete(false); setOpenCard(false); setOpenEdit(true);
-                }}>
-                  Edit
-                </button>
+                <label>Province</label>
+                <input
+                  type="text"
+                  placeholder="Metro Manila"
+                  name="province"
+                  value={province}
+                  onChange={(e) => setProvince(e.target.value)}
+                  disabled
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.province}</small>
+                <br />
 
-                <button 
-                  disabled={!user.verify_status}
-                  onClick={() => {
-                    setUserInfo(
-                      user.senior_id, user.first_name, user.middle_name, 
-                      user.last_name, user.email, user.age, user.birthday, 
-                      user.gender, user.house, user.street, user.subdivision, 
-                      user.barangay, user.city, user.province, 
-                      user.emergency_fname, user.emergency_mname, 
-                      user.emergency_lname, user.emergency_number, true
-                  ); 
-                  setOpenDelete(false); 
-                  setOpenEdit(false); 
-                  setHold(true);
-                }}>
-                  Print ID
-                </button>
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  name="birthday"
+                  value={birthday}
+                  onChange={(e) => {
+                    setBirthday(e.target.value);
+                    handleSetAge();
+                  }}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.date_of_birth_error}
+                </small>
+                <br />
 
-                <button onClick={() => {
-                  setUserInfo(user.senior_id);
-                  setOpenCard(false);
-                  setOpenEdit(false);
-                  setOpenDelete(true);}}
+                <label>Age</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="150"
+                  name="age"
+                  value={age}
+                  disabled
+                />
+                <br />
+                <small style={{ color: "red" }}>{errors.age_error}</small>
+                <br />
+
+                <label>Gender</label>
+                <select
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
                 >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  <option>-- Please select an option --</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+                <br />
+                <small style={{ color: "red" }}>{errors.gender_error}</small>
+                <br />
 
-      <div>
-        <button 
-          disabled={page <= 1} 
-          onClick={() => setPage(page - 1)}
-        >
-          Prev
-        </button>
-        {pages.map(num => (
-          <button 
-            key={num} 
-            style={page === num ? { color: "red" } : {}}
-            onClick={() => setPage(num)}
-          >
-            {num}
-          </button>
-        ))}
-        <button 
-          disabled={page >= totalPages} 
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
-      </div>
+                <label>Emergency Contact's First Name</label>
+                <input
+                  type="text"
+                  name="emergency_fname"
+                  value={emergencyFirstName}
+                  onChange={(e) => setEmergencyFirstName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.emergency_first_name_error}
+                </small>
+                <br />
 
-      { openEdit && (
-        <div className="popup">
-          { !status && (
-            <p style={{color: "red"}}>{response}</p>
+                <label>Emergency Contact's Middle Name</label>
+                <input
+                  type="text"
+                  name="emergency_mname"
+                  value={emergencyMiddleName}
+                  onChange={(e) => setEmergencyMiddleName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.emergency_middle_name_error}
+                </small>
+                <br />
+
+                <label>Emergency Contact's Last Name</label>
+                <input
+                  type="text"
+                  name="emergency_lname"
+                  value={emergencyLastName}
+                  onChange={(e) => setEmergencyLastName(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.emergency_last_name_error}
+                </small>
+                <br />
+
+                <label>Emergency Contact's Contact Number</label>
+                <input
+                  type="tel"
+                  name="emergency_number"
+                  value={emergencyNumber}
+                  onChange={(e) => setEmergencyNumber(e.target.value)}
+                />
+                <br />
+                <small style={{ color: "red" }}>
+                  {errors.emergency_number_error}
+                </small>
+                <br />
+
+                <button onClick={(e) => fetchUser(e)}>Reset</button>
+                <br />
+
+                <button type="submit">Submit</button>
+              </form>
+              <button onClick={() => setOpenEdit(false)}>Cancel</button>
+            </div>
           )}
 
-          <h3>User Edit</h3>
-          <form onSubmit={handleEditUser}>
-            <label>1x1 / Passport Size Image</label>
-            <input 
-              type="file" 
-              accept="image/png, image/jpeg"
-              name="id_picture"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.id_picture_error}</small>
-            <br/>
+          {openDelete && (
+            <div className="popup">
+              <form onSubmit={handleDeleteUser}>
+                <p style={{ color: "red" }}>
+                  This will permanently delete senior #{id}, are you sure?
+                </p>
+                <button type="submit">Confirm</button>
+              </form>
+              <button onClick={() => setOpenDelete(false)}>Cancel</button>
+            </div>
+          )}
 
-            <label>Signature on white background</label>
-            <input 
-              type="file" 
-              name="signature_picture"
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.signature_picture_error}</small>
-            <br/>
+          {openCard && (
+            <div className="popup">
+              <label>Front</label>
+              <br />
+              <img src={cardFront} width={"200px"}></img>
 
-            <label>Email</label>
-            <input 
-              type="email" 
-              placeholder="Email..."
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.email_error}</small>
-            <br/>
+              <br />
 
-            <label>First Name</label>
-            <input 
-              type="text" 
-              placeholder="First name..."
-              name="first_name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.first_name_error}</small>
-            <br/>
+              <label>Back</label>
+              <br />
+              <img src={cardBack} width={"200px"}></img>
 
-            <label>Middle Name</label>
-            <input 
-              type="text" 
-              placeholder="Middle name..."
-              name="middle_name"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.middle_name_error}</small>
-            <br/>
+              <br />
+              <button
+                onClick={() => {
+                  handleDownloadID();
+                }}
+              >
+                Download ID
+              </button>
+              <button onClick={() => setOpenCard(false)}>Close</button>
+            </div>
+          )}
 
-            <label>Last Name</label>
-            <input 
-              type="text" 
-              placeholder="Last name..."
-              name="last_name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.last_name_error}</small>
-            <br/>
+          <button>
+            <Link to="/superadmin-dashboard">Go back</Link>
+          </button>
 
-            <label>Address</label>
-            <br/>
-            <label>House No. / Building / Lot No. *</label>
-            <input 
-              type="text"
-              placeholder="144"
-              name="house"
-              value={house}
-              onChange={(e) => setHouse(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.house}</small>
-            <br/>
-
-            <label>Street *</label>
-            <input 
-              type="text"
-              placeholder="Bayabas St."
-              name="street"
-              value={street}
-              onChange={(e) => setStreet(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.street}</small>
-            <br/>
-
-            <label>Subdivision</label>
-            <input 
-              type="text"
-              placeholder="Sayote Village"
-              name="subdivision"
-              value={subdivision}
-              onChange={(e) => setSubdivision(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.subdivision}</small>
-            <br/>
-
-            <label>Barangay *</label>
-            <select 
-              name="barangay"
-              value={barangay}
-              onChange={(e) => setBarangay(e.target.value)}
-            >
-              <option>-- Please select an option --</option>
-              <option>Addition Hills</option>
-              <option>Balong-Bato</option>
-              <option>Batis</option>
-              <option>Corazon De Jesus</option>
-              <option>Ermitaño</option>
-              <option>Halo-halo</option>
-              <option>Isabelita</option>
-              <option>Kabayanan</option>
-              <option>Little Baguio</option>
-              <option>Maytunas</option>
-              <option>Onse</option>
-              <option>Pasadeña</option>
-              <option>Pedro Cruz</option>
-              <option>Progreso</option>
-              <option>Rivera</option>
-              <option>Salapan</option>
-              <option>San Perfecto</option>
-              <option>Santa Lucia</option>
-              <option>Tibagan</option>
-              <option>West Crame</option>
-              <option>Greenhills</option>
-            </select>
-            <br/>
-            <small style={{"color": "red"}}>{errors.barangay}</small>
-            <br/>
-
-            <label>City / Municipality</label>
-            <input 
-              type="text"
-              placeholder="San Juan"
-              name="city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              disabled
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.city}</small>
-            <br/>
-
-            <label>Province</label>
-            <input 
-              type="text"
-              placeholder="Metro Manila"
-              name="province"
-              value={province}
-              onChange={(e) => setProvince(e.target.value)}
-              disabled
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.province}</small>
-            <br/>
-
-            <label>Date of Birth</label>
-            <input 
-              type="date" 
-              name="birthday"
-              value={birthday}
-              onChange={(e) => {setBirthday(e.target.value); handleSetAge()}}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.date_of_birth_error}</small>
-            <br/>
-
-            <label>Age</label>
-            <input 
-              type="number" 
-              min="0"
-              max="150"
-              name="age"
-              value={age}
-              disabled
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.age_error}</small>
-            <br/>
-
-            <label>Gender</label>
-            <select name="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option>-- Please select an option --</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
-            <br/>
-            <small style={{"color": "red"}}>{errors.gender_error}</small>
-            <br/>
-
-            <label>Emergency Contact's First Name</label>
-            <input 
-              type="text" 
-              name="emergency_fname"
-              value={emergencyFirstName}
-              onChange={(e) => setEmergencyFirstName(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_first_name_error}</small>
-            <br/>
-
-            <label>Emergency Contact's Middle Name</label>
-            <input 
-              type="text" 
-              name="emergency_mname"
-              value={emergencyMiddleName}
-              onChange={(e) => setEmergencyMiddleName(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_middle_name_error}</small>
-            <br/>
-
-            <label>Emergency Contact's Last Name</label>
-            <input 
-              type="text" 
-              name="emergency_lname"
-              value={emergencyLastName}
-              onChange={(e) => setEmergencyLastName(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_last_name_error}</small>
-            <br/>
-
-            <label>Emergency Contact's Contact Number</label>
-            <input 
-              type="tel" 
-              name="emergency_number"
-              value={emergencyNumber}
-              onChange={(e) => setEmergencyNumber(e.target.value)}
-            />
-            <br/>
-            <small style={{"color": "red"}}>{errors.emergency_number_error}</small>
-            <br/>
-
-            <button onClick={(e) => fetchUser(e)}>
-              Reset
-            </button>
-            <br/>
-
-            <button type="submit">Submit</button>
-          </form>
-          <button onClick={() => setOpenEdit(false)}>Cancel</button>
-        </div>
-      )}
-
-      { openDelete && (
-        <div className="popup">
-          <form onSubmit={handleDeleteUser}>
-            <p style={{"color": "red"}}>
-              This will permanently delete senior #{id}, are you sure?
-            </p>
-            <button type="submit">Confirm</button>
-          </form>
-          <button onClick={() => setOpenDelete(false)}>Cancel</button>
-        </div>
-      )}
-
-      { openCard && (
-        <div className="popup">
-          <label>Front</label>
-          <br/>
-          <img 
-            src={cardFront}
-            width={"200px"}
-          ></img>
-
-          <br/>
-
-          <label>Back</label>
-          <br/>
-          <img 
-            src={cardBack} 
-            width={"200px"}
-          ></img>
-
-          <br/>
-          <button onClick={() => {handleDownloadID();}}>Download ID</button>
-          <button onClick={() => setOpenCard(false)}>Close</button>
-        </div>
-      )}
-
-      <button><Link to="/superadmin-dashboard">Go back</Link></button>
+          
+        </main>
+      </div>
     </div>
   );
 }
