@@ -118,7 +118,7 @@ export default function AdminDashboard() {
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
         {/* HEADER */}
-        <header className="bg-white flex justify-between items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
+        <header className="bg-white flex items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
           <button
             onClick={() => setSidebarOpen(true)}
             className="cursor-pointer p-2 hover:text-cyan-700 hover:scale-110 lg:hidden"
@@ -183,8 +183,12 @@ export default function AdminDashboard() {
             <li>ID: {info.admin_id}</li>
           </ul>
           <ol>
+            <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+              <h3 className="text-4xl">12</h3>
+              <p className="uppercase">Number of Seniors</p>
+            </div>
             <li>Unverified Seniors: {info.unverified_seniors}</li>
-            
+
             <li>Verified Seniors: {info.verified_seniors}</li>
             <li>Total Seniors: {info.senior_accounts}</li>
           </ol>
