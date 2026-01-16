@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Swal from "sweetalert2";
 
 export default function AdminsLogin() {
   const [status, setStatus] = useState(null);
@@ -8,43 +7,9 @@ export default function AdminsLogin() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-   // ---------------------------
-    // SWEET ALERT (POP-UP)
-    // ---------------------------
-    const showAlert = ({ title, message, icon = "error" }) => {
-      Swal.fire({
-        title: `<p class="text-2xl font-semibold text-gray-800">${title}</p>`,
-        html: `<p class="text-xl text-gray-600 mt-1">${message}</p>`,
-        icon,
-        iconColor: "#2563eb",
-        background: "#ffffff",
-        showConfirmButton: true,
-        confirmButtonText: "Okay",
-        buttonsStyling: false,
-        customClass: {
-          popup: "rounded-xl px-6 py-4",
-          confirmButton:
-            "mt-4 bg-blue-600 text-white px-6 py-2 rounded text-xl hover:bg-blue-700",
-        },
-      });
-    };
-
   async function handleLogin(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
-
-    const email = fd.get("email");
-    const password = fd.get("password");
-
-    //  EMPTY FIELDS
-    if (!email || !password) {
-      showAlert({
-        title: "Missing Information",
-        message: "Please enter both email and password.",
-      });
-      return;
-    }
-
     try {
       const res = await fetch("/auth/admin-login", {
         method: "POST",
@@ -57,10 +22,8 @@ export default function AdminsLogin() {
       setStatus(data.success);
       setResponse(data.response);
 
-      //  TOO MANY REQUESTS
       if (data.status === 429) {
         navigate("/too-many-requests");
-        return;
       }
 
       if (data.success && data.role === "admin") {
@@ -117,7 +80,7 @@ export default function AdminsLogin() {
                 <input
                   className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="password"
-                  placeholder="Password"  
+                  placeholder="Password"
                   name="password"
                 />
               </div>
