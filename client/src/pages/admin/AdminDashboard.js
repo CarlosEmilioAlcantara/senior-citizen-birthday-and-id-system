@@ -183,18 +183,30 @@ export default function AdminDashboard() {
             <li>ID: {info.admin_id}</li>
           </ul>
           <ol>
-            <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+            <div className="bg-red-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
               <h3 className="text-4xl">12</h3>
               <p className="uppercase">Number of Seniors</p>
             </div>
-            <li>Unverified Seniors: {info.unverified_seniors}</li>
 
-            <li>Verified Seniors: {info.verified_seniors}</li>
-            <li>Total Seniors: {info.senior_accounts}</li>
+            <div className="bg-cyan-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+              <h3 className="text-4xl">{info.unverified_seniors}</h3>
+              <p className="uppercase">Unverified Seniors </p>
+            </div>
+
+            <div className="bg-cyan-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+              <h3 className="text-4xl">{info.verified_seniors}</h3>
+              <p className="uppercase">Verified Seniors</p>
+            </div>
+
+            <div className="bg-cyan-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+              <h3 className="text-4xl">{info.senior_accounts}</h3>
+              <p className="uppercase">Total Seniors</p>
+            </div>
+   
           </ol>
 
           <h3>Seniors with birthdays</h3>
-          <table className="bg-red-500 ">
+          <table className="bg-blue-700 ">
             <thead>
               <tr>
                 <th>ID</th>
@@ -232,7 +244,7 @@ export default function AdminDashboard() {
                               src={picture.picture_name}
                               width={"50px"}
                             ></img>
-                          )
+                          ),
                       )}
                     </td>
 
@@ -245,7 +257,7 @@ export default function AdminDashboard() {
                               src={signature.image_name}
                               width={"50px"}
                             ></img>
-                          )
+                          ),
                       )}
                     </td>
 
