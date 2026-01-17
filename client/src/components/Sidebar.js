@@ -274,7 +274,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       { name: "Create Admins", link: "/superadmin-create-admins" },
       { name: "List of Admins", link: "/admins-list" },
       { name: "Edit Account", link: "/admins-edit" },
-      { name: "Delete Account", link: "/admins-delete" },
+      // { name: "Delete Account", link: "/admins-delete" },
       {
         name: "Logout",
         icon: (

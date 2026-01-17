@@ -472,7 +472,7 @@ export default function UsersList() {
         </header>
 
         {/* SCROLLABLE  ADMIN LIST ACC CONTENT */}
-        <main className="flex-1 overflow-y-auto p-5 bg-white">
+        <main className="flex-1  overflow-auto p-5 bg-white">
           <div>
             <h3>List of Senior Citizens</h3>
             <div style={{ display: "flex", alignItems: "center", gap: "1em" }}>

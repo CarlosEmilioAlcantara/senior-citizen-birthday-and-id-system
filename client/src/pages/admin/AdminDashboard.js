@@ -175,34 +175,57 @@ export default function AdminDashboard() {
         </header>
 
         <main className="flex-1 overflow-y-auto p-5 bg-white">
-          <h3>Admin Dashboard</h3>
-          <p>Hello {info.username}</p>
-          <ul>
-            <li>Email: {info.email}</li>
-            <li>Role: {info.role}</li>
-            <li>ID: {info.admin_id}</li>
-          </ul>
+          {/* <h3>Admin Dashboard</h3> */}
+          <div className="bg-blue-400 border border-blue-500 rounded shadow-lg text-center font-bold p-6  mx-3 mt-3 md:mx-0 md:mt-0">
+            <p className="text-6xl">Hello, {info.username}</p>
+            <ul>
+              <li>Email: {info.email}</li>
+              <li>Role: {info.role}</li>
+              <li>ID: {info.admin_id}</li>
+            </ul>
+          </div>
           <ol>
-            <div className="bg-red-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
-              <h3 className="text-4xl">12</h3>
-              <p className="uppercase">Number of Seniors</p>
-            </div>
+            <div className=" grid md:grid-cols-2 gap-3 mx-3 mt-3 md:my-3 md:mx-0 text-gray-800">
+              {/* <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+                <h3 className="text-4xl">{info.senior_accounts}</h3>
+                <p className="uppercase">Total Seniors</p>
+              </div> */}
 
-            <div className="bg-cyan-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
-              <h3 className="text-4xl">{info.unverified_seniors}</h3>
-              <p className="uppercase">Unverified Seniors </p>
-            </div>
+              <div className="bg-white border border-gray-200 rounded-md shadow-md cursor-pointer py-1">
+                <div className="pt-5 px-8 flex justify-start">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-8"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
+                      clipRule="evenodd"
+                    />
+                    <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                  </svg>
+                </div>
 
-            <div className="bg-cyan-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
-              <h3 className="text-4xl">{info.verified_seniors}</h3>
-              <p className="uppercase">Verified Seniors</p>
-            </div>
+                <div className="text-center font-bold pb-6">
+                  <h3 className="text-4xl">{info.senior_accounts}</h3>
+                  <p className="uppercase"> Total Number of Seniors</p>
+                </div>
+              </div>
 
-            <div className="bg-cyan-500  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
-              <h3 className="text-4xl">{info.senior_accounts}</h3>
-              <p className="uppercase">Total Seniors</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+                  <h3 className="text-4xl">{info.verified_seniors}</h3>
+                  <p className="uppercase">Verified Seniors</p>
+                </div>
+
+                <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
+                  <h3 className="text-4xl">{info.unverified_seniors}</h3>
+                  <p className="uppercase">Unverified Seniors </p>
+                </div>
+              </div>
             </div>
-   
           </ol>
 
           <h3>Seniors with birthdays</h3>
