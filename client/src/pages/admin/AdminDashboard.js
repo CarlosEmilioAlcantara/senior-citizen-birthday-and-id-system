@@ -176,7 +176,7 @@ export default function AdminDashboard() {
 
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {/* <h3>Admin Dashboard</h3> */}
-          <section className="relative overflow-hidden rounded-2xl bg-gradient-to-l from-cyan-600 to-blue-700 text-white p-8 shadow-lg">
+          <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-700 to-cyan-700 text-white p-8 shadow-md">
             <div className="relative z-10">
               <h2 className="text-3xl md:text-4xl font-bold">
                 Welcome back, {info.username} 👋
@@ -204,8 +204,9 @@ export default function AdminDashboard() {
             {/* Decorative Blur */}
             <div className="absolute -top-16 -right-16 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
           </section>
-          <ol>
-            <div className=" grid md:grid-cols-2 gap-3 mx-3 mt-3 md:my-3 md:mx-0 text-gray-800">
+
+          <div>
+            <div className=" grid md:grid-cols-2 gap-3 mt-3 md:my-3 text-gray-800">
               {/* <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
                 <h3 className="text-4xl">{info.senior_accounts}</h3>
                 <p className="uppercase">Total Seniors</p>
@@ -237,107 +238,229 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
                   <h3 className="text-4xl">{info.verified_seniors}</h3>
-                  <p className="uppercase">Verified Seniors</p>
+                  <p className="uppercase">Number of Verified Seniors</p>
                 </div>
 
                 <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
                   <h3 className="text-4xl">{info.unverified_seniors}</h3>
-                  <p className="uppercase">Unverified Seniors </p>
+                  <p className="uppercase">Number of Unverified Seniors </p>
                 </div>
               </div>
             </div>
-          </ol>
+          </div>
 
-          <h3>Seniors with birthdays</h3>
-          <table className="bg-blue-700 ">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Picture</th>
-                <th>Signature</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Age</th>
-                <th>
-                  Birthday
-                  <br />
-                  <small>mm/dd/yyyy</small>
-                </th>
-              </tr>
-            </thead>
+          <section className="mt-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-gray-800">
+                Seniors with Birthdays
+              </h3>
+            </div>
 
-            <tbody>
-              {celebrants.length === 0 ? (
-                <tr>
-                  <td colSpan="7" style={{ textAlign: "center" }}>
-                    No Celebrants Today
-                  </td>
-                </tr>
-              ) : (
-                celebrants.map((celebrant) => (
-                  <tr key={celebrant.senior_id}>
-                    <td>{celebrant.senior_id}</td>
-
-                    <td>
-                      {pictures.map(
-                        (picture) =>
-                          picture.senior_id === celebrant.senior_id && (
-                            <img
-                              id={picture.picture_id}
-                              src={picture.picture_name}
-                              width={"50px"}
-                            ></img>
-                          ),
-                      )}
-                    </td>
-
-                    <td>
-                      {signatures.map(
-                        (signature) =>
-                          signature.senior_id === celebrant.senior_id && (
-                            <img
-                              id={signature.signature_id}
-                              src={signature.image_name}
-                              width={"50px"}
-                            ></img>
-                          ),
-                      )}
-                    </td>
-
-                    <td>
-                      {celebrant.first_name}
-                      {celebrant.middle_name}
-                      {celebrant.last_name}
-                    </td>
-
-                    <td>{celebrant.email}</td>
-                    <td>{celebrant.age}</td>
-                    <td>{celebrant.birthday}</td>
+            {/* BDAY TABLE */}
+            <div className="overflow-x-auto bg-white rounded-md shadow-md  hidden md:block">
+              <table className="min-w-full text-sm text-gray-700">
+                <thead className="bg-slate-100 text-gray-600 uppercase text-base">
+                  <tr>
+                    <th className="px-4 py-3">ID</th>
+                    <th className="px-4 py-3">Picture</th>
+                    <th className="px-4 py-3">Signature</th>
+                    <th className="px-4 py-3">Full Name</th>
+                    <th className="px-4 py-3">Email</th>
+                    <th className="px-4 py-3">Age</th>
+                    <th className="px-4 py-3">
+                      <div>
+                        <h3>Birthday</h3>
+                        <h5 className="text-xs">mm/dd/yyyy</h5>
+                      </div>
+                    </th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                </thead>
 
-          <div>
-            <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
-              Prev
-            </button>
-            {pages.map((num) => (
+                <tbody className="divide-y text-base">
+                  {celebrants.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="7"
+                        className="text-center py-10 text-gray-500"
+                      >
+                        No celebrants today 🎉
+                      </td>
+                    </tr>
+                  ) : (
+                    celebrants.map((celebrant) => (
+                      <tr
+                        key={celebrant.senior_id}
+                        className="hover:bg-slate-50"
+                      >
+                        <td className="px-4 py-3">{celebrant.senior_id}</td>
+
+                        <td className="px-4 py-3">
+                          {pictures.map(
+                            (p) =>
+                              p.senior_id === celebrant.senior_id && (
+                                <img
+                                  key={p.picture_id}
+                                  src={p.picture_name}
+                                  className="w-10 h-10 rounded object-cover"
+                                />
+                              ),
+                          )}
+                        </td>
+
+                        <td className="px-4 py-3">
+                          {signatures.map(
+                            (s) =>
+                              s.senior_id === celebrant.senior_id && (
+                                <img
+                                  key={s.signature_id}
+                                  src={s.image_name}
+                                  className="w-12 h-12 object-contain"
+                                />
+                              ),
+                          )}
+                        </td>
+
+                        <td className="px-4 py-3 font-medium">
+                          {celebrant.first_name} {celebrant.middle_name}{" "}
+                          {celebrant.last_name}
+                        </td>
+
+                        <td className="px-4 py-3">{celebrant.email}</td>
+                        <td className="px-4 py-3">{celebrant.age}</td>
+                        <td className="px-4 py-3">{celebrant.birthday}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* PAGINATION */}
+            <div className="flex justify-center items-center gap-2 mt-6">
               <button
-                key={num}
-                style={page === num ? { color: "red" } : {}}
-                onClick={() => setPage(num)}
+                disabled={page <= 1}
+                onClick={() => setPage(page - 1)}
+                className="px-3 py-1 rounded border disabled:opacity-40"
               >
-                {num}
+                Prev
               </button>
-            ))}
-            <button
-              disabled={page >= totalPages}
-              onClick={() => setPage(page + 1)}
-            >
-              Next
-            </button>
+
+              {pages.map((num) => (
+                <button
+                  key={num}
+                  onClick={() => setPage(num)}
+                  className={`px-3 py-1 rounded border ${
+                    page === num
+                      ? "bg-cyan-600 text-white border-cyan-600"
+                      : "hover:bg-slate-100"
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage(page + 1)}
+                className="px-3 py-1 rounded border disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </section>
+
+          <div className="ORIG_noUI hidden">
+            <h3>Seniors with birthdays</h3>
+            <table className="bg-blue-700">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Picture</th>
+                  <th>Signature</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Age</th>
+                  <th>
+                    Birthday
+                    <br />
+                    <small>mm/dd/yyyy</small>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {celebrants.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" style={{ textAlign: "center" }}>
+                      No Celebrants Today
+                    </td>
+                  </tr>
+                ) : (
+                  celebrants.map((celebrant) => (
+                    <tr key={celebrant.senior_id}>
+                      <td>{celebrant.senior_id}</td>
+
+                      <td>
+                        {pictures.map(
+                          (picture) =>
+                            picture.senior_id === celebrant.senior_id && (
+                              <img
+                                id={picture.picture_id}
+                                src={picture.picture_name}
+                                width={"50px"}
+                              ></img>
+                            ),
+                        )}
+                      </td>
+
+                      <td>
+                        {signatures.map(
+                          (signature) =>
+                            signature.senior_id === celebrant.senior_id && (
+                              <img
+                                id={signature.signature_id}
+                                src={signature.image_name}
+                                width={"50px"}
+                              ></img>
+                            ),
+                        )}
+                      </td>
+
+                      <td>
+                        {celebrant.first_name}
+                        {celebrant.middle_name}
+                        {celebrant.last_name}
+                      </td>
+
+                      <td>{celebrant.email}</td>
+                      <td>{celebrant.age}</td>
+                      <td>{celebrant.birthday}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+
+            <div>
+              <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                Prev
+              </button>
+              {pages.map((num) => (
+                <button
+                  key={num}
+                  style={page === num ? { color: "red" } : {}}
+                  onClick={() => setPage(num)}
+                >
+                  {num}
+                </button>
+              ))}
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </main>
       </div>
