@@ -176,14 +176,34 @@ export default function AdminDashboard() {
 
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {/* <h3>Admin Dashboard</h3> */}
-          <div className="bg-blue-400 border border-blue-500 rounded shadow-lg text-center font-bold p-6  mx-3 mt-3 md:mx-0 md:mt-0">
-            <p className="text-6xl">Hello, {info.username}</p>
-            <ul>
-              <li>Email: {info.email}</li>
-              <li>Role: {info.role}</li>
-              <li>ID: {info.admin_id}</li>
-            </ul>
-          </div>
+          <section className="relative overflow-hidden rounded-2xl bg-gradient-to-l from-cyan-600 to-blue-700 text-white p-8 shadow-lg">
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold">
+                Welcome back, {info.username} 👋
+              </h2>
+              <p className="mt-2 text-cyan-100">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              </p>
+
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <p className="text-cyan-100">Email</p>
+                  <p className="font-semibold break-all">{info.email}</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <p className="text-cyan-100">Role</p>
+                  <p className="font-semibold uppercase">{info.role}</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <p className="text-cyan-100">Admin ID</p>
+                  <p className="font-semibold">{info.admin_id}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Decorative Blur */}
+            <div className="absolute -top-16 -right-16 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
+          </section>
           <ol>
             <div className=" grid md:grid-cols-2 gap-3 mx-3 mt-3 md:my-3 md:mx-0 text-gray-800">
               {/* <div className="bg-white  border border-gray-200 rounded-md shadow-md text-center font-bold p-6">
