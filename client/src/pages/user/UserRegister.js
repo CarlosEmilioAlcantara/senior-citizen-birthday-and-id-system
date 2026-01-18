@@ -130,9 +130,24 @@ export default function UserRegister() {
       return;
     }
 
-    setErrors({});
-    setStep(3);
+    // AGE VALIDATION (60+)
+    const calculatedAge = calcAge(form.birthday);
+  if (calculatedAge < 60) {
+    setErrors({ birthday: "You must be 60 years old or above to register." });
+
+    showAlert({
+      title: "Age Requirement",
+      message: "You must be 60 years old or above to register.",
+    });
+    return;
   }
+
+  setAge(calculatedAge); // store valid age
+  setErrors({});
+  setStep(3);
+}
+
+ 
 
   // ---------------------------
   // STEP 3 VALIDATION (EMERGENCY CONTACT INFO) WITH HIGHLIGHT
