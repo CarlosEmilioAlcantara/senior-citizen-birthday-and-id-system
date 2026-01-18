@@ -111,7 +111,6 @@ export default function UserRegister() {
       "last_name",
       "house",
       "street",
-      "subdivision",
       "barangay",
       "birthday",
       "gender",
@@ -140,6 +139,12 @@ export default function UserRegister() {
   // ---------------------------
   async function handleStep3(e) {
     e.preventDefault();
+
+    // remove sub to required fields
+     setErrors((prev) => {
+       const { subdivision, ...rest } = prev;
+       return rest;
+     });
 
     const required = [
       "emergency_fname",
