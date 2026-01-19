@@ -48,12 +48,12 @@ export default function UserChangePassword() {
 
     // </div>
 
-    <div className="flex-1 overflow-y-auto  bg-white">
+    <div className="flex-1 overflow-y-auto  ">
       {!status && <p style={{ color: "red" }}>{response}</p>}
 
       <form
         onSubmit={handleChangePassword}
-        className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mt-5"
+        className="bg-blue-50 rounded-xl shadow-sm border border-blue-100 p-5 mt-5"
       >
         <h3 className="text-lg font-semibold text-gray-700 mb-3">
           Change Password
