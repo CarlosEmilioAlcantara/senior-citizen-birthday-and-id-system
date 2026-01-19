@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function AdminsLogin() {
   const [status, setStatus] = useState(null);
@@ -7,34 +8,84 @@ export default function AdminsLogin() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  async function handleLogin(e) {
-    e.preventDefault();
-    const fd = new FormData(e.target);
-    try {
-      const res = await fetch("/auth/admin-login", {
-        method: "POST",
-        credentials: "include",
-        body: fd,
-      });
+  // ---------------------------
+  // SWEET ALERT (POP-UP)
+  // ---------------------------
+  const showAlert = ({ title, message, icon = "error" }) => {
+    Swal.fire({
+      title: `<p class="text-2xl font-semibold text-gray-800">${title}</p>`,
+      html: `<p class="text-xl text-gray-600 mt-1">${message}</p>`,
+      icon,
+      iconColor: "#2563eb",
+      background: "#ffffff",
+      showConfirmButton: true,
+      confirmButtonText: "Okay",
+      buttonsStyling: false,
+      customClass: {
+        popup: "rounded-xl px-6 py-4",
+        confirmButton:
+          "mt-4 bg-blue-600 text-white px-6 py-2 rounded text-xl hover:bg-blue-700",
+      },
+    });
+  };
 
-      const data = await res.json();
-      setErrors({ ...data.errors });
-      setStatus(data.success);
-      setResponse(data.response);
+  // ---------------------------
+  // LOGIN HANDLER
+  // ---------------------------
+ async function handleLogin(e) {
+   e.preventDefault();
+   const fd = new FormData(e.target);
 
-      if (data.status === 429) {
-        navigate("/too-many-requests");
-      }
+   const email = fd.get("email_or_username");
+   const password = fd.get("password");
 
-      if (data.success && data.role === "admin") {
-        navigate("/admin-dashboard");
-      } else if (data.success && data.role === "superadmin") {
-        navigate("/superadmin-dashboard");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+   if (!email || !password) {
+     showAlert({
+       title: "Missing Information",
+       message: "Please enter both email and password.",
+     });
+     return;
+   }
+
+   try {
+     const res = await fetch("/auth/admin-login", {
+       method: "POST",
+       credentials: "include",
+       body: fd,
+     });
+
+     const data = await res.json();
+
+     // TOO MANY REQUESTS
+     if (res.status === 429) {
+       navigate("/too-many-requests");
+       return;
+     }
+
+     // FAILED
+     if (!res.ok || data.success !== true) {
+       showAlert({
+         title: "Login Failed",
+         message: data.response || "Invalid email or password.",
+       });
+       return;
+     }
+
+     //SUCCESS
+     if (data.role === "admin") {
+       navigate("/admin-dashboard");
+     } else if (data.role === "superadmin") {
+       navigate("/superadmin-dashboard");
+     }
+   } catch (err) {
+     console.error(err);
+     showAlert({
+       title: "Server Error",
+       message: "Something went wrong. Please try again later.",
+     });
+   }
+ }
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
@@ -49,7 +100,7 @@ export default function AdminsLogin() {
 
       {/* RIGHT SIDE - LOGIN FORM */}
       <div className="flex flex-col justify-center p-12 lg:p-20 ">
-        {!status && <p className="text-red-500 text-center mb-4">{response}</p>}
+       
         <h2 className="text-3xl font-bold text-gray-800 mb-6">
           Log in to your Account
         </h2>

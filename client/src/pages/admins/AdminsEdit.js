@@ -197,8 +197,8 @@ export default function AdminsEdit() {
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-red-100 shadow-sm p-5">
-              <h3 className="text-lg font-semibold text-red-600 mb-1">
+            <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5">
+              <h3 className="text-lg font-semibold text-cyan-600 mb-1">
                 Change Password
               </h3>
               <p className="text-sm text-gray-500 mb-4">
@@ -253,7 +253,7 @@ export default function AdminsEdit() {
                 {role === "superadmin" && (
                   <Link
                     to="/superadmin-dashboard"
-                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                    className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
                   >
                     Cancel
                   </Link>
@@ -262,7 +262,7 @@ export default function AdminsEdit() {
 
               <button
                 type="submit"
-                className="px-6 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                className="px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
               >
                 Save Changes
               </button>
