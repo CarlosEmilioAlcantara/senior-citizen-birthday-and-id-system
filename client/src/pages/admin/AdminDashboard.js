@@ -164,7 +164,7 @@ export default function AdminDashboard() {
 
           {/* SUMMARY CARDS */}
           <div className="grid md:grid-cols-2 gap-3 text-gray-800 mb-10">
-            <div className="bg-white border border-gray-200 rounded-md shadow-md cursor-pointer py-1">
+            <div className="bg-white border border-gray-200 rounded-md shadow-md py-1">
               <div className="pt-5 px-8 flex justify-start">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
