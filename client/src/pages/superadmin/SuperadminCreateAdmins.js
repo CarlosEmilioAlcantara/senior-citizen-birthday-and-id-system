@@ -51,78 +51,91 @@ export default function SuperadminCreateAdmins() {
         className="max-w-4xl mx-auto space-y-6"
         onSubmit={handleCreateAdmin}
       >
-        <h3 className="text-lg font-semibold text-blue-700 mb-4">
+        {/* <h3 className="text-lg font-semibold text-blue-700 mb-4">
           Creation of Admin and Superadmin Accounts
-        </h3>
+        </h3> */}
 
-        <div>
-          <label className="text-sm text-gray-600">Email</label>
-          <input
-            className="mt-1 w-full border rounded px-3 py-2"
-            type="email"
-            name="email"
-          />
+        <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5">
+          <h3 className="text-lg font-semibold text-cyan-600 mb-1">
+            Create an account
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Create an account for Admin and Superadmin
+          </p>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm text-gray-600">Email</label>
+              <input
+                className="mt-1 w-full border rounded px-3 py-2"
+                type="email"
+                name="email"
+              />
 
-          <small className="text-red-500">{errors.email}</small>
-        </div>
+              <small className="text-red-500">{errors.email}</small>
+            </div>
 
-        <div>
-          <label className="text-sm text-gray-600">Username</label>
-          <input
-            type="text"
-            className="mt-1 w-full border rounded px-3 py-2"
-            name="username"
-          />
+            <div>
+              <label className="text-sm text-gray-600">Username</label>
+              <input
+                type="text"
+                className="mt-1 w-full border rounded px-3 py-2"
+                name="username"
+              />
 
-          <small className="text-red-500">{errors.username}</small>
-        </div>
+              <small className="text-red-500">{errors.username}</small>
+            </div>
 
-        <div>
-          <label className="text-sm text-gray-600">Role</label>
-          <select className="mt-1 w-full border rounded px-3 py-2" name="role">
-            <option value="">-- Please select a role --</option>
-            <option value="admin">admin</option>
-            <option value="superadmin">superadmin</option>
-          </select>
-          <small className="text-red-500">{errors.role}</small>
-        </div>
+            <div>
+              <label className="text-sm text-gray-600">Role</label>
+              <select
+                className="mt-1 w-full border rounded px-3 py-2"
+                name="role"
+              >
+                <option value="">-- Please select a role --</option>
+                <option value="admin">admin</option>
+                <option value="superadmin">superadmin</option>
+              </select>
+              <small className="text-red-500">{errors.role}</small>
+            </div>
 
-        <div>
-          <label className="text-sm text-gray-600">Password</label>
-          <input
-            className="mt-1 w-full border rounded px-3 py-2"
-            type="password"
-            name="password"
-          />
+            <div>
+              <label className="text-sm text-gray-600">Password</label>
+              <input
+                className="mt-1 w-full border rounded px-3 py-2"
+                type="password"
+                name="password"
+              />
 
-          <small className="text-red-500">{errors.password}</small>
-        </div>
+              <small className="text-red-500">{errors.password}</small>
+            </div>
 
-        <div>
-          <label className="text-sm text-gray-600">Confirm Password</label>
-          <input
-            className="mt-1 w-full border rounded px-3 py-2"
-            type="password"
-            name="confirm"
-          />
+            <div>
+              <label className="text-sm text-gray-600">Confirm Password</label>
+              <input
+                className="mt-1 w-full border rounded px-3 py-2"
+                type="password"
+                name="confirm"
+              />
 
-          <small className="text-red-500">{errors.confirm}</small>
-        </div>
+              <small className="text-red-500">{errors.confirm}</small>
+            </div>
+          </div>
 
-        <div className="flex justify-between items-center pt-4">
-          <Link
-            to="/superadmin-dashboard"
-            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-          >
-            Cancel
-          </Link>
+          <div className="flex justify-between items-center pt-4">
+            <Link
+              to="/superadmin-dashboard"
+              className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+            >
+              Cancel
+            </Link>
 
-          <button
-            type="submit"
-            className="px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
-          >
-            Create Admin
-          </button>
+            <button
+              type="submit"
+              className="px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+            >
+              Create Account
+            </button>
+          </div>
         </div>
       </form>
     </div>
