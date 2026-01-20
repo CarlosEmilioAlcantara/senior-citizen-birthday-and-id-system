@@ -14,6 +14,9 @@ export default function ForgotPassword({ accountType }) {
 
   const navigate = useNavigate();
 
+ 
+  const loginRoute = accountType === "admin" ? "/admins-login" : "/user-login";
+
   async function handleResetPassword(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -60,12 +63,7 @@ export default function ForgotPassword({ accountType }) {
       }
       if (res.ok && data.success) {
         alert(`${data.response}, redirecting you back to login page`);
-        if (accountType === "senior") {
-          navigate("/user-dashboard");
-        }
-        if (accountType === "admin") {
-          navigate("/admins-login");
-        }
+        navigate(loginRoute); 
       }
     } catch (err) {
       console.error(err);
@@ -114,18 +112,17 @@ export default function ForgotPassword({ accountType }) {
         console.error(err);
       }
     }
+
     const intervalMinutes = 30;
     const runInterval = setInterval(timeCheckOTP, intervalMinutes * 60 * 1000);
 
-    return () => {
-      clearInterval(runInterval);
-    };
+    return () => clearInterval(runInterval);
   }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
       {/* LEFT SIDE */}
-      <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 relative overflow-hidden border-4 border-white rounded-2xl">
+      <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 border-4 border-white rounded-2xl">
         <h3 className="text-3xl font-bold text-white mb-4">Senior Citizen</h3>
         <p className="text-white text-sm max-w-md">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -133,71 +130,57 @@ export default function ForgotPassword({ accountType }) {
         </p>
       </div>
 
-      {/* RIGHT SIDE - REGISTER FORM */}
+      {/* RIGHT SIDE */}
       {open ? (
-        <div className="flex flex-col justify-center  p-12 lg:p-20 ">
+        <div className="flex flex-col justify-center p-12 lg:p-20">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Confirm OTP</h2>
 
-          {!status && <p style={{ color: "red" }}>{response}</p>}
+          {!status && <p className="text-red-500">{response}</p>}
 
           <form onSubmit={handleOTP} className="space-y-4">
-            <div>
-              <label className="block text-gray-700 font-medium">OTP</label>
-              <input
-                type="text"
-                placeholder="508795"
-                name="otp"
-                className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={otp}
-                // Nagdedelete lagi pamula likod
-                onKeyDown={(e) => {
-                  if (
-                    (e.key >= "0" && e.key <= "9") ||
-                    e.key === "Enter" ||
-                    e.key === "Backspace" ||
-                    e.key === "Delete"
-                  ) {
-                    if (e.key !== "Backspace" && e.key !== "Delete") {
-                      setOTP((otp) => otp + e.key);
-                    } else {
-                      setOTP((otp) => otp.slice(0, -1));
-                    }
+            <input
+              type="text"
+              name="otp"
+              value={otp}
+              placeholder="508795"
+              className="w-full border p-2 rounded"
+              onKeyDown={(e) => {
+                if (
+                  (e.key >= "0" && e.key <= "9") ||
+                  e.key === "Backspace" ||
+                  e.key === "Delete"
+                ) {
+                  if (e.key === "Backspace" || e.key === "Delete") {
+                    setOTP((o) => o.slice(0, -1));
+                  } else {
+                    setOTP((o) => o + e.key);
                   }
-                }}
-              />
-            </div>
+                }
+              }}
+            />
             <p className="text-red-500">{errors.otp}</p>
 
-            <button
-              className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer"
-              type="submit"
-            >
+            <button className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer">
               Confirm Reset
             </button>
           </form>
+
           <button onClick={resendOTP} disabled={timeCheck}>
             Resend OTP
           </button>
 
-          <div className="text-center my-6">
-            <span className="text-sm text-gray-600 cursor-pointer flex justify-center gap-1">
-              <span>Remembered your password?</span>
-              <Link
-                to="/user-login"
-                className="hover:underline text-blue-600 font-semibold"
-              >
-                Login here
-              </Link>
-            </span>
+          <div className="text-center mt-6">
+            <Link
+              to={loginRoute}
+              className="hover:underline text-blue-600 font-semibold"
+            >
+              Go back to Login
+            </Link>
           </div>
         </div>
       ) : (
         <div className="flex flex-col justify-center p-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">
-            Forgot Password
-          </h2>
-
-          {!status && <p className="text-red-500 text-xs">{response}</p>}
+          <h2 className="text-3xl font-bold mb-6">Forgot Password</h2>
 
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div className="text-gray-500 font-medium px-2">
@@ -256,27 +239,15 @@ export default function ForgotPassword({ accountType }) {
               Send OTP
             </button>
 
-            <div className="text-center my-6 text-sm text-gray-600">
+            <div className="text-center mt-6">
               <Link
-                to="/admins-login"
+                to={loginRoute}
                 className="text-blue-600 font-semibold hover:underline"
               >
                 Go back to Login
               </Link>
             </div>
           </form>
-
-          {/* <div className="text-center my-6">
-            <span className="text-sm text-gray-600 cursor-pointer flex justify-center gap-1">
-              <span>Remembered your password?</span>
-              <Link
-                to="/user-login"
-                className="hover:underline text-blue-600 font-semibold"
-              >
-                Login here
-              </Link>
-            </span>
-          </div> */}
         </div>
       )}
     </div>
