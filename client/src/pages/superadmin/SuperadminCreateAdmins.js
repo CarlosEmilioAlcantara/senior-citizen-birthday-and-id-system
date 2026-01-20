@@ -40,68 +40,91 @@ export default function SuperadminCreateAdmins() {
     }
   }
 
-  return(
+  return (
     <div>
-      { !status && (
+      {/* { !status && (
         <p style={{color: "red"}}>{response}</p>
-      )}
+      )} */}
 
-      <h3>Superadmin Create Admins</h3>
-      <form onSubmit={handleCreateAdmin}>
-        <label>Email</label>
-        <input
-          type="email"
-          placeholder="email@email.com"
-          name="email"
-        />
-        <br/>
-        <small style={{"color": "red"}}>{errors.email}</small>
-        <br/>
+      {/* <h3>Superadmin Create Admins</h3> */}
+      <form
+        className="max-w-4xl mx-auto space-y-6"
+        onSubmit={handleCreateAdmin}
+      >
+        <h3 className="text-lg font-semibold text-blue-700 mb-4">
+          Creation of Admin and Superadmin Accounts
+        </h3>
 
-        <label>Username</label>
-        <input
-          type="text"
-          placeholder="username"
-          name="username"
-        />
-        <br/>
-        <small style={{"color": "red"}}>{errors.username}</small>
-        <br/>
+        <div>
+          <label className="text-sm text-gray-600">Email</label>
+          <input
+            className="mt-1 w-full border rounded px-3 py-2"
+            type="email"
+            name="email"
+          />
 
-        <label>Role</label>
-        <select name="role">
-          <option>-- Please select a role --</option>
-          <option value="admin">admin</option>
-          <option value="superadmin">superadmin</option>
-        </select>
-        <br/>
-        <small style={{"color": "red"}}>{errors.role}</small>
-        <br/>
+          <small className="text-red-500">{errors.email}</small>
+        </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          placeholder="password"
-          name="password"
-        />
-        <br/>
-        <small style={{"color": "red"}}>{errors.password}</small>
-        <br/>
+        <div>
+          <label className="text-sm text-gray-600">Username</label>
+          <input
+            type="text"
+            className="mt-1 w-full border rounded px-3 py-2"
+            name="username"
+          />
 
-        <label>Confirm Password</label>
-        <input
-          type="password"
-          placeholder="confirm password"
-          name="confirm"
-        />
-        <br/>
-        <small style={{"color": "red"}}>{errors.confirm}</small>
-        <br/>
+          <small className="text-red-500">{errors.username}</small>
+        </div>
 
-        <button type="submit">Create Admin</button>
+        <div>
+          <label className="text-sm text-gray-600">Role</label>
+          <select className="mt-1 w-full border rounded px-3 py-2" name="role">
+            <option value="">-- Please select a role --</option>
+            <option value="admin">admin</option>
+            <option value="superadmin">superadmin</option>
+          </select>
+          <small className="text-red-500">{errors.role}</small>
+        </div>
+
+        <div>
+          <label className="text-sm text-gray-600">Password</label>
+          <input
+            className="mt-1 w-full border rounded px-3 py-2"
+            type="password"
+            name="password"
+          />
+
+          <small className="text-red-500">{errors.password}</small>
+        </div>
+
+        <div>
+          <label className="text-sm text-gray-600">Confirm Password</label>
+          <input
+            className="mt-1 w-full border rounded px-3 py-2"
+            type="password"
+            name="confirm"
+          />
+
+          <small className="text-red-500">{errors.confirm}</small>
+        </div>
+
+        <div className="flex justify-between items-center pt-4">
+          <Link
+            to="/superadmin-dashboard"
+            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+          >
+            Cancel
+          </Link>
+
+          <button
+            type="submit"
+            className="px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+          >
+            Create Admin
+          </button>
+        </div>
       </form>
-
-      <button><Link to="/superadmin-dashboard">Cancel</Link></button>
     </div>
   );
 }
