@@ -83,6 +83,7 @@ export default function UserLogin() {
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
       {/* LEFT SIDE */}
       <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 border-8 border-white rounded-2xl">
+        <img src="logo192.png"/>
         <h3 className="text-3xl font-bold text-white mb-4">Senior Citizen</h3>
         <p className="text-white text-sm max-w-md">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.

@@ -91,16 +91,15 @@ export default function AdminsLogin() {
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
       {/* LEFT SIDE */}
       <div className="bg-gradient-to-b from-cyan-700 to-blue-700 flex flex-col justify-center items-center text-center p-10 relative overflow-hidden border-8 border-white rounded-2xl">
+        <img src="logo192.png" />
         <h3 className="text-3xl font-bold text-white mb-4">Senior Citizen</h3>
         <p className="text-white text-sm max-w-md">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
       </div>
 
       {/* RIGHT SIDE - LOGIN FORM */}
       <div className="flex flex-col justify-center p-12 lg:p-20 ">
-       
         <h2 className="text-3xl font-bold text-gray-800 mb-6">
           Log in to your Account
         </h2>
