@@ -11,6 +11,11 @@ export default function ForgotPassword({ accountType }) {
   const [timeCheck, setTimeCheck] = useState(true);
   const [response, setResponse] = useState("");
   const [errors, setErrors] = useState({});
+  const [sendingOTP, setSendingOTP] = useState(false);
+  const RESEND_TIME = 30 * 60; // 30 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(0);
+
+
 
   const navigate = useNavigate();
 
@@ -22,10 +27,13 @@ export default function ForgotPassword({ accountType }) {
     const fd = new FormData(e.target);
 
     try {
+      setSendingOTP(true); // start animation
+
       const res = await fetch("/auth/reset-password", {
         method: "POST",
         body: fd,
       });
+
       const data = await res.json();
       setResponse(data.response);
       setErrors({ ...data.errors });
@@ -33,13 +41,25 @@ export default function ForgotPassword({ accountType }) {
       if (data.status === 429) {
         navigate("/too-many-requests");
       }
+
       if (res.ok && data.success) {
-        setOpen(data.success);
+        setOpen(true);
+        startResendTimer(); // start 30 min timer here
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setSendingOTP(false); // stop animation
     }
   }
+
+  function startResendTimer() {
+    const expiry = Date.now() + RESEND_TIME * 1000;
+    localStorage.setItem("otp_expiry", expiry);
+    setTimeLeft(RESEND_TIME);
+  }
+
+  
 
   async function handleOTP(e) {
     e.preventDefault();
@@ -95,29 +115,29 @@ export default function ForgotPassword({ accountType }) {
   }
 
   useEffect(() => {
-    async function timeCheckOTP() {
-      try {
-        const res = await fetch("/auth/timecheck-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, confirm }),
-        });
-        const data = await res.json();
-        setTimeCheck(data.time_check);
+    const storedExpiry = localStorage.getItem("otp_expiry");
 
-        if (data.status === 429) {
-          navigate("/too-many-requests");
-        }
-      } catch (err) {
-        console.error(err);
+    if (storedExpiry) {
+      const remaining = Math.floor((storedExpiry - Date.now()) / 1000);
+      if (remaining > 0) {
+        setTimeLeft(remaining);
       }
     }
 
-    const intervalMinutes = 30;
-    const runInterval = setInterval(timeCheckOTP, intervalMinutes * 60 * 1000);
+    if (timeLeft <= 0) return;
 
-    return () => clearInterval(runInterval);
-  }, []);
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
@@ -133,8 +153,11 @@ export default function ForgotPassword({ accountType }) {
       {/* RIGHT SIDE */}
       {open ? (
         <div className="flex flex-col justify-center p-12 lg:p-20">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Confirm OTP</h2>
-
+          <h2 className="text-3xl font-bold text-gray-800 ">Confirm OTP</h2>
+          <div className="text-gray-500 font-medium px-2 mb-4">
+            Please check your email for an OTP that is being sent for password
+            reset verification.
+          </div>
           {!status && <p className="text-red-500">{response}</p>}
 
           <form onSubmit={handleOTP} className="space-y-4">
@@ -142,7 +165,6 @@ export default function ForgotPassword({ accountType }) {
               type="text"
               name="otp"
               value={otp}
-              placeholder="508795"
               className="w-full border p-2 rounded"
               onKeyDown={(e) => {
                 if (
@@ -165,8 +187,22 @@ export default function ForgotPassword({ accountType }) {
             </button>
           </form>
 
-          <button onClick={resendOTP} disabled={timeCheck}>
+          {/* <button onClick={resendOTP} disabled={timeCheck}>
             Resend OTP
+          </button> */}
+          <button
+            onClick={resendOTP}
+            disabled={timeLeft > 0}
+            className={`mt-4 text-sm font-medium
+    ${
+      timeLeft > 0
+        ? "text-gray-400 cursor-not-allowed"
+        : "text-blue-600 hover:underline"
+    }`}
+          >
+            {timeLeft > 0
+              ? `Resend OTP in ${formatTime(timeLeft)}`
+              : "Resend OTP"}
           </button>
 
           <div className="text-center mt-6">
@@ -232,11 +268,30 @@ export default function ForgotPassword({ accountType }) {
               <p className="text-red-500 text-sm">{errors.confirm}</p>
             </div>
 
-            <button
+            {/* <button
               className="mt-8 w-full py-3 rounded bg-gradient-to-r from-cyan-700 to-blue-700 text-white font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 cursor-pointer"
               type="submit"
             >
               Send OTP
+            </button> */}
+            <button
+              type="submit"
+              disabled={sendingOTP}
+              className={`mt-8 w-full py-3 rounded text-white font-semibold transition-all duration-300
+    ${
+      sendingOTP
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-gradient-to-r from-cyan-700 to-blue-700 hover:scale-105"
+    }`}
+            >
+              {sendingOTP ? (
+                <span className="flex justify-center items-center gap-2">
+                  <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                  Sending OTP...
+                </span>
+              ) : (
+                "Send OTP"
+              )}
             </button>
 
             <div className="text-center mt-6">
