@@ -134,12 +134,6 @@ export default function AdminDashboard() {
         <main className="flex-1 overflow-y-auto p-5 bg-white">
           {/* WELCOME SECTION */}
           <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-700 to-cyan-700 text-white p-8 shadow-md mb-8">
-            {/* <h2 className="text-3xl md:text-4xl font-bold">
-              Welcome back, {info.username} 👋
-            </h2>
-            <p className="mt-2 text-cyan-100">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-            </p> */}
             <h2 className="text-3xl md:text-4xl font-bold">
               Welcome back, {info?.username || "Admin"} 👋
             </h2>
