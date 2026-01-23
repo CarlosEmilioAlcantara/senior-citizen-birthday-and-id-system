@@ -415,7 +415,7 @@ export default function UsersList() {
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen overflow-hidden">
         {/* HEADER */}
-        <header className="bg-white flex items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
+        <header className="bg-white flex items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7] z-10">
           <button
             onClick={() => setSidebarOpen(true)}
             className="cursor-pointer p-2 hover:text-cyan-700 hover:scale-110 lg:hidden"
