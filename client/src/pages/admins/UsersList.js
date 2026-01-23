@@ -413,7 +413,7 @@ export default function UsersList() {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen">
+      <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen overflow-hidden">
         {/* HEADER */}
         <header className="bg-white flex items-center p-4 filter drop-shadow-[0_0_0.25rem_#0097A7]">
           <button
@@ -477,7 +477,7 @@ export default function UsersList() {
             {/* <h3>List of Senior Citizens</h3> */}
             <div className="grid md:grid-cols-3 gap-2">
               <form onSubmit={handleFetchUsers}>
-                <h3>Search</h3>
+                <h3 className="font-semibold text-gray-500">Search</h3>
                 <div className="relative flex justify-between  py-0 gap-0 border border-gray-500 rounded-md focus:outline-blue-600">
                   <div className="flex justify-center items-center  rounded focus:outline-blue-600 px-2">
                     {/* SVG */}
@@ -520,7 +520,7 @@ export default function UsersList() {
               </form>
 
               <div>
-                <p>Filter By</p>
+                <p className="font-semibold text-gray-500">Filter By</p>
                 <select
                   className="w-full border rounded px-3 py-1.5"
                   value={filter}
@@ -533,7 +533,7 @@ export default function UsersList() {
               </div>
 
               <div>
-                <p>Sort By</p>
+                <p className="font-semibold text-gray-500">Sort By</p>
                 <select
                   className="w-full border rounded px-3 py-1.5"
                   value={sort}
@@ -547,216 +547,196 @@ export default function UsersList() {
               </div>
             </div>
           </div>
+          {/* TABLE CONTAINER */}
 
-          <table className="hidden">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Picture</th>
-                <th>Signature</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Age</th>
-                <th>
-                  Birthday
-                  <br />
-                  <small>mm/dd/yyyy</small>
-                </th>
-                <th>Gender</th>
-                <th>Address</th>
-                <th>Emergency Contact Name</th>
-                <th>Emergency Contact #</th>
-                <th>Verification Status</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {users
-                // .filter(user => {
-                //   if (emailOrFullname === "") return user
-                //   const q = emailOrFullname.toLowerCase();
-
-                //   return (
-                //     user.first_name.toLowerCase().includes(q) ||
-                //     user.middle_name.toLowerCase().includes(q) ||
-                //     user.last_name.toLowerCase().includes(q)
-                //   )
-                // })
-                .filter((user) => {
-                  return filter === "all"
-                    ? user
-                    : user.verify_status === Number(filter);
-                })
-                .map((user) => (
-                  <tr key={user.senior_id}>
-                    {user.verify_status === filter && <p>Yes</p>}
-                    <td>{user.senior_id}</td>
-
-                    <td>
-                      {pictures.map(
-                        (picture) =>
-                          picture.senior_id === user.senior_id && (
-                            <img
-                              id={picture.picture_id}
-                              src={picture.picture_name}
-                              width={"50px"}
-                            ></img>
-                          ),
-                      )}
-                    </td>
-
-                    <td>
-                      {signatures.map(
-                        (signature) =>
-                          signature.senior_id === user.senior_id && (
-                            <img
-                              id={signature.signature_id}
-                              src={signature.image_name}
-                              width={"50px"}
-                            ></img>
-                          ),
-                      )}
-                    </td>
-
-                    {/* <td>
-                {(() => {
-                  const userCards = cards.filter(
-                    card => String(card.senior_id) === String(user.senior_id)
-                  );
-
-                  return userCards.length > 0 ? (
-                    userCards.map(card => (
-                      <div key={card.card_id}>
-                        <img src={card.card_front_name} width="50" alt="Card front" />
-                        <img src={card.card_back_name} width="50" alt="Card back" />
-                      </div>
-                    ))
-                  ) : (
-                    <p>Verify first and print ID</p>
-                  );
-                })()}
-              </td> */}
-
-                    <td>
-                      {user.first_name} {user.middle_name} {user.last_name}
-                    </td>
-                    <td>{user.email}</td>
-                    <td>{user.age}</td>
-                    <td>{user.birthday}</td>
-                    <td>{user.gender}</td>
-                    <td>
-                      {user.house} {user.street},{" "}
-                      {(user.subdivision && user.barangay) || user.barangay},{" "}
-                      {user.city}, {user.province}
-                    </td>
-                    <td>
-                      {user.emergency_fname} {user.emergency_mname}{" "}
-                      {user.emergency_lname}
-                    </td>
-                    <td>{user.emergency_number}</td>
-
-                    <td>
-                      <select
-                        value={verifications[user.senior_id]}
-                        onChange={(e) =>
-                          handleVerificationChange(
-                            user.senior_id,
-                            user.email,
-                            e.target.value,
-                          )
-                        }
-                      >
-                        <option>Verified</option>
-                        <option>Unverified</option>
-                      </select>
-                    </td>
-
-                    <td>{user.created_at}</td>
-                    <td>{user.updated_at}</td>
-
-                    <td>
-                      <button
-                        onClick={() => {
-                          setUserInfo(
-                            user.senior_id,
-                            user.first_name,
-                            user.middle_name,
-                            user.last_name,
-                            user.email,
-                            user.age,
-                            user.birthday,
-                            user.gender,
-                            user.house,
-                            user.street,
-                            user.subdivision,
-                            user.barangay,
-                            user.city,
-                            user.province,
-                            user.emergency_fname,
-                            user.emergency_mname,
-                            user.emergency_lname,
-                            user.emergency_number,
-                            true,
-                          );
-                          setOpenDelete(false);
-                          setOpenCard(false);
-                          setOpenEdit(true);
-                        }}
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        disabled={!user.verify_status}
-                        onClick={() => {
-                          setUserInfo(
-                            user.senior_id,
-                            user.first_name,
-                            user.middle_name,
-                            user.last_name,
-                            user.email,
-                            user.age,
-                            user.birthday,
-                            user.gender,
-                            user.house,
-                            user.street,
-                            user.subdivision,
-                            user.barangay,
-                            user.city,
-                            user.province,
-                            user.emergency_fname,
-                            user.emergency_mname,
-                            user.emergency_lname,
-                            user.emergency_number,
-                            true,
-                          );
-                          setOpenDelete(false);
-                          setOpenEdit(false);
-                          setHold(true);
-                        }}
-                      >
-                        Print ID
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setUserInfo(user.senior_id);
-                          setOpenCard(false);
-                          setOpenEdit(false);
-                          setOpenDelete(true);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
+          <div className="mt-6 overflow-hidden">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Senior Citizen's Account List Table
+            </h3>
+            <div className="overflow-x-auto rounded-lg shadow-md ">
+              <table className="min-w-[1400px] w-full border-collapse ">
+                <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
+                  <tr>
+                    <th className="px-4 py-3 text-left">ID</th>
+                    <th className="px-4 py-3">Picture</th>
+                    <th className="px-4 py-3">Signature</th>
+                    <th className="px-4 py-3 text-left">Full Name</th>
+                    <th className="px-4 py-3 text-left">Email</th>
+                    <th className="px-4 py-3">Age</th>
+                    <th className="px-4 py-3">
+                      Birthday
+                      <div className="text-xs font-normal">MM/DD/YYYY</div>
+                    </th>
+                    <th className="px-4 py-3">Gender</th>
+                    <th className="px-4 py-3 text-left">Address</th>
+                    <th className="px-4 py-3 text-left">Emergency Contact</th>
+                    <th className="px-4 py-3">Contact #</th>
+                    <th className="px-4 py-3">Verification</th>
+                    <th className="px-4 py-3">Created</th>
+                    <th className="px-4 py-3">Updated</th>
+                    <th className="px-4 py-3 text-center">Actions</th>
                   </tr>
-                ))}
-            </tbody>
-          </table>
+                </thead>
 
+                <tbody className="divide-y text-sm">
+                  {users
+                    .filter((user) =>
+                      filter === "all"
+                        ? user
+                        : user.verify_status === Number(filter),
+                    )
+                    .map((user) => (
+                      <tr key={user.senior_id} className="hover:bg-gray-50">
+                        <td className="px-4 py-3">{user.senior_id}</td>
+
+                        <td className="px-4 py-3">
+                          {pictures.map(
+                            (picture) =>
+                              picture.senior_id === user.senior_id && (
+                                <img
+                                  key={picture.picture_id}
+                                  src={picture.picture_name}
+                                  className="w-10 h-10 rounded-full object-cover border"
+                                />
+                              ),
+                          )}
+                        </td>
+
+                        <td className="px-4 py-3">
+                          {signatures.map(
+                            (signature) =>
+                              signature.senior_id === user.senior_id && (
+                                <img
+                                  key={signature.signature_id}
+                                  src={signature.image_name}
+                                  className="w-10 h-10 object-contain border rounded"
+                                />
+                              ),
+                          )}
+                        </td>
+
+                        <td className="px-4 py-3 font-medium">
+                          {user.first_name} {user.middle_name} {user.last_name}
+                        </td>
+
+                        <td className="px-4 py-3">{user.email}</td>
+                        <td className="px-4 py-3 text-center">{user.age}</td>
+                        <td className="px-4 py-3 text-center">
+                          {user.birthday}
+                        </td>
+                        <td className="px-4 py-3 text-center">{user.gender}</td>
+
+                        <td className="px-4 py-3 max-w-xs">
+                          {user.house} {user.street},{" "}
+                          {(user.subdivision && user.barangay) || user.barangay}
+                          , {user.city}, {user.province}
+                        </td>
+
+                        <td className="px-4 py-3">
+                          {user.emergency_fname} {user.emergency_mname}{" "}
+                          {user.emergency_lname}
+                        </td>
+
+                        <td className="px-4 py-3">{user.emergency_number}</td>
+
+                        <td className="px-4 py-3">
+                          <select
+                            className="border rounded px-2 py-1 text-sm"
+                            value={verifications[user.senior_id]}
+                            onChange={(e) =>
+                              handleVerificationChange(
+                                user.senior_id,
+                                user.email,
+                                e.target.value,
+                              )
+                            }
+                          >
+                            <option>Verified</option>
+                            <option>Unverified</option>
+                          </select>
+                        </td>
+
+                        <td className="px-4 py-3">{user.created_at}</td>
+                        <td className="px-4 py-3">{user.updated_at}</td>
+
+                        <td className="px-4 py-3 flex gap-2 justify-center">
+                          <button
+                            className="px-3 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
+                            onClick={() => {
+                              setUserInfo(
+                                user.senior_id,
+                                user.first_name,
+                                user.middle_name,
+                                user.last_name,
+                                user.email,
+                                user.age,
+                                user.birthday,
+                                user.gender,
+                                user.house,
+                                user.street,
+                                user.subdivision,
+                                user.barangay,
+                                user.city,
+                                user.province,
+                                user.emergency_fname,
+                                user.emergency_mname,
+                                user.emergency_lname,
+                                user.emergency_number,
+                                true,
+                              );
+                              setOpenEdit(true);
+                            }}
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            disabled={!user.verify_status}
+                            className="px-3 py-1 text-xs rounded bg-emerald-600 text-white disabled:opacity-50"
+                            onClick={() => {
+                              setUserInfo(
+                                user.senior_id,
+                                user.first_name,
+                                user.middle_name,
+                                user.last_name,
+                                user.email,
+                                user.age,
+                                user.birthday,
+                                user.gender,
+                                user.house,
+                                user.street,
+                                user.subdivision,
+                                user.barangay,
+                                user.city,
+                                user.province,
+                                user.emergency_fname,
+                                user.emergency_mname,
+                                user.emergency_lname,
+                                user.emergency_number,
+                                true,
+                              );
+                              setHold(true);
+                            }}
+                          >
+                            Print ID
+                          </button>
+
+                          <button
+                            className="px-3 py-1 text-xs rounded bg-red-600 text-white hover:bg-red-700"
+                            onClick={() => {
+                              setID(user.senior_id);
+                              setOpenDelete(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
           <div className="flex justify-center items-center gap-2 mt-6">
             <button
               disabled={page <= 1}
@@ -786,7 +766,6 @@ export default function UsersList() {
               Next
             </button>
           </div>
-
           {openEdit && (
             <div className="popup">
               {!status && <p style={{ color: "red" }}>{response}</p>}
@@ -1065,7 +1044,6 @@ export default function UsersList() {
               <button onClick={() => setOpenEdit(false)}>Cancel</button>
             </div>
           )}
-
           {openDelete && (
             <div className="popup">
               <form onSubmit={handleDeleteUser}>
@@ -1077,7 +1055,6 @@ export default function UsersList() {
               <button onClick={() => setOpenDelete(false)}>Cancel</button>
             </div>
           )}
-
           {openCard && (
             <div className="popup">
               <label>Front</label>
@@ -1101,7 +1078,6 @@ export default function UsersList() {
               <button onClick={() => setOpenCard(false)}>Close</button>
             </div>
           )}
-
           {/* <button>
             <Link to="/superadmin-dashboard">Cancel</Link>
           </button> */}
