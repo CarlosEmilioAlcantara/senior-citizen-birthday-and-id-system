@@ -474,26 +474,55 @@ export default function UsersList() {
         {/* SCROLLABLE  ADMIN LIST ACC CONTENT */}
         <main className="flex-1  overflow-auto p-5 bg-white">
           <div>
-            <h3>List of Senior Citizens</h3>
-            <div style={{ display: "flex", alignItems: "center", gap: "1em" }}>
+            {/* <h3>List of Senior Citizens</h3> */}
+            <div className="grid md:grid-cols-3 gap-2">
               <form onSubmit={handleFetchUsers}>
-                <input
-                  type="text"
-                  placeholder="Search by email/full name"
-                  value={emailOrFullname}
-                  // onKeyDown={(e) => {
-                  //   if (e.key === "Enter") {
-                  //     e.preventDefault();
-                  //   }}
-                  // }
-                  onChange={(e) => setEmailOrFullname(e.target.value)}
-                />
-                <button type="submit">Search</button>
+                <h3>Search</h3>
+                <div className="relative flex justify-between  py-0 gap-0 border border-gray-500 rounded-md focus:outline-blue-600">
+                  <div className="flex justify-center items-center  rounded focus:outline-blue-600 px-2">
+                    {/* SVG */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                      />
+                    </svg>
+                    <input
+                      className="border-none outline-none w-full ps-2"
+                      // className="block w-full ps-1"
+                      type="text"
+                      placeholder="Search by Email or Name"
+                      value={emailOrFullname}
+                      // onKeyDown={(e) => {
+                      //   if (e.key === "Enter") {
+                      //     e.preventDefault();
+                      //   }}
+                      // }
+                      onChange={(e) => setEmailOrFullname(e.target.value)}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="text-white bg-blue-600 hover:bg-blue-700 rounded-r py-1.5 px-6"
+                  >
+                    Search
+                  </button>
+                </div>
               </form>
 
               <div>
                 <p>Filter By</p>
                 <select
+                  className="w-full border rounded px-3 py-1.5"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                 >
@@ -505,7 +534,11 @@ export default function UsersList() {
 
               <div>
                 <p>Sort By</p>
-                <select value={sort} onChange={(e) => setSort(e.target.value)}>
+                <select
+                  className="w-full border rounded px-3 py-1.5"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
+                >
                   <option value={"Newest"}>Newest to Oldest</option>
                   <option value={"Oldest"}>Oldest to Newest</option>
                   <option value={"Updated"}>Last Updated</option>
@@ -515,7 +548,7 @@ export default function UsersList() {
             </div>
           </div>
 
-          <table>
+          <table className="hidden">
             <thead>
               <tr>
                 <th>ID</th>
@@ -571,7 +604,7 @@ export default function UsersList() {
                               src={picture.picture_name}
                               width={"50px"}
                             ></img>
-                          )
+                          ),
                       )}
                     </td>
 
@@ -584,7 +617,7 @@ export default function UsersList() {
                               src={signature.image_name}
                               width={"50px"}
                             ></img>
-                          )
+                          ),
                       )}
                     </td>
 
@@ -632,7 +665,7 @@ export default function UsersList() {
                           handleVerificationChange(
                             user.senior_id,
                             user.email,
-                            e.target.value
+                            e.target.value,
                           )
                         }
                       >
@@ -666,7 +699,7 @@ export default function UsersList() {
                             user.emergency_mname,
                             user.emergency_lname,
                             user.emergency_number,
-                            true
+                            true,
                           );
                           setOpenDelete(false);
                           setOpenCard(false);
@@ -698,7 +731,7 @@ export default function UsersList() {
                             user.emergency_mname,
                             user.emergency_lname,
                             user.emergency_number,
-                            true
+                            true,
                           );
                           setOpenDelete(false);
                           setOpenEdit(false);
@@ -724,15 +757,23 @@ export default function UsersList() {
             </tbody>
           </table>
 
-          <div>
-            <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
+          <div className="flex justify-center items-center gap-2 mt-6">
+            <button
+              disabled={page <= 1}
+              onClick={() => setPage(page - 1)}
+              className="px-3 py-1 rounded border disabled:opacity-40"
+            >
               Prev
             </button>
             {pages.map((num) => (
               <button
                 key={num}
-                style={page === num ? { color: "red" } : {}}
                 onClick={() => setPage(num)}
+                className={`px-3 py-1 rounded border ${
+                  page === num
+                    ? "bg-cyan-600 text-white border-cyan-600"
+                    : "hover:bg-slate-100"
+                }`}
               >
                 {num}
               </button>
@@ -740,6 +781,7 @@ export default function UsersList() {
             <button
               disabled={page >= totalPages}
               onClick={() => setPage(page + 1)}
+              className="px-3 py-1 rounded border disabled:opacity-40"
             >
               Next
             </button>
@@ -1060,11 +1102,9 @@ export default function UsersList() {
             </div>
           )}
 
-          <button>
-            <Link to="/superadmin-dashboard">Go back</Link>
-          </button>
-
-          
+          {/* <button>
+            <Link to="/superadmin-dashboard">Cancel</Link>
+          </button> */}
         </main>
       </div>
     </div>
