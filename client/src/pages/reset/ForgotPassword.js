@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 
 export default function ForgotPassword({ accountType }) {
   const [email, setEmail] = useState("");
@@ -14,40 +16,94 @@ export default function ForgotPassword({ accountType }) {
   const [sendingOTP, setSendingOTP] = useState(false);
   const RESEND_TIME = 30 * 60; // 30 minutes in seconds
   const [timeLeft, setTimeLeft] = useState(0);
-
-
-
   const navigate = useNavigate();
 
- 
+  // ---------------------------
+  // SWEET ALERT (POP-UP)
+  // ---------------------------
+  const showAlert = ({ title, message, icon = "error" }) => {
+    Swal.fire({
+      title: `<p class="text-2xl font-semibold text-gray-800">${title}</p>`,
+      html: `<p class="text-xl text-gray-600 mt-1">${message}</p>`,
+      icon,
+      iconColor: "#2563eb",
+      background: "#ffffff",
+      showConfirmButton: true,
+      confirmButtonText: "Okay",
+      buttonsStyling: false,
+      customClass: {
+        popup: "rounded-xl px-6 py-4",
+        confirmButton:
+          "mt-4 bg-blue-600 text-white px-6 py-2 rounded text-xl hover:bg-blue-700",
+      },
+    });
+  };
+
   const loginRoute = accountType === "admin" ? "/admins-login" : "/user-login";
 
+  // ---------------------------
+  // LOGIN HANDLER
+  // ---------------------------
   async function handleResetPassword(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
+
+    const email = fd.get("email");
+    const password = fd.get("password");
+    const confirm = fd.get("confirm");
+
+    //missing fields
+    if (!email || !password || !confirm) {
+      showAlert({
+        title: "Missing Information",
+        message: "Please fill in all required fields.",
+      });
+      return;
+    }
+
+    // password mismatch
+    if (password !== confirm) {
+      showAlert({
+        title: "Password Mismatch",
+        message: "New Password and Confirm Password must match.",
+      });
+      return;
+    }
 
     try {
       setSendingOTP(true); // start animation
 
       const res = await fetch("/auth/reset-password", {
         method: "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirm, role: accountType }),
+        // body: fd,
       });
 
       const data = await res.json();
       setResponse(data.response);
-      setErrors({ ...data.errors });
+      setErrors(data.errors || {});
 
       if (data.status === 429) {
         navigate("/too-many-requests");
+        return;
       }
 
       if (res.ok && data.success) {
         setOpen(true);
         startResendTimer(); // start 30 min timer here
+      } else if (!data.success) {
+        showAlert({
+          title: "Error",
+          message: data.response || "Account does not exist.",
+        });
       }
     } catch (err) {
       console.error(err);
+      showAlert({
+        title: "Server Error",
+        message: "Something went wrong. Please try again later.",
+      });
     } finally {
       setSendingOTP(false); // stop animation
     }
@@ -59,8 +115,6 @@ export default function ForgotPassword({ accountType }) {
     setTimeLeft(RESEND_TIME);
   }
 
-  
-
   async function handleOTP(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -71,25 +125,42 @@ export default function ForgotPassword({ accountType }) {
     try {
       const res = await fetch("/auth/otp", {
         method: "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          otp,
+          role: accountType,
+        }),
+        // body: fd,
       });
       const data = await res.json();
       setStatus(data.success);
-      setResponse(data.response);
-      setErrors({ ...data.errors });
+      setErrors(data.errors || {});
 
       if (data.status === 429) {
         navigate("/too-many-requests");
       }
       if (res.ok && data.success) {
-        alert(`${data.response}, redirecting you back to login page`);
-        navigate(loginRoute); 
+        Swal.fire({
+          title: "Success",
+          text: data.response,
+          icon: "success",
+        }).then(() => navigate(loginRoute));
+      } else {
+        showAlert({
+          title: "Invalid OTP",
+          message: data.response,
+        });
       }
     } catch (err) {
       console.error(err);
     }
   }
 
+  // ---------------------------
+  // RESEND OTP TIMER
+  // ---------------------------
   async function resendOTP(e) {
     e.preventDefault();
 
@@ -119,15 +190,13 @@ export default function ForgotPassword({ accountType }) {
 
     if (storedExpiry) {
       const remaining = Math.floor((storedExpiry - Date.now()) / 1000);
-      if (remaining > 0) {
-        setTimeLeft(remaining);
-      }
+      if (remaining > 0) setTimeLeft(remaining);
     }
 
     if (timeLeft <= 0) return;
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
+      setTimeLeft((t) => t - 1);
     }, 1000);
 
     return () => clearInterval(interval);
