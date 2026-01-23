@@ -478,8 +478,8 @@ export default function UsersList() {
             <div className="grid md:grid-cols-3 gap-2">
               <form onSubmit={handleFetchUsers}>
                 <h3 className="font-semibold text-gray-500">Search</h3>
-                <div className="relative flex justify-between  py-0 gap-0 border border-gray-500 rounded-md focus:outline-blue-600">
-                  <div className="flex justify-center items-center  rounded focus:outline-blue-600 px-2">
+                <div className="relative flex justify-between  py-0 gap-0 border border-cyan-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+                  <div className="flex justify-center items-center   px-2">
                     {/* SVG */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -522,7 +522,7 @@ export default function UsersList() {
               <div>
                 <p className="font-semibold text-gray-500">Filter By</p>
                 <select
-                  className="w-full border rounded px-3 py-1.5"
+                  className="w-full border rounded px-3 py-1.5 "
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                 >
@@ -547,8 +547,8 @@ export default function UsersList() {
               </div>
             </div>
           </div>
-          {/* TABLE CONTAINER */}
 
+          {/* TABLE CONTAINER */}
           <div className="mt-6 overflow-hidden">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
               Senior Citizen's Account List Table
@@ -659,7 +659,7 @@ export default function UsersList() {
                         <td className="px-4 py-3">{user.created_at}</td>
                         <td className="px-4 py-3">{user.updated_at}</td>
 
-                        <td className="px-4 py-3 flex gap-2 justify-center">
+                        <td className="px-4 py-3 grid grid-cols-1 gap-2 justify-center">
                           <button
                             className="px-3 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
                             onClick={() => {
@@ -737,6 +737,8 @@ export default function UsersList() {
               </table>
             </div>
           </div>
+
+          {/* PAGINATION  */}
           <div className="flex justify-center items-center gap-2 mt-6">
             <button
               disabled={page <= 1}
@@ -766,6 +768,7 @@ export default function UsersList() {
               Next
             </button>
           </div>
+
           {openEdit && (
             <div className="popup">
               {!status && <p style={{ color: "red" }}>{response}</p>}
