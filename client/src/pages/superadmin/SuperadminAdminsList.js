@@ -277,12 +277,12 @@ export default function SuperadminAdminsList() {
           </button>
 
           <div>
-            <h1 className="text-2xl font-bold">List of Admin</h1>
+            <h1 className="text-2xl font-bold">List of Admins</h1>
           </div>
         </header>
 
         <main className="flex-1 overflow-y-auto p-5 bg-white">
-          <SuperadminCreateAdmins/>
+          {/* <SuperadminCreateAdmins/> */}
           <div>
             {/* <h3>List of admin accounts</h3> */}
             <div className="grid md:grid-cols-3 gap-2">
@@ -356,7 +356,7 @@ export default function SuperadminAdminsList() {
             </div>
           </div>
 
-          <table className="hidden">
+          {/* <table className="hidden">
             <thead>
               <tr>
                 <th>ID</th>
@@ -413,12 +413,33 @@ export default function SuperadminAdminsList() {
                   </tr>
                 ))}
             </tbody>
-          </table>
+          </table> */}
 
           <div className="mt-6 overflow-hidden">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">
-              Admin and Superadmin's Account List Table
-            </h3>
+            <div className="grid gap-2 md:flex md:justify-between mb-2">
+              {/* <div className="md:flex md:justify-between mb-4"> */}
+              <h3 className="text-2xl text-center font-bold text-gray-800">
+                Admin and Superadmin's Account List Table
+              </h3>
+
+              <button className="flex justify-center px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+                Add Admin Account
+              </button>
+            </div>
 
             <div className="overflow-x-auto rounded-lg shadow-md ">
               <table className="min-w-[1400px] w-full border-collapse ">

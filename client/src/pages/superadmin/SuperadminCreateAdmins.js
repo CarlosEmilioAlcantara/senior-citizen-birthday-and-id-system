@@ -50,7 +50,7 @@ export default function SuperadminCreateAdmins() {
       {/* <h3 className="text-lg font-semibold text-blue-700 mb-4">
           Creation of Admin and Superadmin Accounts
         </h3> */}
-      {/* <form
+      <form
         className="max-w-4xl mx-auto space-y-6"
         onSubmit={handleCreateAdmin}
       >
@@ -136,8 +136,8 @@ export default function SuperadminCreateAdmins() {
             </button>
           </div>
         </div>
-      </form> */}
-      <form
+      </form>
+      {/* <form
         className="mb-6"
         // className="max-w-4xl mx-auto space-y-6"
         onSubmit={handleCreateAdmin}
@@ -226,7 +226,7 @@ export default function SuperadminCreateAdmins() {
             Create Account
           </button>
         </div>
-      </form>
+      </form> */}
     </div>
   );
 }
