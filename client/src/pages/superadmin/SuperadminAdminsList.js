@@ -30,6 +30,8 @@ export default function SuperadminAdminsList() {
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
+
 
   async function fetchAdmins() {
     try {
@@ -356,65 +358,6 @@ export default function SuperadminAdminsList() {
             </div>
           </div>
 
-          {/* <table className="hidden">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {admins
-                .filter((admin) => admin.admin_id !== currentAdmin)
-                // .filter(admin => {
-                //   return emailOrUsername === "" ? admin :
-                //   admin.username.includes(emailOrUsername.toLowerCase()) ||
-                //   admin.email.includes(emailOrUsername.toLowerCase())
-                // })
-                .filter((admin) => {
-                  return filter === "All" ? admin : admin.role === filter;
-                })
-                .map((admin) => (
-                  <tr key={admin.admin_id}>
-                    <td>{admin.admin_id}</td>
-                    <td>{admin.username}</td>
-                    <td>{admin.email}</td>
-                    <td>
-                      <select
-                        value={roles[admin.admin_id]}
-                        onChange={(e) =>
-                          handleChangeRole(admin.admin_id, e.target.value)
-                        }
-                      >
-                        <option>admin</option>
-                        <option>superadmin</option>
-                      </select>
-                    </td>
-                    <td>{admin.created_at}</td>
-                    <td>{admin.updated_at}</td>
-                    <td>
-                      <button
-                        onClick={() =>
-                          editAdmin(admin.admin_id, admin.email, admin.username)
-                        }
-                      >
-                        Edit
-                      </button>
-                      <button onClick={() => deleteAdmin(admin.admin_id)}>
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table> */}
-
           <div className="mt-6 overflow-hidden">
             <div className="grid gap-2 md:flex md:justify-between mb-2">
               {/* <div className="md:flex md:justify-between mb-4"> */}
@@ -422,7 +365,10 @@ export default function SuperadminAdminsList() {
                 Admin and Superadmin's Account List Table
               </h3>
 
-              <button className="flex justify-center px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium">
+              <button
+                onClick={() => setOpenCreate(true)}
+                className="flex justify-center px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -440,6 +386,36 @@ export default function SuperadminAdminsList() {
                 Add Admin Account
               </button>
             </div>
+
+            {openCreate && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
+                <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setOpenCreate(false)}
+                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+                  >
+                    ✕
+                  </button>
+
+                  {/* Modal title */}
+                  <h3 className="text-lg font-semibold text-cyan-600 mb-1">
+                    Create an account
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Create an account for Admin and Superadmin
+                  </p>
+
+                  <SuperadminCreateAdmins
+                    onSuccess={() => {
+                      setOpenCreate(false);
+                      fetchAdmins(); // refresh list after creating admin
+                    }}
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="overflow-x-auto rounded-lg shadow-md ">
               <table className="min-w-[1400px] w-full border-collapse ">

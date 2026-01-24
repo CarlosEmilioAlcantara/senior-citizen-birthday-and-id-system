@@ -51,37 +51,40 @@ export default function SuperadminCreateAdmins() {
           Creation of Admin and Superadmin Accounts
         </h3> */}
       <form
-        className="max-w-4xl mx-auto space-y-6"
+        className="max-w-sm md:max-w-4xl mx-auto space-y-6"
         onSubmit={handleCreateAdmin}
       >
-        <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5">
-          <h3 className="text-lg font-semibold text-cyan-600 mb-1">
+        {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
+          <div>
+          {/* <h3 className="text-lg font-semibold text-cyan-600 mb-1">
             Create an account
           </h3>
           <p className="text-sm text-gray-500 mb-4">
             Create an account for Admin and Superadmin
-          </p>
+          </p> */}
           <div className="space-y-4">
-            <div>
-              <label className="text-sm text-gray-600">Email</label>
-              <input
-                className="mt-1 w-full border rounded px-3 py-2"
-                type="email"
-                name="email"
-              />
+            <div className="grid md:grid-cols-2 gap-2">
+              <div>
+                <label className="text-sm text-gray-600">Email</label>
+                <input
+                  className="mt-1 w-full border rounded px-3 py-2"
+                  type="email"
+                  name="email"
+                />
 
-              <small className="text-red-500">{errors.email}</small>
-            </div>
+                <small className="text-red-500">{errors.email}</small>
+              </div>
 
-            <div>
-              <label className="text-sm text-gray-600">Username</label>
-              <input
-                type="text"
-                className="mt-1 w-full border rounded px-3 py-2"
-                name="username"
-              />
+              <div>
+                <label className="text-sm text-gray-600">Username</label>
+                <input
+                  type="text"
+                  className="mt-1 w-full border rounded px-3 py-2"
+                  name="username"
+                />
 
-              <small className="text-red-500">{errors.username}</small>
+                <small className="text-red-500">{errors.username}</small>
+              </div>
             </div>
 
             <div>
@@ -119,22 +122,21 @@ export default function SuperadminCreateAdmins() {
               <small className="text-red-500">{errors.confirm}</small>
             </div>
           </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <Link
+            to="/superadmin-dashboard"
+            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+          >
+            Cancel
+          </Link>
 
-          <div className="flex justify-between items-center pt-4">
-            <Link
-              to="/superadmin-dashboard"
-              className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-            >
-              Cancel
-            </Link>
-
-            <button
-              type="submit"
-              className="px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
-            >
-              Create Account
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="px-6 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+          >
+            Create Account
+          </button>
         </div>
       </form>
       {/* <form
