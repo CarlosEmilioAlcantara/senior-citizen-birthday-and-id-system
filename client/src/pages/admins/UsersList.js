@@ -436,7 +436,7 @@ export default function UsersList() {
             </svg>
           </button>
           <div>
-            <h1 className="text-2xl font-bold">List of Users</h1>
+            <h1 className="text-2xl font-bold">List of Senior Citizens</h1>
           </div>
 
           {/* Profile Container */}

@@ -282,7 +282,7 @@ export default function SuperadminAdminsList() {
         </header>
 
         <main className="flex-1 overflow-y-auto p-5 bg-white">
-          {/* <SuperadminCreateAdmins/> */}
+          <SuperadminCreateAdmins/>
           <div>
             {/* <h3>List of admin accounts</h3> */}
             <div className="grid md:grid-cols-3 gap-2">
