@@ -183,7 +183,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         link: "/admin-dashboard",
       },
       {
-        name: "List of Users",
+        name: "List of Seniors",
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -271,7 +271,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         link: "/superadmin-dashboard",
       },
       {
-        name: "List of Users",
+        name: "List of Seniors",
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"

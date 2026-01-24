@@ -277,7 +277,7 @@ export default function SuperadminAdminsList() {
           </button>
 
           <div>
-            <h1 className="text-2xl font-bold">Superdmin Dashboard</h1>
+            <h1 className="text-2xl font-bold">List of Admin</h1>
           </div>
         </header>
 
@@ -417,7 +417,7 @@ export default function SuperadminAdminsList() {
 
           <div className="mt-6 overflow-hidden">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
-              Senior Citizen's Account List Table
+              Admin and Superadmin's Account List Table
             </h3>
 
             <div className="overflow-x-auto rounded-lg shadow-md ">
@@ -425,11 +425,11 @@ export default function SuperadminAdminsList() {
                 <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
                   <tr>
                     <th className="px-4 py-3 text-left">ID</th>
-                    <th className="px-4 py-3">Username</th>
+                    <th className="px-4 py-3 text-start">Username</th>
                     <th className="px-4 py-3 text-left">Email</th>
-                    <th className="px-4 py-3">Role</th>
-                    <th className="px-4 py-3">Created</th>
-                    <th className="px-4 py-3">Updated</th>
+                    <th className="px-4 py-3 text-start">Role</th>
+                    <th className="px-4 py-3 text-start">Created</th>
+                    <th className="px-4 py-3 text-start">Updated</th>
                     <th className="px-4 py-3 text-center">Actions</th>
                   </tr>
                 </thead>
@@ -462,8 +462,8 @@ export default function SuperadminAdminsList() {
                             <option>superadmin</option>
                           </select>
                         </td>
-                        <td>{admin.created_at}</td>
-                        <td>{admin.updated_at}</td>
+                        <td className="px-4 py-3">{admin.created_at}</td>
+                        <td className="px-4 py-3">{admin.updated_at}</td>
                         <td className="px-4 py-3 grid grid-cols-1 gap-2 justify-center">
                           <button
                             className="px-3 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
