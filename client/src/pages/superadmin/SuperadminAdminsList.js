@@ -520,49 +520,89 @@ export default function SuperadminAdminsList() {
           </div>
 
           {openEdit && (
-            <div className="popup">
-              <form onSubmit={handleEditAdmin}>
-                {!status && <p style={{ color: "red" }}>{response}</p>}
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
+                <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setOpenEdit(false)}
+                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+                  >
+                    ✕
+                  </button>
 
-                <label>Editing Admin {id}</label>
-                <br />
-                <label>Email</label>
-                <input
-                  type="email"
-                  placeholder="email@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.email}</small>
-                <br />
+                  {/* Modal title */}
+                  <h3 className="text-lg font-semibold text-cyan-600 mb-1">
+                    Edit account
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Edit an account for Admin and Superadmin
+                  </p>
 
-                <label>Username</label>
-                <input
-                  type="text"
-                  placeholder="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.username}</small>
-                <br />
+                  <form onSubmit={handleEditAdmin} className="bg-white">
+                    {!status && <p className="text-red-500">{response}</p>}
 
-                <button onClick={(e) => fetchAdmin(e)}>Reset</button>
-                <br />
+                    {/* <label>Editing Admin {id}</label> */}
+                    <div className="grid grid-cols-1 gap-4 mb-4">
+                      <div>
+                        <label className="text-sm text-gray-600">
+                          Username
+                        </label>
+                        <input
+                          className="mt-1 w-full border rounded px-3 py-2"
+                          type="text"
+                          placeholder="Username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <small className="text-red-500">
+                          {errors.username}
+                        </small>
+                      </div>
 
-                <button type="submit">Edit Admin</button>
-              </form>
+                      <div>
+                        <label className="text-sm text-gray-600">Email</label>
+                        <input
+                          className="mt-1 w-full border rounded px-3 py-2"
+                          type="email"
+                          placeholder="email@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <small className="text-red-500">{errors.email}</small>
+                      </div>
+                    </div>
 
-              <button
-                onClick={() => {
-                  setOpenEdit(false);
-                  setErrors({});
-                  setResponse("");
-                }}
-              >
-                Cancel
-              </button>
+                    {/* <button onClick={(e) => fetchAdmin(e)}>Reset</button> */}
+
+                    <div className="flex justify-between items-center">
+                      <button
+                        className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                        onClick={() => {
+                          setOpenEdit(false);
+                          setErrors({});
+                          setResponse("");
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-8 py-2 rounded bg-white border border-blue-700 text-blue-700 font-medium"
+                        onClick={(e) => fetchAdmin(e)}
+                      >
+                        Reset
+                      </button>
+                      <button
+                        className="px-10 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                        type="submit"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           )}
 
