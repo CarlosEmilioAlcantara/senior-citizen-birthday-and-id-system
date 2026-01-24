@@ -1082,7 +1082,8 @@ export default function UsersList() {
 
                     <div className="flex flex-col">
                       <p className="text-2xl text-center font-semibold text-gray-700">
-                        Are you sure you want to delete this Senior Citizen's Account?
+                        Are you sure you want to delete this Senior Citizen's
+                        Account?
                       </p>
                       <p className="text-sm tracking-wider text-center font-semibold text-gray-500">
                         This action will delete this entire account, including
@@ -1112,26 +1113,61 @@ export default function UsersList() {
             </div>
           )}
           {openCard && (
-            <div className="popup">
-              <label>Front</label>
-              <br />
-              <img src={cardFront} width={"200px"}></img>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
+              <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
+                {/* Close button */}
+                <button
+                  onClick={() => setOpenCard(false)}
+                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+                >
+                  ✕
+                </button>
+                {/* Modal title */}
+                <h3 className="text-lg font-semibold text-cyan-600 mb-1">
+                  Senior Citizen's ID
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  To Print Senior Citizen's ID
+                </p>
 
-              <br />
+                {/* Senior Citizen's ID */}
+                <div className="flex gap-2">
+                  <div>
+                    <label className="text-base font-semibold text-gray-600 mb-4">
+                      Front
+                    </label>
 
-              <label>Back</label>
-              <br />
-              <img src={cardBack} width={"200px"}></img>
+                    <img src={cardFront} width={"200px"}></img>
+                  </div>
 
-              <br />
-              <button
-                onClick={() => {
-                  handleDownloadID();
-                }}
-              >
-                Download ID
-              </button>
-              <button onClick={() => setOpenCard(false)}>Close</button>
+                  <div>
+                    <label className="text-base font-semibold text-gray-600 mb-4">
+                      Back
+                    </label>
+
+                    <img src={cardBack} width={"200px"}></img>
+                  </div>
+                </div>
+
+                {/* buttons */}
+                <div className="flex justify-between items-center gap-4 mt-4">
+                  <button
+                    className="px-6 md:px-8 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                    onClick={() => setOpenCard(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="px-10 md:px-12 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                    onClick={() => {
+                      handleDownloadID();
+                    }}
+                  >
+                    Download ID
+                  </button>
+                </div>
+              </div>
             </div>
           )}
           {/* <button>
