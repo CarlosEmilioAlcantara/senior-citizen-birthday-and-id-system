@@ -16,7 +16,7 @@ export default function UsersList() {
   const [emailOrFullname, setEmailOrFullname] = useState("");
   const [sort, setSort] = useState("Newest");
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(15);
+  const [perPage, setPerPage] = useState(2);
   const [totalPages, setTotalPages] = useState(1);
   const [pages, setPages] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -408,6 +408,43 @@ export default function UsersList() {
   // SideBar
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+
+  const getVisiblePages = (current, total, maxVisible = 5) => {
+    const pages = [];
+    const half = Math.floor(maxVisible / 2);
+
+    let start = Math.max(1, current - half);
+    let end = Math.min(total, current + half);
+
+    if (end - start + 1 < maxVisible) {
+      if (start === 1) {
+        end = Math.min(total, start + maxVisible - 1);
+      } else if (end === total) {
+        start = Math.max(1, end - maxVisible + 1);
+      }
+    }
+
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push("...");
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < total) {
+      if (end < total - 1) pages.push("...");
+      pages.push(total);
+    }
+
+    return pages;
+  };
+
+  const maxVisiblePages = window.innerWidth < 640 ? 3 : 5;
+
+
+
   return (
     <div className="flex bg-white md:h-screen">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -472,7 +509,7 @@ export default function UsersList() {
         </header>
 
         {/* SCROLLABLE  ADMIN LIST ACC CONTENT */}
-        <main className="flex-1  overflow-auto p-5 bg-white">
+        <main className="flex-1  overflow-auto px-5 py-3 bg-white">
           {/* <h3>List of Senior Citizens</h3> */}
           <div className="grid md:grid-cols-3 gap-2">
             <form onSubmit={handleFetchUsers}>
@@ -548,31 +585,31 @@ export default function UsersList() {
 
           {/* TABLE CONTAINER */}
           <div className="mt-6 overflow-hidden">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">
               Senior Citizen's Account List Table
             </h3>
             <div className="overflow-x-auto rounded-lg shadow-md ">
               <table className="min-w-[1400px] w-full border-collapse ">
                 <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
                   <tr>
-                    <th className="px-4 py-3 text-left">ID</th>
-                    <th className="px-4 py-3">Picture</th>
-                    <th className="px-4 py-3">Signature</th>
-                    <th className="px-4 py-3 text-left">Full Name</th>
-                    <th className="px-4 py-3 text-left">Email</th>
-                    <th className="px-4 py-3">Age</th>
-                    <th className="px-4 py-3">
+                    <th className="px-4 py-2 text-left">ID</th>
+                    <th className="px-4 py-2">Picture</th>
+                    <th className="px-4 py-2">Signature</th>
+                    <th className="px-4 py-2 text-left">Full Name</th>
+                    <th className="px-4 py-2 text-left">Email</th>
+                    <th className="px-4 py-2">Age</th>
+                    <th className="px-4 py-2">
                       Birthday
                       <div className="text-xs font-normal">MM/DD/YYYY</div>
                     </th>
-                    <th className="px-4 py-3">Gender</th>
-                    <th className="px-4 py-3 text-left">Address</th>
-                    <th className="px-4 py-3 text-left">Emergency Contact</th>
-                    <th className="px-4 py-3">Contact #</th>
-                    <th className="px-4 py-3">Verification</th>
-                    <th className="px-4 py-3">Created</th>
-                    <th className="px-4 py-3">Updated</th>
-                    <th className="px-4 py-3 text-center">Actions</th>
+                    <th className="px-4 py-2">Gender</th>
+                    <th className="px-4 py-2 text-left">Address</th>
+                    <th className="px-4 py-2 text-left">Emergency Contact</th>
+                    <th className="px-4 py-2">Contact #</th>
+                    <th className="px-4 py-2">Verification</th>
+                    <th className="px-4 py-2">Created</th>
+                    <th className="px-4 py-2">Updated</th>
+                    <th className="px-4 py-2 text-center">Actions</th>
                   </tr>
                 </thead>
 
@@ -585,9 +622,9 @@ export default function UsersList() {
                     )
                     .map((user) => (
                       <tr key={user.senior_id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3">{user.senior_id}</td>
+                        <td className="px-4 py-2">{user.senior_id}</td>
 
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2">
                           {pictures.map(
                             (picture) =>
                               picture.senior_id === user.senior_id && (
@@ -600,7 +637,7 @@ export default function UsersList() {
                           )}
                         </td>
 
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2">
                           {signatures.map(
                             (signature) =>
                               signature.senior_id === user.senior_id && (
@@ -613,31 +650,31 @@ export default function UsersList() {
                           )}
                         </td>
 
-                        <td className="px-4 py-3 font-medium">
+                        <td className="px-4 py-2 font-medium">
                           {user.first_name} {user.middle_name} {user.last_name}
                         </td>
 
-                        <td className="px-4 py-3">{user.email}</td>
-                        <td className="px-4 py-3 text-center">{user.age}</td>
-                        <td className="px-4 py-3 text-center">
+                        <td className="px-4 py-2">{user.email}</td>
+                        <td className="px-4 py-2 text-center">{user.age}</td>
+                        <td className="px-4 py-2 text-center">
                           {user.birthday}
                         </td>
-                        <td className="px-4 py-3 text-center">{user.gender}</td>
+                        <td className="px-4 py-2 text-center">{user.gender}</td>
 
-                        <td className="px-4 py-3 max-w-xs">
+                        <td className="px-4 py-2 max-w-xs">
                           {user.house} {user.street},{" "}
                           {(user.subdivision && user.barangay) || user.barangay}
                           , {user.city}, {user.province}
                         </td>
 
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2">
                           {user.emergency_fname} {user.emergency_mname}{" "}
                           {user.emergency_lname}
                         </td>
 
-                        <td className="px-4 py-3">{user.emergency_number}</td>
+                        <td className="px-4 py-2">{user.emergency_number}</td>
 
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2">
                           <select
                             className="border rounded px-2 py-1 text-sm"
                             value={verifications[user.senior_id]}
@@ -654,10 +691,10 @@ export default function UsersList() {
                           </select>
                         </td>
 
-                        <td className="px-4 py-3">{user.created_at}</td>
-                        <td className="px-4 py-3">{user.updated_at}</td>
+                        <td className="px-4 py-2">{user.created_at}</td>
+                        <td className="px-4 py-2">{user.updated_at}</td>
 
-                        <td className="px-4 py-3 grid grid-cols-1 gap-2 justify-center">
+                        <td className="px-4 py-2 grid grid-cols-1 gap-2 justify-center">
                           <button
                             className="px-3 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
                             onClick={() => {
@@ -737,7 +774,7 @@ export default function UsersList() {
           </div>
 
           {/* PAGINATION  */}
-          <div className="flex justify-center items-center gap-2 mt-6">
+          <div className="flex justify-center items-center gap-2 mt-4">
             <button
               disabled={page <= 1}
               onClick={() => setPage(page - 1)}
@@ -745,7 +782,7 @@ export default function UsersList() {
             >
               Prev
             </button>
-            {pages.map((num) => (
+            {/* {pages.map((num) => (
               <button
                 key={num}
                 onClick={() => setPage(num)}
@@ -757,7 +794,28 @@ export default function UsersList() {
               >
                 {num}
               </button>
-            ))}
+            ))} */}
+            
+            {getVisiblePages(page, totalPages, 5).map((num, idx) =>
+              num === "..." ? (
+                <span key={idx} className="px-2 text-gray-500">
+                  …
+                </span>
+              ) : (
+                <button
+                  key={num}
+                  onClick={() => setPage(num)}
+                  className={`px-3 py-1 rounded border ${
+                    page === num
+                      ? "bg-cyan-600 text-white border-cyan-600"
+                      : "hover:bg-slate-100"
+                  }`}
+                >
+                  {num}
+                </button>
+              ),
+            )}
+
             <button
               disabled={page >= totalPages}
               onClick={() => setPage(page + 1)}

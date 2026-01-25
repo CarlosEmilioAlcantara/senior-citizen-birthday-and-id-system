@@ -21,7 +21,7 @@ export default function SuperadminAdminsList() {
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Newest");
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(15);
+  const [perPage, setPerPage] = useState(3);
   const [totalPages, setTotalPages] = useState(1);
   const [pages, setPages] = useState([]);
   const [errors, setErrors] = useState({});
@@ -283,7 +283,7 @@ export default function SuperadminAdminsList() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-5 bg-white">
+        <main className="flex-1 overflow-y-auto  px-5 py-3 bg-white">
           {/* <SuperadminCreateAdmins/> */}
           <div>
             {/* <h3>List of admin accounts</h3> */}
@@ -489,7 +489,7 @@ export default function SuperadminAdminsList() {
           </div>
 
           {/* PAGINATION  */}
-          <div className="flex justify-center items-center gap-2 mt-6">
+          <div className="flex justify-center items-center gap-2 mt-4">
             <button
               disabled={page <= 1}
               onClick={() => setPage(page - 1)}
