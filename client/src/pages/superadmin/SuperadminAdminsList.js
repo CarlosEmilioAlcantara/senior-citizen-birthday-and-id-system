@@ -283,7 +283,7 @@ export default function SuperadminAdminsList() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto  px-5 py-3 bg-white">
+        <main className="flex-1 overflow-y-auto  p-5 bg-white">
           {/* <SuperadminCreateAdmins/> */}
           <div>
             {/* <h3>List of admin accounts</h3> */}
