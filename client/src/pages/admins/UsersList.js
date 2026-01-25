@@ -768,283 +768,299 @@ export default function UsersList() {
           </div>
 
           {openEdit && (
-            <div className="popup">
-              {!status && <p style={{ color: "red" }}>{response}</p>}
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              {/* Modal Card (same as User Reg) */}
+              <div
+                // className="bg-white w-full max-w-5xl rounded-lg shadow-lg p-6  border-2 border-cyan-100 "
+                className="relative z-10 w-full max-w-5xl mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto"
+              >
+                {!status && (
+                  <p className="text-red-600 font-medium mb-4">{response}</p>
+                )}
 
-              <h3>User Edit</h3>
-              <form onSubmit={handleEditUser}>
-                <label>1x1 / Passport Size Image</label>
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  name="id_picture"
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.id_picture_error}
-                </small>
-                <br />
+                {/* Modal title */}
+                <h3 className="text-2xl font-semibold text-cyan-600 mb-1">
+                  Edit account
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Edit an account for Admin and Superadmin
+                </p>
 
-                <label>Signature on white background</label>
-                <input type="file" name="signature_picture" />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.signature_picture_error}
-                </small>
-                <br />
+                <form onSubmit={handleEditUser} className="space-y-6">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setOpenEdit(false)}
+                    className="absolute top-10 right-3 text-gray-500 hover:text-gray-800"
+                  >
+                    ✕
+                  </button>
 
-                <label>Email</label>
-                <input
-                  type="email"
-                  placeholder="Email..."
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.email_error}</small>
-                <br />
+                  {/* UPLOADS */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        1x1 / Passport Size Image
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        name="id_picture"
+                        className="w-full border rounded p-2"
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.id_picture_error}
+                      </p>
+                    </div>
 
-                <label>First Name</label>
-                <input
-                  type="text"
-                  placeholder="First name..."
-                  name="first_name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.first_name_error}
-                </small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Signature (White Background)
+                      </label>
+                      <input
+                        type="file"
+                        name="signature_picture"
+                        className="w-full border rounded p-2"
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.signature_picture_error}
+                      </p>
+                    </div>
+                  </div>
 
-                <label>Middle Name</label>
-                <input
-                  type="text"
-                  placeholder="Middle name..."
-                  name="middle_name"
-                  value={middleName}
-                  onChange={(e) => setMiddleName(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.middle_name_error}
-                </small>
-                <br />
+                  {/* ACCOUNT */}
+                  <div>
+                    <label className="block font-medium text-gray-700">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className="w-full border rounded p-2"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <p className="text-red-500 text-xs">{errors.email_error}</p>
+                  </div>
 
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  placeholder="Last name..."
-                  name="last_name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.last_name_error}</small>
-                <br />
+                  {/* PERSONAL INFO */}
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        First Name
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.first_name_error}
+                      </p>
+                    </div>
 
-                <label>Address</label>
-                <br />
-                <label>House No. / Building / Lot No. *</label>
-                <input
-                  type="text"
-                  placeholder="144"
-                  name="house"
-                  value={house}
-                  onChange={(e) => setHouse(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.house}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Middle Name
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        value={middleName}
+                        onChange={(e) => setMiddleName(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.middle_name_error}
+                      </p>
+                    </div>
 
-                <label>Street *</label>
-                <input
-                  type="text"
-                  placeholder="Bayabas St."
-                  name="street"
-                  value={street}
-                  onChange={(e) => setStreet(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.street}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Last Name
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.last_name_error}
+                      </p>
+                    </div>
+                  </div>
 
-                <label>Subdivision</label>
-                <input
-                  type="text"
-                  placeholder="Sayote Village"
-                  name="subdivision"
-                  value={subdivision}
-                  onChange={(e) => setSubdivision(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.subdivision}</small>
-                <br />
+                  {/* ADDRESS */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        House No.
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        value={house}
+                        onChange={(e) => setHouse(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">{errors.house}</p>
+                    </div>
 
-                <label>Barangay *</label>
-                <select
-                  name="barangay"
-                  value={barangay}
-                  onChange={(e) => setBarangay(e.target.value)}
-                >
-                  <option>-- Please select an option --</option>
-                  <option>Addition Hills</option>
-                  <option>Balong-Bato</option>
-                  <option>Batis</option>
-                  <option>Corazon De Jesus</option>
-                  <option>Ermitaño</option>
-                  <option>Halo-halo</option>
-                  <option>Isabelita</option>
-                  <option>Kabayanan</option>
-                  <option>Little Baguio</option>
-                  <option>Maytunas</option>
-                  <option>Onse</option>
-                  <option>Pasadeña</option>
-                  <option>Pedro Cruz</option>
-                  <option>Progreso</option>
-                  <option>Rivera</option>
-                  <option>Salapan</option>
-                  <option>San Perfecto</option>
-                  <option>Santa Lucia</option>
-                  <option>Tibagan</option>
-                  <option>West Crame</option>
-                  <option>Greenhills</option>
-                </select>
-                <br />
-                <small style={{ color: "red" }}>{errors.barangay}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Street
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">{errors.street}</p>
+                    </div>
 
-                <label>City / Municipality</label>
-                <input
-                  type="text"
-                  placeholder="San Juan"
-                  name="city"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  disabled
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.city}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Subdivision
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        value={subdivision}
+                        onChange={(e) => setSubdivision(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.subdivision}
+                      </p>
+                    </div>
 
-                <label>Province</label>
-                <input
-                  type="text"
-                  placeholder="Metro Manila"
-                  name="province"
-                  value={province}
-                  onChange={(e) => setProvince(e.target.value)}
-                  disabled
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.province}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Barangay
+                      </label>
+                      <select
+                        className="w-full border rounded p-2"
+                        value={barangay}
+                        onChange={(e) => setBarangay(e.target.value)}
+                      >
+                        <option value="">-- Select --</option>
+                        <option>Addition Hills</option>
+                        <option>Balong-Bato</option>
+                        <option>Greenhills</option>
+                      </select>
+                      <p className="text-red-500 text-xs">{errors.barangay}</p>
+                    </div>
+                  </div>
 
-                <label>Date of Birth</label>
-                <input
-                  type="date"
-                  name="birthday"
-                  value={birthday}
-                  onChange={(e) => {
-                    setBirthday(e.target.value);
-                    handleSetAge();
-                  }}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.date_of_birth_error}
-                </small>
-                <br />
+                  {/* BIRTHDAY */}
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        className="w-full border rounded p-2"
+                        value={birthday}
+                        onChange={(e) => {
+                          setBirthday(e.target.value);
+                          handleSetAge();
+                        }}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.date_of_birth_error}
+                      </p>
+                    </div>
 
-                <label>Age</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="150"
-                  name="age"
-                  value={age}
-                  disabled
-                />
-                <br />
-                <small style={{ color: "red" }}>{errors.age_error}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Age
+                      </label>
+                      <input
+                        disabled
+                        className="w-full border rounded p-2 bg-gray-100"
+                        value={age}
+                      />
+                    </div>
 
-                <label>Gender</label>
-                <select
-                  name="gender"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                >
-                  <option>-- Please select an option --</option>
-                  <option>Male</option>
-                  <option>Female</option>
-                </select>
-                <br />
-                <small style={{ color: "red" }}>{errors.gender_error}</small>
-                <br />
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Gender
+                      </label>
+                      <select
+                        className="w-full border rounded p-2"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <option value="">-- Select --</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                      </select>
+                      <p className="text-red-500 text-xs">
+                        {errors.gender_error}
+                      </p>
+                    </div>
+                  </div>
 
-                <label>Emergency Contact's First Name</label>
-                <input
-                  type="text"
-                  name="emergency_fname"
-                  value={emergencyFirstName}
-                  onChange={(e) => setEmergencyFirstName(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.emergency_first_name_error}
-                </small>
-                <br />
+                  {/* EMERGENCY CONTACT */}
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <input
+                      className="border rounded p-2"
+                      placeholder="Emergency First Name"
+                      value={emergencyFirstName}
+                      onChange={(e) => setEmergencyFirstName(e.target.value)}
+                    />
+                    <input
+                      className="border rounded p-2"
+                      placeholder="Emergency Middle Name"
+                      value={emergencyMiddleName}
+                      onChange={(e) => setEmergencyMiddleName(e.target.value)}
+                    />
+                    <input
+                      className="border rounded p-2"
+                      placeholder="Emergency Last Name"
+                      value={emergencyLastName}
+                      onChange={(e) => setEmergencyLastName(e.target.value)}
+                    />
+                  </div>
 
-                <label>Emergency Contact's Middle Name</label>
-                <input
-                  type="text"
-                  name="emergency_mname"
-                  value={emergencyMiddleName}
-                  onChange={(e) => setEmergencyMiddleName(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.emergency_middle_name_error}
-                </small>
-                <br />
+                  <div>
+                    <label className="block font-medium text-gray-700">
+                      Emergency Contact Number
+                    </label>
+                    <input
+                      className="w-full border rounded p-2"
+                      value={emergencyNumber}
+                      onChange={(e) => setEmergencyNumber(e.target.value)}
+                    />
+                    <p className="text-red-500 text-xs">
+                      {errors.emergency_number_error}
+                    </p>
+                  </div>
 
-                <label>Emergency Contact's Last Name</label>
-                <input
-                  type="text"
-                  name="emergency_lname"
-                  value={emergencyLastName}
-                  onChange={(e) => setEmergencyLastName(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.emergency_last_name_error}
-                </small>
-                <br />
+                  {/* ACTIONS */}
+                  <div className="flex justify-between items-center">
+                    <button
+                      type="button"
+                      onClick={() => setOpenEdit(false)}
+                      className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => fetchUser(e)}
+                      className="px-4 md:px-8 py-2 rounded bg-white border border-blue-700 text-blue-700 font-medium"
+                    >
+                      Reset
+                    </button>
 
-                <label>Emergency Contact's Contact Number</label>
-                <input
-                  type="tel"
-                  name="emergency_number"
-                  value={emergencyNumber}
-                  onChange={(e) => setEmergencyNumber(e.target.value)}
-                />
-                <br />
-                <small style={{ color: "red" }}>
-                  {errors.emergency_number_error}
-                </small>
-                <br />
-
-                <button onClick={(e) => fetchUser(e)}>Reset</button>
-                <br />
-
-                <button type="submit">Submit</button>
-              </form>
-              <button onClick={() => setOpenEdit(false)}>Cancel</button>
+                    <div>
+                      <button
+                        type="submit"
+                        className="px-6 md:px-10 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
+
           {openDelete && (
             <div className="popup">
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

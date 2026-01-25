@@ -520,7 +520,6 @@ export default function SuperadminAdminsList() {
           </div>
 
           {openEdit && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                 {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
                 <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
@@ -602,7 +601,6 @@ export default function SuperadminAdminsList() {
                   </form>
                 </div>
               </div>
-            </div>
           )}
 
           {openDelete && (
