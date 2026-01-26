@@ -1031,11 +1031,11 @@ export default function UsersList() {
                   </div>
 
                   {/* ACTIONS */}
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => setOpenEdit(false)}
-                      className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                      className="px-4 md:px-8  py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
                     >
                       Cancel
                     </button>
@@ -1050,7 +1050,7 @@ export default function UsersList() {
                     <div>
                       <button
                         type="submit"
-                        className="px-6 md:px-10 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                        className="px-6 md:px-12 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
                       >
                         Save Changes
                       </button>
