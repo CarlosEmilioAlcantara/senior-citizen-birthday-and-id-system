@@ -811,14 +811,14 @@ export default function UsersList() {
                   />
 
                   <p className="text-red-500 text-xs">
-                    {errors.id_picture_error}
+                    {errors.id_picture}
                   </p>
 
                   <label>Signature on white background</label>
                   <input type="file" name="signature_picture" />
 
                   <p className="text-red-500 text-xs">
-                    {errors.signature_picture_error}
+                    {errors.signature_picture}
                   </p>
 
                   <div>
@@ -832,9 +832,8 @@ export default function UsersList() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
+                    <p className="text-red-500 text-xs">{errors.email}</p>
                   </div>
-
-                  <p className="text-red-500 text-xs">{errors.email_error}</p>
 
                   {/* PERSONAL INFO */}
                   <div className="grid md:grid-cols-3 gap-4">
@@ -852,7 +851,7 @@ export default function UsersList() {
                       />
 
                       <p className="text-red-500 text-xs">
-                        {errors.first_name_error}
+                        {errors.first_name}
                       </p>
                     </div>
 
@@ -870,7 +869,7 @@ export default function UsersList() {
                       />
 
                       <p className="text-red-500 text-xs">
-                        {errors.middle_name_error}
+                        {errors.middle_name}
                       </p>
                     </div>
 
@@ -887,9 +886,7 @@ export default function UsersList() {
                         onChange={(e) => setLastName(e.target.value)}
                       />
 
-                      <p className="text-red-500 text-xs">
-                        {errors.last_name_error}
-                      </p>
+                      <p className="text-red-500 text-xs">{errors.last_name}</p>
                     </div>
                   </div>
 
@@ -1036,7 +1033,7 @@ export default function UsersList() {
                       />
 
                       <p className="text-red-500 text-xs">
-                        {errors.date_of_birth_error}
+                        {errors.birthday}
                       </p>
                     </div>
 
@@ -1054,7 +1051,7 @@ export default function UsersList() {
                         disabled
                       />
 
-                      <p className="text-red-500 text-xs">{errors.age_error}</p>
+                      <p className="text-red-500 text-xs">{errors.age}</p>
                     </div>
 
                     <div>
@@ -1072,9 +1069,7 @@ export default function UsersList() {
                         <option>Female</option>
                       </select>
 
-                      <p className="text-red-500 text-xs">
-                        {errors.gender_error}
-                      </p>
+                      <p className="text-red-500 text-xs">{errors.gender}</p>
                     </div>
                   </div>
 
@@ -1091,9 +1086,9 @@ export default function UsersList() {
                         value={emergencyFirstName}
                         onChange={(e) => setEmergencyFirstName(e.target.value)}
                       />
-                      <p className="text-red-500 text-xs">
-                        {errors.emergency_first_name_error}
-                      </p>
+                      <small className="text-red-500 text-xs">
+                        {errors.emergency_fname}
+                      </small>
                     </div>
 
                     <div>
@@ -1109,7 +1104,7 @@ export default function UsersList() {
                       />
 
                       <p className="text-red-500 text-xs">
-                        {errors.emergency_middle_name_error}
+                        {errors.emergency_mname}
                       </p>
                     </div>
 
@@ -1126,7 +1121,7 @@ export default function UsersList() {
                       />
 
                       <p className="text-red-500 text-xs">
-                        {errors.emergency_last_name_error}
+                        {errors.emergency_lname}
                       </p>
                     </div>
 
@@ -1143,7 +1138,7 @@ export default function UsersList() {
                       />
 
                       <p className="text-red-500 text-xs">
-                        {errors.emergency_number_error}
+                        {errors.emergency_number}
                       </p>
                     </div>
                   </div>
