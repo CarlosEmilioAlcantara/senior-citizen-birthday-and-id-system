@@ -390,7 +390,10 @@ export default function SuperadminAdminsList() {
             {openCreate && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                 {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
-                <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
+                <div 
+                className="relative z-10 w-full max-w-2xl mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto"
+                // className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative border-2 border-cyan-100"
+                >
                   {/* Close button */}
                   <button
                     onClick={() => setOpenCreate(false)}

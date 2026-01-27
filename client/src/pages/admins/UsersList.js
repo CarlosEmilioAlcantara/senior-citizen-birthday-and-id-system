@@ -548,7 +548,7 @@ export default function UsersList() {
 
           {/* TABLE CONTAINER */}
           <div className="mt-6 overflow-hidden">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+            <h3 className="text-xl text-center md:text-start md:text-2xl font-bold text-gray-800 mb-4">
               Senior Citizen's Account List Table
             </h3>
             <div className="overflow-x-auto rounded-lg shadow-md ">
