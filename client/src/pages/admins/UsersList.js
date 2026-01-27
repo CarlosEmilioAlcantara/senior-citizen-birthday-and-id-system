@@ -1218,15 +1218,15 @@ export default function UsersList() {
                     </div>
 
                     <div>
-                      <div className="flex justify-between items-center gap-4">
+                      <div className="flex justify-between items-center gap-6">
                         <button
-                          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                          className="px-4 md:px-6 py-2 rounded bg-gray-200 hover:bg-gray-300"
                           onClick={() => setOpenDelete(false)}
                         >
                           No, cancel
                         </button>
                         <button
-                          className="px-6 py-2 rounded bg-red-700 hover:bg-red-800 text-white font-medium"
+                          className="px-6 md:px-12 py-2 rounded bg-red-700 hover:bg-red-800 text-white font-medium"
                           type="submit"
                         >
                           Yes, Delete Account

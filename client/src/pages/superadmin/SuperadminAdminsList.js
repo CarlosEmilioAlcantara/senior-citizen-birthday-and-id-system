@@ -520,93 +520,91 @@ export default function SuperadminAdminsList() {
           </div>
 
           {openEdit && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
-                <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
-                  {/* Close button */}
-                  <button
-                    onClick={() => setOpenEdit(false)}
-                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-                  >
-                    ✕
-                  </button>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
+              <div
+                className="relative z-10 w-full max-w-md mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto"
+                // className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100"
+              >
+                {/* Close button */}
+                <button
+                  onClick={() => setOpenEdit(false)}
+                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+                >
+                  ✕
+                </button>
 
-                  {/* Modal title */}
-                  <h3 className="text-lg font-semibold text-cyan-600 mb-1">
-                    Edit account
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Edit an account for Admin and Superadmin
-                  </p>
+                {/* Modal title */}
+                <h3 className="text-lg font-semibold text-cyan-600 mb-1">
+                  Edit account
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Edit an account for Admin and Superadmin
+                </p>
 
-                  <form onSubmit={handleEditAdmin} className="bg-white">
-                    {!status && <p className="text-red-500">{response}</p>}
+                <form onSubmit={handleEditAdmin} className="bg-white">
+                  {!status && <p className="text-red-500">{response}</p>}
 
-                    <div className="grid grid-cols-1 gap-4 mb-4">
-                      <div>
-                        <label className="text-sm text-gray-600">
-                          Username
-                        </label>
-                        <input
-                          className="mt-1 w-full border rounded px-3 py-2"
-                          type="text"
-                          placeholder="Username"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <small className="text-red-500">
-                          {errors.username}
-                        </small>
-                      </div>
-
-                      <div>
-                        <label className="text-sm text-gray-600">Email</label>
-                        <input
-                          className="mt-1 w-full border rounded px-3 py-2"
-                          type="email"
-                          placeholder="email@email.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <small className="text-red-500">{errors.email}</small>
-                      </div>
+                  <div className="grid grid-cols-1 gap-4 mb-4">
+                    <div>
+                      <label className="text-sm text-gray-600">Username</label>
+                      <input
+                        className="mt-1 w-full border rounded px-3 py-2"
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
+                      <small className="text-red-500">{errors.username}</small>
                     </div>
 
-                    {/* <button onClick={(e) => fetchAdmin(e)}>Reset</button> */}
-
-                    <div className="flex justify-between items-center">
-                      <button
-                        className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-                        onClick={() => {
-                          setOpenEdit(false);
-                          setErrors({});
-                          setResponse("");
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="px-8 py-2 rounded bg-white border border-blue-700 text-blue-700 font-medium"
-                        onClick={(e) => fetchAdmin(e)}
-                      >
-                        Reset
-                      </button>
-                      <button
-                        className="px-10 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
-                        type="submit"
-                      >
-                        Save Changes
-                      </button>
+                    <div>
+                      <label className="text-sm text-gray-600">Email</label>
+                      <input
+                        className="mt-1 w-full border rounded px-3 py-2"
+                        type="email"
+                        placeholder="email@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <small className="text-red-500">{errors.email}</small>
                     </div>
-                  </form>
-                </div>
+                  </div>
+
+                  {/* ACTIONS */}
+                  <div className="flex justify-between items-center">
+                    <button
+                      className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                      onClick={() => {
+                        setOpenEdit(false);
+                        setErrors({});
+                        setResponse("");
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="px-4 md:px-8 py-2 rounded bg-white border hover:bg-blue-100 border-blue-700 text-blue-700 font-medium"
+                      onClick={(e) => fetchAdmin(e)}
+                    >
+                      Reset
+                    </button>
+                    <button
+                      className="px-8 md:px-10 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                      type="submit"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
               </div>
+            </div>
           )}
 
           {openDelete && (
             <div className="popup">
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border border-red-500 ">
+                <div className="relative z-10 w-full max-w-md mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto">
                   {/* Close button */}
                   <button
                     onClick={() => setOpenDelete(false)}
@@ -649,15 +647,15 @@ export default function SuperadminAdminsList() {
                     </div>
                     {/* <label>Delete Confirmation for {id}</label> */}
                     <div>
-                      <div className="flex justify-between items-center gap-4">
+                      <div className="flex justify-between items-center gap-6">
                         <button
-                          className="px-6 md:px-8 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                          className="px-4 md:px-6 py-2 rounded bg-gray-200 hover:bg-gray-300"
                           onClick={() => setOpenDelete(false)}
                         >
                           No, cancel
                         </button>
                         <button
-                          className="px-10 md:px-12 py-2 rounded bg-red-700 hover:bg-red-800 text-white font-medium"
+                          className="px-6 md:px-12 py-2 rounded bg-red-700 hover:bg-red-800 text-white font-medium"
                           type="submit"
                         >
                           Yes, Delete Account
