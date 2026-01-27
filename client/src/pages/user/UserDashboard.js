@@ -250,12 +250,12 @@ export default function UserDashboard() {
                 </h3>
 
                 {/* CARD PICTURE */}
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <p className="text-gray-500 text-base mb-2">Card Picture</p>
 
                   <div className="flex justify-center sm:justify-start">
                     <div className="w-64 h-40 bg-gray-100 border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden">
-                      {/* PLACEHOLDER IMAGE */}
+                     
                       <img
                         src="https://via.placeholder.com/256x160?text=Senior+ID+Card"
                         alt="Senior ID Card"
@@ -263,7 +263,7 @@ export default function UserDashboard() {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {/* ID NUMBER */}
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">

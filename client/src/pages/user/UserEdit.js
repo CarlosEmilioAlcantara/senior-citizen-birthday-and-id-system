@@ -559,7 +559,7 @@ export default function UserEdit() {
               <div>
                 <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
                   <label className="text-gray-500 text-base">
-                    Date of Birth
+                    Date of Birth *
                   </label>
                   <input
                     type="date"
@@ -594,7 +594,7 @@ export default function UserEdit() {
 
               <div>
                 <div className="mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                  <label className="text-gray-500 text-base">Gender</label>
+                  <label className="text-gray-500 text-base">Gender *</label>
                   <select
                     name="gender"
                     className="border rounded w-full p-2 font-medium text-gray-700 text-lg sm:text-base break-words sm:text-right max-w-full sm:max-w-[70%]"

@@ -361,8 +361,8 @@ export default function UserRegister() {
                     step === index + 1
                       ? "bg-blue-600"
                       : step > index + 1
-                      ? "bg-blue-700"
-                      : "bg-gray-400"
+                        ? "bg-blue-700"
+                        : "bg-gray-400"
                   }`}
                   >
                     {step > index + 1 ? (
@@ -394,7 +394,7 @@ export default function UserRegister() {
                   {label}
                 </p>
               </div>
-            )
+            ),
           )}
         </div>
 
@@ -490,7 +490,7 @@ export default function UserRegister() {
               {/* HOUSE NUMBER (digits only) */}
               <div>
                 <label className="block text-gray-700 font-medium">
-                  House Number
+                  House No. / Building / Lot No. *
                 </label>
                 <input
                   name="house"
@@ -509,7 +509,7 @@ export default function UserRegister() {
               {/* STREET */}
               <div>
                 <label className="block text-gray-700 font-medium">
-                  Street
+                  Street *
                 </label>
                 <input
                   name="street"
@@ -543,7 +543,7 @@ export default function UserRegister() {
               {/* Barangay */}
               <div>
                 <label className="block text-gray-700 font-medium">
-                  Barangay
+                  Barangay *
                 </label>
                 <select
                   name="barangay"
@@ -586,7 +586,7 @@ export default function UserRegister() {
               <div>
                 <div>
                   <label className="block text-gray-700 font-medium">
-                    Date of Birth
+                    Date of Birth *
                   </label>
                   <p className="text-xs text-gray-500 mb-1 md:hidden">
                     (Click the calendar and select your birth date)
@@ -620,7 +620,7 @@ export default function UserRegister() {
 
               <div>
                 <label className="block text-gray-700 font-medium">
-                  Gender
+                  Gender *
                 </label>
                 <select
                   name="gender"
