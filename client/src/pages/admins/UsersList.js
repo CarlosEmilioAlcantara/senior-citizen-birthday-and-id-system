@@ -772,27 +772,32 @@ export default function UsersList() {
               <div className="relative z-10 w-full max-w-5xl mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto">
                 {!status && <p style={{ color: "red" }}>{response}</p>}
 
-                <h3>User Edit</h3>
-                <form onSubmit={handleEditUser}>
+                {/* Modal title */}
+                <h3 className="text-2xl font-semibold text-cyan-600 mb-1">
+                  Edit account
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Edit an account for Senior Citizens
+                </p>
+
+                <form onSubmit={handleEditUser} className="space-y-6">
                   <label>1x1 / Passport Size Image</label>
                   <input
                     type="file"
                     accept="image/png, image/jpeg"
                     name="id_picture"
                   />
-                  <br />
-                  <small style={{ color: "red" }}>
+
+                  <p className="text-red-500 text-xs">
                     {errors.id_picture_error}
-                  </small>
-                  <br />
+                  </p>
 
                   <label>Signature on white background</label>
                   <input type="file" name="signature_picture" />
-                  <br />
-                  <small style={{ color: "red" }}>
+
+                  <p className="text-red-500 text-xs">
                     {errors.signature_picture_error}
-                  </small>
-                  <br />
+                  </p>
 
                   <label>Email</label>
                   <input
@@ -802,240 +807,319 @@ export default function UsersList() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.email_error}</small>
-                  <br />
 
-                  <label>First Name</label>
-                  <input
-                    type="text"
-                    placeholder="First name..."
-                    name="first_name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>
-                    {errors.first_name_error}
-                  </small>
-                  <br />
+                  <p className="text-red-500 text-xs">{errors.email_error}</p>
 
-                  <label>Middle Name</label>
-                  <input
-                    type="text"
-                    placeholder="Middle name..."
-                    name="middle_name"
-                    value={middleName}
-                    onChange={(e) => setMiddleName(e.target.value)}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>
-                    {errors.middle_name_error}
-                  </small>
-                  <br />
-
-                  <label>Last Name</label>
-                  <input
-                    type="text"
-                    placeholder="Last name..."
-                    name="last_name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>
-                    {errors.last_name_error}
-                  </small>
-                  <br />
-
-                  <label>Address</label>
-                  <br />
-                  <label>House No. / Building / Lot No. *</label>
-                  <input
-                    type="text"
-                    placeholder="144"
-                    name="house"
-                    value={house}
-                    onChange={(e) => setHouse(e.target.value)}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.house}</small>
-                  <br />
-
-                  <label>Street *</label>
-                  <input
-                    type="text"
-                    placeholder="Bayabas St."
-                    name="street"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.street}</small>
-                  <br />
-
-                  <label>Subdivision</label>
-                  <input
-                    type="text"
-                    placeholder="Sayote Village"
-                    name="subdivision"
-                    value={subdivision}
-                    onChange={(e) => setSubdivision(e.target.value)}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.subdivision}</small>
-                  <br />
-
-                  <label>Barangay *</label>
-                  <select
-                    name="barangay"
-                    value={barangay}
-                    onChange={(e) => setBarangay(e.target.value)}
-                  >
-                    <option>-- Please select an option --</option>
-                    <option>Addition Hills</option>
-                    <option>Balong-Bato</option>
-                    <option>Batis</option>
-                    <option>Corazon De Jesus</option>
-                    <option>Ermitaño</option>
-                    <option>Halo-halo</option>
-                    <option>Isabelita</option>
-                    <option>Kabayanan</option>
-                    <option>Little Baguio</option>
-                    <option>Maytunas</option>
-                    <option>Onse</option>
-                    <option>Pasadeña</option>
-                    <option>Pedro Cruz</option>
-                    <option>Progreso</option>
-                    <option>Rivera</option>
-                    <option>Salapan</option>
-                    <option>San Perfecto</option>
-                    <option>Santa Lucia</option>
-                    <option>Tibagan</option>
-                    <option>West Crame</option>
-                    <option>Greenhills</option>
-                  </select>
-                  <br />
-                  <small style={{ color: "red" }}>{errors.barangay}</small>
-                  <br />
-
-                  <label>City / Municipality</label>
-                  <input
-                    type="text"
-                    placeholder="San Juan"
-                    name="city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    disabled
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.city}</small>
-                  <br />
-
-                  <label>Province</label>
-                  <input
-                    type="text"
-                    placeholder="Metro Manila"
-                    name="province"
-                    value={province}
-                    onChange={(e) => setProvince(e.target.value)}
-                    disabled
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.province}</small>
-                  <br />
-
-                  <label>Date of Birth</label>
-                  <input
-                    type="date"
-                    name="birthday"
-                    value={birthday}
-                    onChange={(e) => {
-                      setBirthday(e.target.value);
-                      handleSetAge();
-                    }}
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>
-                    {errors.date_of_birth_error}
-                  </small>
-                  <br />
-
-                  <label>Age</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="150"
-                    name="age"
-                    value={age}
-                    disabled
-                  />
-                  <br />
-                  <small style={{ color: "red" }}>{errors.age_error}</small>
-                  <br />
-
-                  <label>Gender</label>
-                  <select
-                    name="gender"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                  >
-                    <option>-- Please select an option --</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
-                  <br />
-                  <small style={{ color: "red" }}>{errors.gender_error}</small>
-                  <br />
-
+                  {/* PERSONAL INFO */}
                   <div className="grid md:grid-cols-3 gap-4">
-                    <label>Emergency Contact's First Name</label>
-                    <input
-                      className="border rounded p-2"
-                      type="text"
-                      name="emergency_fname"
-                      value={emergencyFirstName}
-                      onChange={(e) => setEmergencyFirstName(e.target.value)}
-                    />
-                    <small style={{ color: "red" }}>
-                      {errors.emergency_first_name_error}
-                    </small>
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        First Name
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        placeholder="First name..."
+                        name="first_name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
 
-                    <label>Emergency Contact's Middle Name</label>
-                    <input
-                      type="text"
-                      name="emergency_mname"
-                      value={emergencyMiddleName}
-                      onChange={(e) => setEmergencyMiddleName(e.target.value)}
-                    />
+                      <p className="text-red-500 text-xs">
+                        {errors.first_name_error}
+                      </p>
+                    </div>
 
-                    <small style={{ color: "red" }}>
-                      {errors.emergency_middle_name_error}
-                    </small>
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Middle Name
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        placeholder="Middle name..."
+                        name="middle_name"
+                        value={middleName}
+                        onChange={(e) => setMiddleName(e.target.value)}
+                      />
 
-                    <label>Emergency Contact's Last Name</label>
-                    <input
-                      type="text"
-                      name="emergency_lname"
-                      value={emergencyLastName}
-                      onChange={(e) => setEmergencyLastName(e.target.value)}
-                    />
+                      <p className="text-red-500 text-xs">
+                        {errors.middle_name_error}
+                      </p>
+                    </div>
 
-                    <small style={{ color: "red" }}>
-                      {errors.emergency_last_name_error}
-                    </small>
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Last Name
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        placeholder="Last name..."
+                        name="last_name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    
+                      <p className="text-red-500 text-xs">
+                        {errors.last_name_error}
+                      </p>
+                    </div>
+                  </div>
 
-                    <label>Emergency Contact's Contact Number</label>
-                    <input
-                      type="tel"
-                      name="emergency_number"
-                      value={emergencyNumber}
-                      onChange={(e) => setEmergencyNumber(e.target.value)}
-                    />
+                  {/* ADDRESS */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {/* <label className="block font-medium text-gray-700">
+                      Address
+                    </label> */}
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        House No. / Building / Lot No. *
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        name="house"
+                        value={house}
+                        onChange={(e) => setHouse(e.target.value)}
+                      />
 
-                    <small style={{ color: "red" }}>
-                      {errors.emergency_number_error}
-                    </small>
+                      <p className="text-red-500 text-xs">{errors.house}</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Street *
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        placeholder="Bayabas St."
+                        name="street"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                      />
+
+                      <p className="text-red-500 text-xs">{errors.street}</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Subdivision
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        name="subdivision"
+                        value={subdivision}
+                        onChange={(e) => setSubdivision(e.target.value)}
+                      />
+
+                      <p className="text-red-500 text-xs">
+                        {errors.subdivision}
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Barangay *
+                      </label>
+                      <select
+                        className="w-full border rounded p-2"
+                        name="barangay"
+                        value={barangay}
+                        onChange={(e) => setBarangay(e.target.value)}
+                      >
+                        <option value="">-- Please select an option --</option>
+                        <option>Addition Hills</option>
+                        <option>Balong-Bato</option>
+                        <option>Batis</option>
+                        <option>Corazon De Jesus</option>
+                        <option>Ermitaño</option>
+                        <option>Halo-halo</option>
+                        <option>Isabelita</option>
+                        <option>Kabayanan</option>
+                        <option>Little Baguio</option>
+                        <option>Maytunas</option>
+                        <option>Onse</option>
+                        <option>Pasadeña</option>
+                        <option>Pedro Cruz</option>
+                        <option>Progreso</option>
+                        <option>Rivera</option>
+                        <option>Salapan</option>
+                        <option>San Perfecto</option>
+                        <option>Santa Lucia</option>
+                        <option>Tibagan</option>
+                        <option>West Crame</option>
+                        <option>Greenhills</option>
+                      </select>
+
+                      <p className="text-red-500 text-xs">{errors.barangay}</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        City / Municipality
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        placeholder="San Juan"
+                        name="city"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        disabled
+                      />
+
+                      <p className="text-red-500 text-xs">{errors.city}</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Province
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="text"
+                        placeholder="Metro Manila"
+                        name="province"
+                        value={province}
+                        onChange={(e) => setProvince(e.target.value)}
+                        disabled
+                      />
+
+                      <p className="text-red-500 text-xs">{errors.province}</p>
+                    </div>
+                  </div>
+
+                  {/* BIRTHDAY & GENDER */}
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Date of Birth
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="date"
+                        name="birthday"
+                        value={birthday}
+                        onChange={(e) => {
+                          setBirthday(e.target.value);
+                          handleSetAge();
+                        }}
+                      />
+
+                      <p className="text-red-500 text-xs">
+                        {errors.date_of_birth_error}
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Age
+                      </label>
+                      <input
+                        className="w-full border rounded p-2"
+                        type="number"
+                        min="0"
+                        max="150"
+                        name="age"
+                        value={age}
+                        disabled
+                      />
+
+                      <p className="text-red-500 text-xs">{errors.age_error}</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Gender
+                      </label>
+                      <select
+                        className="w-full border rounded p-2"
+                        name="gender"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <option value="">-- Please select an option --</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                      </select>
+
+                      <p className="text-red-500 text-xs">
+                        {errors.gender_error}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* EMERGENCY CONTACT */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Emergency Contact's First Name
+                      </label>
+                      <input
+                        className="border rounded p-2 w-full"
+                        type="text"
+                        name="emergency_fname"
+                        value={emergencyFirstName}
+                        onChange={(e) => setEmergencyFirstName(e.target.value)}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.emergency_first_name_error}
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Emergency Contact's Middle Name
+                      </label>
+                      <input
+                        className="border rounded p-2 w-full"
+                        type="text"
+                        name="emergency_mname"
+                        value={emergencyMiddleName}
+                        onChange={(e) => setEmergencyMiddleName(e.target.value)}
+                      />
+
+                      <p className="text-red-500 text-xs">
+                        {errors.emergency_middle_name_error}
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Emergency Contact's Last Name
+                      </label>
+                      <input
+                        className="border rounded p-2 w-full"
+                        type="text"
+                        name="emergency_lname"
+                        value={emergencyLastName}
+                        onChange={(e) => setEmergencyLastName(e.target.value)}
+                      />
+
+                      <p className="text-red-500 text-xs">
+                        {errors.emergency_last_name_error}
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium text-gray-700">
+                        Emergency Contact's Contact Number
+                      </label>
+                      <input
+                        className="border rounded p-2 w-full"
+                        type="tel"
+                        name="emergency_number"
+                        value={emergencyNumber}
+                        onChange={(e) => setEmergencyNumber(e.target.value)}
+                      />
+
+                      <p className="text-red-500 text-xs">
+                        {errors.emergency_number_error}
+                      </p>
+                    </div>
                   </div>
 
                   {/* ACTIONS */}
