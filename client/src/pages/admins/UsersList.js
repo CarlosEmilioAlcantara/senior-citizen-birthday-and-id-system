@@ -770,7 +770,9 @@ export default function UsersList() {
           {openEdit && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
               <div className="relative z-10 w-full max-w-5xl mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto">
-                {!status && <p style={{ color: "red" }}>{response}</p>}
+                {!status && (
+                  <p className="text-red-500 font-semibold">{response}</p>
+                )}
 
                 {/* Modal title */}
                 <h3 className="text-2xl font-semibold text-cyan-600 mb-1">
@@ -780,6 +782,26 @@ export default function UsersList() {
                   Edit an account for Senior Citizens
                 </p>
 
+                {/* Close button */}
+                <button
+                  onClick={() => setOpenEdit(false)}
+                  className="absolute top-6 right-3 text-gray-500 hover:text-gray-800"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-8"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18 18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
                 <form onSubmit={handleEditUser} className="space-y-6">
                   <label>1x1 / Passport Size Image</label>
                   <input
@@ -799,14 +821,18 @@ export default function UsersList() {
                     {errors.signature_picture_error}
                   </p>
 
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    placeholder="Email..."
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <div>
+                    <label className="block font-medium text-gray-700">
+                      Email
+                    </label>
+                    <input
+                      className="w-full border rounded p-2"
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
 
                   <p className="text-red-500 text-xs">{errors.email_error}</p>
 
@@ -860,7 +886,7 @@ export default function UsersList() {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                       />
-                    
+
                       <p className="text-red-500 text-xs">
                         {errors.last_name_error}
                       </p>
@@ -1150,7 +1176,10 @@ export default function UsersList() {
           {openDelete && (
             <div className="popup">
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border border-red-500 ">
+                <div
+                  className="relative z-10 w-full max-w-md mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto"
+                  // className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border border-red-500"
+                >
                   {/* Close button */}
                   <button
                     onClick={() => setOpenDelete(false)}
@@ -1196,13 +1225,13 @@ export default function UsersList() {
                     <div>
                       <div className="flex justify-between items-center gap-4">
                         <button
-                          className="px-6 md:px-8 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
                           onClick={() => setOpenDelete(false)}
                         >
                           No, cancel
                         </button>
                         <button
-                          className="px-10 md:px-12 py-2 rounded bg-red-700 hover:bg-red-800 text-white font-medium"
+                          className="px-6 py-2 rounded bg-red-700 hover:bg-red-800 text-white font-medium"
                           type="submit"
                         >
                           Yes, Delete Account
@@ -1216,8 +1245,10 @@ export default function UsersList() {
           )}
           {openCard && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-              {/* <div className="bg-white rounded-xl border border-cyan-100 shadow-sm p-5"> */}
-              <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100 ">
+              <div
+                className="relative z-10 w-full max-w-md mx-4 bg-white shadow-xl rounded-xl p-8 max-h-[90vh] overflow-y-auto"
+                // className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative border-2 border-cyan-100"
+              >
                 {/* Close button */}
                 <button
                   onClick={() => setOpenCard(false)}
