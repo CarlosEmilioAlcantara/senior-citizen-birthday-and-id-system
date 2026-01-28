@@ -286,9 +286,17 @@ export default function UserEdit() {
 
               {/* SIGNATURE */}
               <div>
-                <label className="text-lg font-semibold text-gray-700 mb-3">
+                {/* <label className="text-lg font-semibold text-gray-700 mb-3">
                   Signature on white background
-                </label>
+                </label> */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    E-signature
+                  </h3>
+                  <h4 className="text-xs font-semibold text-gray-700">
+                    Signature on white background
+                  </h4>
+                </div>
 
                 <input
                   type="file"
