@@ -778,7 +778,7 @@ export default function UserRegister() {
                 {/* Signature Picture */}
                 <div>
                   <label className="block text-gray-700 font-medium mb-1">
-                    Signature (White BG)
+                    Signature on white background 
                   </label>
                   <div
                     className={`w-100 h-32 flex items-center justify-center text-gray-500 border p-2 rounded ${

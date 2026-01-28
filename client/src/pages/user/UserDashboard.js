@@ -172,9 +172,17 @@ export default function UserDashboard() {
 
               {/*(SIGNATURE) */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                {/* <h3 className="text-lg font-semibold text-gray-700 mb-3">
                   Signature on white background
-                </h3>
+                </h3> */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    E-signature
+                  </h3>
+                  <h4 className="text-xs font-semibold text-gray-700">
+                    Signature on white background
+                  </h4>
+                </div>
 
                 <div className="flex justify-center">
                   <img

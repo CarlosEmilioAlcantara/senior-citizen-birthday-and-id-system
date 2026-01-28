@@ -311,7 +311,7 @@ export default function UserEdit() {
                   <img
                     src={signaturePreview}
                     alt="Signature Preview"
-                    className="mt-7 w-100 h-32 object-contain bg-white border rounded"
+                    className="mt-3 w-100 h-32 object-contain bg-white border rounded"
                   />
                 )}
 
