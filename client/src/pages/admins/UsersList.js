@@ -810,9 +810,7 @@ export default function UsersList() {
                     name="id_picture"
                   />
 
-                  <p className="text-red-500 text-xs">
-                    {errors.id_picture}
-                  </p>
+                  <p className="text-red-500 text-xs">{errors.id_picture}</p>
 
                   <label>Signature on white background</label>
                   <input type="file" name="signature_picture" />
@@ -953,7 +951,7 @@ export default function UsersList() {
                         value={barangay}
                         onChange={(e) => setBarangay(e.target.value)}
                       >
-                        <option value="">-- Please select an option --</option>
+                        <option value="">-- Please Select Option--</option>
                         <option>Addition Hills</option>
                         <option>Balong-Bato</option>
                         <option>Batis</option>
@@ -1032,9 +1030,7 @@ export default function UsersList() {
                         }}
                       />
 
-                      <p className="text-red-500 text-xs">
-                        {errors.birthday}
-                      </p>
+                      <p className="text-red-500 text-xs">{errors.birthday}</p>
                     </div>
 
                     <div>
