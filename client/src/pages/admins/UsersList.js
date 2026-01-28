@@ -408,6 +408,89 @@ export default function UsersList() {
   // SideBar
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+
+  //pagination helper
+  // function getPaginationRange(current, total) {
+  //   const delta = 1; // pages on each side of current
+  //   const range = [];
+  //   const rangeWithDots = [];
+  //   let lastPage = null;
+
+  //   for (let i = 1; i <= total; i++) {
+  //     if (
+  //       i === 1 ||
+  //       i === total ||
+  //       (i >= current - delta && i <= current + delta)
+  //     ) {
+  //       range.push(i);
+  //     }
+  //   }
+
+  //   for (let i of range) {
+  //     if (lastPage) {
+  //       if (i - lastPage === 2) {
+  //         rangeWithDots.push(lastPage + 1);
+  //       } else if (i - lastPage > 2) {
+  //         rangeWithDots.push("...");
+  //       }
+  //     }
+  //     rangeWithDots.push(i);
+  //     lastPage = i;
+  //   }
+
+  //   return rangeWithDots;
+  // }
+  function getPaginationRange(current, total, isMobile) {
+    // MOBILE: show ONLY current page
+    if (isMobile) {
+      return [current];
+    }
+
+    // DESKTOP: show neighbors + dots
+    const delta = 1;
+    const range = [];
+    const result = [];
+    let last = null;
+
+    for (let i = 1; i <= total; i++) {
+      if (
+        i === 1 ||
+        i === total ||
+        (i >= current - delta && i <= current + delta)
+      ) {
+        range.push(i);
+      }
+    }
+
+    for (let i of range) {
+      if (last !== null) {
+        if (i - last === 2) {
+          result.push(last + 1);
+        } else if (i - last > 2) {
+          result.push("...");
+        }
+      }
+      result.push(i);
+      last = i;
+    }
+
+    return result;
+  }
+
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 640); // tailwind sm breakpoint
+    };
+
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+
   return (
     <div className="flex bg-white md:h-screen">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -548,7 +631,7 @@ export default function UsersList() {
 
           {/* TABLE CONTAINER */}
           <div className="mt-6 overflow-hidden">
-            <h3 className="text-xl text-center md:text-start md:text-2xl font-bold text-gray-800 mb-4">
+            <h3 className=" text-center md:text-start text-2xl font-bold text-gray-800 mb-4">
               Senior Citizen's Account List Table
             </h3>
             <div className="overflow-x-auto rounded-lg shadow-md ">
@@ -737,7 +820,7 @@ export default function UsersList() {
           </div>
 
           {/* PAGINATION  */}
-          <div className="flex justify-center items-center gap-2 mt-6">
+          {/* <div className="flex justify-center items-center gap-2 mt-6">
             <button
               disabled={page <= 1}
               onClick={() => setPage(page - 1)}
@@ -745,19 +828,32 @@ export default function UsersList() {
             >
               Prev
             </button>
-            {pages.map((num) => (
-              <button
-                key={num}
-                onClick={() => setPage(num)}
-                className={`px-3 py-1 rounded border ${
-                  page === num
-                    ? "bg-cyan-600 text-white border-cyan-600"
-                    : "hover:bg-slate-100"
-                }`}
-              >
-                {num}
-              </button>
-            ))}
+          
+
+            {getPaginationRange(page, totalPages, isMobile).map(
+              (item, index) =>
+                item === "..." ? (
+                  <span
+                    key={index}
+                    className="px-3 py-1 text-gray-500 select-none"
+                  >
+                    …
+                  </span>
+                ) : (
+                  <button
+                    key={item}
+                    onClick={() => setPage(item)}
+                    className={`px-3 py-1 rounded border min-w-[36px] ${
+                      page === item
+                        ? "bg-cyan-600 text-white border-cyan-600"
+                        : "hover:bg-slate-100"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ),
+            )}
+
             <button
               disabled={page >= totalPages}
               onClick={() => setPage(page + 1)}
@@ -765,6 +861,56 @@ export default function UsersList() {
             >
               Next
             </button>
+          </div> */}
+          {/* PAGINATION */}
+          <div className="mt-6 flex flex-col items-center gap-1">
+            {/* Buttons */}
+            <div className="flex justify-center items-center gap-2">
+              <button
+                disabled={page <= 1}
+                onClick={() => setPage(page - 1)}
+                className="px-3 py-1 rounded border disabled:opacity-40"
+              >
+                Prev
+              </button>
+
+              {getPaginationRange(page, totalPages, isMobile).map(
+                (item, index) =>
+                  item === "..." ? (
+                    <span key={index} className="px-3 py-1 text-gray-500">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={item}
+                      onClick={() => setPage(item)}
+                      className={`px-3 py-1 rounded border min-w-[36px] ${
+                        page === item
+                          ? "bg-cyan-600 text-white border-cyan-600"
+                          : "hover:bg-slate-100"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ),
+              )}
+
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage(page + 1)}
+                className="px-3 py-1 rounded border disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+
+            {/* MOBILE INFO TEXT */}
+            {isMobile && (
+              <p className="text-sm text-gray-500">
+                Page {page} of {totalPages} 
+                {/* • Showing {perPage} per page */}
+              </p>
+            )}
           </div>
 
           {openEdit && (
