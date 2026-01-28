@@ -30,9 +30,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       title: "Are you sure?",
       text: "You will be logged out of your account",
       icon: "warning",
+      iconColor: "#d33",
       showCancelButton: true,
       confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      cancelButtonColor: "#6B7280",
       confirmButtonText: "Yes, logout",
       cancelButtonText: "Cancel",
     }).then((result) => {
