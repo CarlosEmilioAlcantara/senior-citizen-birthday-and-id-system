@@ -1,7 +1,10 @@
+import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
 import Sidebar from "../../components/Sidebar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UsersList() {
   const [users, setUsers] = useState([]);
@@ -26,7 +29,8 @@ export default function UsersList() {
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
 
-
+  //Toast Testing
+   const notify = () => toast("Wow! Testing");
 
   //preview for upload pic and e-sign
   const idInputRef = useRef(null);
@@ -37,7 +41,6 @@ export default function UsersList() {
 
   const [previewPicture, setPreviewPicture] = useState(null);
   const [previewSignature, setPreviewSignature] = useState(null);
-
 
   async function fetchUsers() {
     try {
@@ -259,8 +262,49 @@ export default function UsersList() {
     }
   }
 
+  // async function handleEditUser(e) {
+  //   e.preventDefault();
+
+
+  //   const fd = new FormData(e.target);
+  //   fd.append("id", id);
+  //   fd.append("age", age);
+  //   fd.append("city", "San Juan");
+  //   fd.append("province", "Metro Manila");
+  //   fd.set("csrf_token", csrfToken);
+
+  //   try {
+  //     const res = await fetch("/admins/edit-senior", {
+  //       method: "POST",
+  //       credentials: "include",
+  //       body: fd,
+  //     });
+  //     const data = await res.json();
+      
+  //     setStatus(data.success);
+  //     setResponse(data.response);
+  //     setErrors({ ...data.errors });
+
+  //     if (data.status === 429) {
+  //       navigate("/too-many-requests");
+  //     }
+  //     if (data.status === 403) {
+  //       navigate("/forbidden");
+  //     }
+  //     if (data.success) {
+  //       alert(`Senior ${id} edited`);
+  //       setOpenEdit(false);
+  //       fetchUsers();
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
   async function handleEditUser(e) {
     e.preventDefault();
+
+    const toastId = toast.loading("Saving changes...");
+
     const fd = new FormData(e.target);
     fd.append("id", id);
     fd.append("age", age);
@@ -274,26 +318,40 @@ export default function UsersList() {
         credentials: "include",
         body: fd,
       });
+
       const data = await res.json();
-      setStatus(data.success);
-      setResponse(data.response);
+
       setErrors({ ...data.errors });
 
-      if (data.status === 429) {
-        navigate("/too-many-requests");
-      }
-      if (data.status === 403) {
-        navigate("/forbidden");
-      }
       if (data.success) {
-        alert(`Senior ${id} edited`);
+        toast.update(toastId, {
+          render: "Changes saved successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+
         setOpenEdit(false);
         fetchUsers();
+      } else {
+        toast.update(toastId, {
+          render: data.response || "Failed to save changes",
+          type: "error",
+          isLoading: false,
+          autoClose: 4000,
+        });
       }
     } catch (err) {
+      toast.update(toastId, {
+        render: "Server error. Please try again.",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+      });
       console.error(err);
     }
   }
+
 
   async function handleDeleteUser(e) {
     e.preventDefault();
@@ -421,7 +479,6 @@ export default function UsersList() {
   // SideBar
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
   //pagination helper
   // function getPaginationRange(current, total) {
   //   const delta = 1; // pages on each side of current
@@ -490,7 +547,6 @@ export default function UsersList() {
     return result;
   }
 
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -504,10 +560,21 @@ export default function UsersList() {
   }, []);
 
 
+
   return (
     <div className="flex bg-white md:h-screen">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
+      
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-auto h-screen overflow-hidden">
         {/* HEADER */}
@@ -647,6 +714,7 @@ export default function UsersList() {
             <h3 className=" text-center md:text-start text-2xl font-bold text-gray-800 mb-4">
               Senior Citizen's Account List Table
             </h3>
+
             <div className="overflow-x-auto rounded-lg shadow-md ">
               <table className="min-w-[1400px] w-full border-collapse ">
                 <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
