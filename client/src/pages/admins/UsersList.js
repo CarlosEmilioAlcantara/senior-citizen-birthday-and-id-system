@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCsrfToken from "../CsrfToken";
 import Sidebar from "../../components/Sidebar";
@@ -25,6 +25,19 @@ export default function UsersList() {
   const [response, setResponse] = useState("");
   const csrfToken = useCsrfToken();
   const navigate = useNavigate();
+
+
+
+  //preview for upload pic and e-sign
+  const idInputRef = useRef(null);
+  const signatureInputRef = useRef(null);
+
+  const [currentPicture, setCurrentPicture] = useState(null);
+  const [currentSignature, setCurrentSignature] = useState(null);
+
+  const [previewPicture, setPreviewPicture] = useState(null);
+  const [previewSignature, setPreviewSignature] = useState(null);
+
 
   async function fetchUsers() {
     try {
@@ -765,6 +778,21 @@ export default function UsersList() {
                                 user.emergency_number,
                                 true,
                               );
+
+                              // LOAD EXISTING IMAGES
+                              const pic = pictures.find(
+                                (p) => p.senior_id === user.senior_id,
+                              );
+                              const sig = signatures.find(
+                                (s) => s.senior_id === user.senior_id,
+                              );
+
+                              setCurrentPicture(pic?.picture_name || null);
+                              setCurrentSignature(sig?.image_name || null);
+
+                              setPreviewPicture(null);
+                              setPreviewSignature(null);
+
                               setOpenEdit(true);
                             }}
                           >
@@ -819,49 +847,6 @@ export default function UsersList() {
             </div>
           </div>
 
-          {/* PAGINATION  */}
-          {/* <div className="flex justify-center items-center gap-2 mt-6">
-            <button
-              disabled={page <= 1}
-              onClick={() => setPage(page - 1)}
-              className="px-3 py-1 rounded border disabled:opacity-40"
-            >
-              Prev
-            </button>
-          
-
-            {getPaginationRange(page, totalPages, isMobile).map(
-              (item, index) =>
-                item === "..." ? (
-                  <span
-                    key={index}
-                    className="px-3 py-1 text-gray-500 select-none"
-                  >
-                    …
-                  </span>
-                ) : (
-                  <button
-                    key={item}
-                    onClick={() => setPage(item)}
-                    className={`px-3 py-1 rounded border min-w-[36px] ${
-                      page === item
-                        ? "bg-cyan-600 text-white border-cyan-600"
-                        : "hover:bg-slate-100"
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ),
-            )}
-
-            <button
-              disabled={page >= totalPages}
-              onClick={() => setPage(page + 1)}
-              className="px-3 py-1 rounded border disabled:opacity-40"
-            >
-              Next
-            </button>
-          </div> */}
           {/* PAGINATION */}
           <div className="mt-6 flex flex-col items-center gap-1">
             {/* Buttons */}
@@ -907,7 +892,7 @@ export default function UsersList() {
             {/* MOBILE INFO TEXT */}
             {isMobile && (
               <p className="text-sm text-gray-500">
-                Page {page} of {totalPages} 
+                Page {page} of {totalPages}
                 {/* • Showing {perPage} per page */}
               </p>
             )}
@@ -949,21 +934,111 @@ export default function UsersList() {
                   </svg>
                 </button>
                 <form onSubmit={handleEditUser} className="space-y-6">
-                  <label>1x1 / Passport Size Image</label>
-                  <input
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    name="id_picture"
-                  />
+                  <div className="bg-blue-100 rounded-xl shadow-sm border border-blue-50 p-4 sm:p-5 flex flex-col gap-5 md:flex-row md:justify-around">
+                    {/* ID/PASSPORT PIC */}
+                    <div className="flex flex-col items-center">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-700">
+                          Profile Photo
+                        </h3>
+                        <h4 className="text-xs font-semibold text-gray-700">
+                          1x1 / Passport Size Image
+                        </h4>
+                      </div>
 
-                  <p className="text-red-500 text-xs">{errors.id_picture}</p>
+                      <div className="flex flex-col">
+                        <img
+                          src={previewPicture || currentPicture}
+                          alt="Profile Preview"
+                          className="mt-3 w-32 h-32 object-cover rounded border"
+                        />
 
-                  <label>Signature on white background</label>
-                  <input type="file" name="signature_picture" />
+                        <p className="text-red-500 text-xs">
+                          {errors.id_picture}
+                        </p>
+                      </div>
 
-                  <p className="text-red-500 text-xs">
-                    {errors.signature_picture}
-                  </p>
+                      {/* <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        name="id_picture"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            setPreviewPicture(URL.createObjectURL(file));
+                          }
+                        }}
+                      /> */}
+                      <input
+                        ref={idInputRef}
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        name="id_picture"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            setPreviewPicture(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => idInputRef.current.click()}
+                        className="inline-block cursor-pointer px-4 py-2 mt-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      >
+                        Choose ID Image
+                      </button>
+                    </div>
+
+                    {/* SIGNATURE */}
+                    <div className="flex flex-col items-center">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-700">
+                          E-signature
+                        </h3>
+                        <h4 className="text-xs font-semibold text-gray-700">
+                          Signature on white background
+                        </h4>
+                      </div>
+
+                      <img
+                        src={previewSignature || currentSignature}
+                        alt="Signature Preview"
+                        className="mt-3 w-100 h-32 object-contain bg-white border rounded"
+                      />
+
+                      <div>
+                        <p className="text-red-500 text-xs">
+                          {errors.signature_picture}
+                        </p>
+                      </div>
+
+                      <input
+                        ref={signatureInputRef}
+                        type="file"
+                        name="signature_picture"
+                        accept="image/png, image/jpeg"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            setPreviewSignature(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => signatureInputRef.current.click()}
+                        className="inline-block cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-2"
+                      >
+                        Choose Signature Image
+                      </button>
+                    </div>
+                  </div>
 
                   <div>
                     <label className="block font-medium text-gray-700">
@@ -1300,7 +1375,7 @@ export default function UsersList() {
                       Reset
                     </button>
                     <button
-                      className="px-6 md:px-12 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
+                      className="px-4 md:px-12 py-2 rounded bg-blue-700 hover:bg-blue-800 text-white font-medium"
                       type="submit"
                     >
                       Save Changes
