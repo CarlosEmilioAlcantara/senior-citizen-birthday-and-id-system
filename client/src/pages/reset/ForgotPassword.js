@@ -288,7 +288,7 @@ export default function ForgotPassword({ accountType }) {
           <h2 className="text-3xl font-bold mb-6">Forgot Password</h2>
 
           <form onSubmit={handleResetPassword} className="space-y-4">
-            <div className="text-gray-500 font-medium px-2">
+            <div className="text-gray-500 text-justify  font-medium px-2">
               Please provide your registered email address and set a new
               password. An OTP will be sent for password reset verification.
             </div>
