@@ -602,36 +602,6 @@ export default function UsersList() {
             <h1 className="text-2xl font-bold">List of Senior Citizens</h1>
           </div>
 
-          {/* Profile Container */}
-          {/* <div className="flex gap-2">
-          
-            <div className="hidden md:block">
-              <p className="font-bold">
-                {info.first_name} {info.last_name}
-              </p>
-              <p className="text-sm font-semibold uppercase text-right">
-                ADMIN
-              </p>
-            </div>
-
-
-            <img
-              className="w-12 h-12 rounded-full object-cover border shadow"
-              src={`http://localhost:5000/${info.picture_name}`}
-            ></img>
-          </div> */}
-          {/* <div className="flex gap-2">
-            <div className="text-xl font-bold flex items-center">
-              <h2 className="uppercase text-sm font-bold text-blue-700 text-center">
-                Senior Citizen System
-              </h2>
-
-              <img
-                // src="seniorLogo.jpg"
-                className="bg-cyan-700 rounded-full w-12 h-12 md:mx-1"
-              />
-            </div>
-          </div> */}
         </header>
 
         {/* SCROLLABLE  ADMIN LIST ACC CONTENT */}
